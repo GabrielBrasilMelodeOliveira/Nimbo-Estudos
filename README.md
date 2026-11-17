@@ -101,3 +101,11 @@ Acesse **http://localhost:3000**. O edital começa vazio para você importar seu
 - Há testes Java novos para revisão, metas e migração, mas **não foi possível executar Maven nem o build Vite completo neste ambiente** porque as dependências de Maven/npm não estavam disponíveis e o acesso à rede estava bloqueado. A primeira compilação e a verificação visual ainda precisam acontecer no Docker do usuário.
 
 Veja `docs/VALIDACAO-5.5.md` para uma sequência de testes após a atualização. Documentação anterior: `docs/README-HISTORICO-ATE-5.4.md`.
+
+## Organização do código
+
+O frontend usa React e Material UI. `src/shared` reúne componentes reutilizados, serviços HTTP, utilitários e tema. `src/pages/<pagina>` contém a página, seus hooks, componentes e utilitários locais quando necessários. As regras visuais existentes são mantidas em CSS-in-JS no `GlobalStyles` do MUI. Os gráficos de cobertura e prioridades usam MUI X Charts.
+
+O backend é um monólito modular. Cada funcionalidade possui seus pacotes de controllers, services, entities e repositories. Os controllers extraídos delegam os casos de uso aos services, com injeção pelo construtor. Os módulos ainda compartilham relacionamentos JPA e algumas dependências de persistência entre funcionalidades.
+
+Classes e componentes usam PascalCase. Funções e variáveis usam camelCase. Para formatar o frontend, execute `npm run format` em `frontend`. Para validar, execute `npm run build`, `npm run test:logic` e `mvn test` em `backend`, usando JDK 21.
