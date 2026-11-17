@@ -1,4 +1,6 @@
-import { Button, Input, NativeSelect } from "@mui/material";
+import { DisciplineCharts } from "./components/DisciplineCharts.jsx";
+import { Input, NativeSelect } from "../../shared/components/FormControls.jsx";
+import { Button } from "@mui/material";
 import { BarChart } from "@mui/x-charts/BarChart";
 import React from "react";
 import {
@@ -161,63 +163,17 @@ export default function Analytics({ data, action, working, navigate }) {
           </span>
         }
       >
-        <div className="discipline-radar">
-          {(analysis.disciplines || []).map((d) => (
-            <article className="radar-card" key={d.id}>
-              <div className="radar-top">
-                <span
-                  className="radar-dot"
-                  style={{
-                    background: d.color,
-                  }}
-                />
-                <strong>{d.name}</strong>
-                <Priority value={d.priority} />
-              </div>
-              <div className="radar-line">
-                <span>Progresso do edital</span>
-                <b>{d.coverage}%</b>
-              </div>
-              <ProgressBar value={d.coverage} height={7} color={d.color} />
-              <div className="radar-stats">
-                <span>
-                  {d.completedTopics}/{d.topicCount} assuntos
-                </span>
-                <span>{d.questions} questões</span>
-                <span>
-                  {d.questions ? `${d.accuracy}% acertos` : "Sem questões"}
-                </span>
-                <span>Teoria {fmtHours(d.theorySeconds || 0)}</span>
-                <span>Questões {fmtHours(d.questionSeconds || 0)}</span>
-              </div>
-              <div className="radar-rating">
-                <span>
-                  Importância <b>{d.importance}/5</b>
-                </span>
-                <span>
-                  Peso <b>{d.examWeight}/5</b>
-                </span>
-                <span>
-                  Entendimento <b>{d.confidence}/5</b>
-                </span>
-              </div>
-              <Button
-                className="radar-edit"
-                onClick={() => {
-                  setEditing(d);
-                  setTuning({
-                    importance: d.importance,
-                    examWeight: d.examWeight,
-                    confidence: d.confidence,
-                  });
-                }}
-                type="button"
-              >
-                <Edit3 size={15} /> Ajustar prioridade
-              </Button>
-            </article>
-          ))}
-        </div>
+        <DisciplineCharts
+          disciplines={analysis.disciplines || []}
+          onEdit={(discipline) => {
+            setEditing(discipline);
+            setTuning({
+              importance: discipline.importance,
+              examWeight: discipline.examWeight,
+              confidence: discipline.confidence,
+            });
+          }}
+        />
       </Panel>
       <Panel
         title="Todos os assuntos"

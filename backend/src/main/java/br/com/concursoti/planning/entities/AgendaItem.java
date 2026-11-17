@@ -49,6 +49,12 @@ public class AgendaItem {
   public Integer targetQuestions;
   public Integer priority = 2;
 
+  public Boolean completionOverride;
+
+  @Version
+  @Column(nullable = false, columnDefinition = "bigint default 0")
+  public long version;
+
   @Column(nullable = false)
   public Boolean completed = false;
 

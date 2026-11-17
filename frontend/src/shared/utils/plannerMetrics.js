@@ -68,6 +68,13 @@ export function itemProgress(data, item) {
         : null,
   };
 }
+export function isAgendaCompleted(data, item) {
+  return (
+    item.completionOverride ??
+    (Boolean(item.completed) || Boolean(itemProgress(data, item)?.complete))
+  );
+}
+
 /** Métricas de períodos, derivadas dos registros originais (um lançamento só conta uma vez). */
 export function periodSummary(data, start, end) {
   const inRange = (date) => date >= start && date <= end;

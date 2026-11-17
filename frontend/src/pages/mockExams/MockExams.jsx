@@ -1,4 +1,5 @@
-import { Input, TextareaAutosize } from "@mui/material";
+import { Input } from "../../shared/components/FormControls.jsx";
+import { TextareaAutosize } from "@mui/material";
 import { ClipboardCheck, Plus, Target, Trophy } from "lucide-react";
 import {
   Panel,
@@ -203,7 +204,7 @@ export default function MockExams({ data, action, working }) {
             </Field>
             <Field label="Observações (opcional)">
               <TextareaAutosize
-                rows="3"
+                minRows="3"
                 maxLength="500"
                 value={form.notes}
                 onChange={(e) =>

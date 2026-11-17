@@ -1,6 +1,10 @@
 import { TODAY } from "../../../shared/utils/utils.js";
 import { activeReview } from "../../../shared/utils/revisionLevels.js";
-import { startWeek, findGoal } from "../../../shared/utils/plannerMetrics.js";
+import {
+  startWeek,
+  findGoal,
+  isAgendaCompleted,
+} from "../../../shared/utils/plannerMetrics.js";
 export function useDashboard({ data, action, working, navigate }) {
   const overview = data.dashboard || {},
     today = TODAY();
@@ -8,7 +12,9 @@ export function useDashboard({ data, action, working, navigate }) {
     todayTasks = allTasks
       .filter((t) => t.scheduledDate === today)
       .sort((a, b) => (a.startTime || "99").localeCompare(b.startTime || "99"));
-  const pendingTasks = todayTasks.filter((t) => !t.completed);
+  const pendingTasks = todayTasks.filter(
+    (task) => !isAgendaCompleted(data, task),
+  );
   const due = (data.reviews || [])
     .filter((r) => activeReview(r) && r.dueDate <= today)
     .sort((a, b) => a.dueDate.localeCompare(b.dueDate));

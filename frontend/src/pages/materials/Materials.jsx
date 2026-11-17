@@ -1,4 +1,5 @@
-import { Input, NativeSelect, Button, TextareaAutosize } from "@mui/material";
+import { Input, NativeSelect } from "../../shared/components/FormControls.jsx";
+import { Button, TextareaAutosize } from "@mui/material";
 import {
   LibraryBig,
   Plus,
@@ -338,7 +339,7 @@ export default function Materials({ data, action, working }) {
             </Field>
             <Field label="Descrição">
               <TextareaAutosize
-                rows="2"
+                minRows="2"
                 maxLength="400"
                 value={form.description}
                 onChange={(e) =>
@@ -492,7 +493,7 @@ export default function Materials({ data, action, working }) {
                       páginas originais.
                     </p>
                     <TextareaAutosize
-                      rows="5"
+                      minRows="5"
                       maxLength="12000"
                       value={draft}
                       onChange={(e) => setDraft(e.target.value)}
@@ -504,7 +505,7 @@ export default function Materials({ data, action, working }) {
                   <div className="reader-notes">
                     <strong>Anotações pessoais</strong>
                     <TextareaAutosize
-                      rows="4"
+                      minRows="4"
                       maxLength="12000"
                       value={draft}
                       onChange={(e) => setDraft(e.target.value)}

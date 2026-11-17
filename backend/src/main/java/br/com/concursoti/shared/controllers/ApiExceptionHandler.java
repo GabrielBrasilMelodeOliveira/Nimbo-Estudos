@@ -2,6 +2,7 @@ package br.com.concursoti.shared.controllers;
 
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +36,32 @@ public class ApiExceptionHandler {
         "error",
         "Há registros vinculados. Exclua os registros relacionados primeiro."
       )
+    );
+  }
+
+  @ExceptionHandler(
+    org.springframework.web.server.ResponseStatusException.class
+  )
+  public ResponseEntity<Map<String, String>> status(
+    org.springframework.web.server.ResponseStatusException exception
+  ) {
+    return ResponseEntity.status(exception.getStatusCode()).body(
+      Map.of(
+        "error",
+        Objects.toString(
+          exception.getReason(),
+          "Não foi possível atualizar o registro."
+        )
+      )
+    );
+  }
+
+  @ExceptionHandler(
+    org.springframework.orm.ObjectOptimisticLockingFailureException.class
+  )
+  public ResponseEntity<Map<String, String>> staleRecord(Exception exception) {
+    return ResponseEntity.status(HttpStatus.CONFLICT).body(
+      Map.of("error", "O registro mudou. Atualize a página e tente novamente.")
     );
   }
 }

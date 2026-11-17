@@ -1,4 +1,5 @@
-import { Button, Input } from "@mui/material";
+import { Input } from "./shared/components/FormControls.jsx";
+import { Button } from "@mui/material";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   LayoutDashboard,
@@ -230,6 +231,7 @@ export default function App() {
       });
       return true;
     } catch (e) {
+      if (e.status === 409) await refresh();
       setToast({
         message: e.message,
         success: false,

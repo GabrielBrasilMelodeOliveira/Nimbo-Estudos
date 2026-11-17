@@ -1,4 +1,5 @@
-import { Button, Input, NativeSelect } from "@mui/material";
+import { Input, NativeSelect } from "../../shared/components/FormControls.jsx";
+import { Button } from "@mui/material";
 import React from "react";
 import {
   BookOpenText,
@@ -314,7 +315,7 @@ export default function Edital({ data, action, working, navigate }) {
                       </td>
                       <td>
                         <NativeSelect
-                          className="sheet-inline-select status-select"
+                          sx={{ minWidth: 150, maxWidth: 190 }}
                           value={t.status}
                           disabled={working}
                           onChange={(e) =>
@@ -393,7 +394,7 @@ export default function Edital({ data, action, working, navigate }) {
                       </td>
                       <td>
                         <NativeSelect
-                          className="sheet-inline-select mastery-select"
+                          sx={{ minWidth: 120, maxWidth: 170 }}
                           value={t.mastery}
                           disabled={working}
                           onChange={(e) =>

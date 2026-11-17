@@ -36,4 +36,15 @@ public class ErrorNote {
 
   @Column(length = 36)
   public String answerImageId;
+
+  @com.fasterxml.jackson.annotation.JsonIgnore
+  @Column(columnDefinition = "text")
+  public String flashcardState;
+
+  @com.fasterxml.jackson.annotation.JsonIgnore
+  @Column(columnDefinition = "text")
+  public String flashcardHistory;
+
+  @Column(nullable = false, columnDefinition = "bigint default 0")
+  public long flashcardRevision;
 }

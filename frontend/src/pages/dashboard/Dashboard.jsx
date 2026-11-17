@@ -1,3 +1,5 @@
+import { Checkbox, IconButton } from "@mui/material";
+import { isAgendaCompleted } from "../../shared/utils/plannerMetrics.js";
 import { Button } from "@mui/material";
 import {
   ArrowRight,
@@ -164,37 +166,30 @@ export default function Dashboard({ data, action, working, navigate }) {
           {todayTasks.length ? (
             <div className="ux-today-list">
               {todayTasks.slice(0, 5).map((task) => (
-                <Button
-                  className={`ux-today-task ${task.completed ? "is-complete" : ""}`}
-                  type="button"
+                <div
+                  className={`ux-today-task ${isAgendaCompleted(data, task) ? "is-complete" : ""}`}
                   key={task.id}
-                  disabled={working}
-                  onClick={() =>
-                    task.topic
-                      ? navigate(
-                          task.studyKind === "QUESTIONS"
-                            ? "questions"
-                            : "cycle",
-                          {
-                            topicId: task.topic.id,
-                          },
-                        )
-                      : action(
-                          `agenda/${task.id}/toggle`,
-                          "PATCH",
-                          undefined,
-                          "Atividade atualizada.",
-                        )
-                  }
-                  aria-label={
-                    task.topic
-                      ? `Iniciar ${task.title}`
-                      : `${task.completed ? "Reabrir" : "Concluir"} ${task.title}`
-                  }
                 >
-                  <span className="ux-task-check">
-                    {task.completed && <Check size={14} />}
-                  </span>
+                  <Checkbox
+                    checked={isAgendaCompleted(data, task)}
+                    disabled={working}
+                    slotProps={{
+                      input: {
+                        "aria-label": `${isAgendaCompleted(data, task) ? "Reabrir" : "Concluir"} ${task.title}`,
+                      },
+                    }}
+                    onChange={(event) =>
+                      action(
+                        `agenda/${task.id}/completion`,
+                        "PATCH",
+                        {
+                          completed: event.target.checked,
+                          expectedVersion: task.version ?? 0,
+                        },
+                        "Atividade atualizada.",
+                      )
+                    }
+                  />
                   <span className="ux-task-label">
                     <strong>{task.title}</strong>
                     <small>
@@ -202,7 +197,22 @@ export default function Dashboard({ data, action, working, navigate }) {
                       {area[task.category] || "Pessoal"}
                     </small>
                   </span>
-                </Button>
+                  {task.topic && (
+                    <IconButton
+                      aria-label={`Iniciar ${task.title}`}
+                      onClick={() =>
+                        navigate(
+                          task.studyKind === "QUESTIONS"
+                            ? "questions"
+                            : "cycle",
+                          { topicId: task.topic.id },
+                        )
+                      }
+                    >
+                      <ArrowRight size={16} />
+                    </IconButton>
+                  )}
+                </div>
               ))}
             </div>
           ) : (

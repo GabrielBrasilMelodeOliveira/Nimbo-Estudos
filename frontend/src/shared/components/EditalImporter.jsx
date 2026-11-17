@@ -1,4 +1,5 @@
-import { Button, Input, TextareaAutosize } from "@mui/material";
+import { Input } from "./FormControls.jsx";
+import { Button, TextareaAutosize } from "@mui/material";
 import React, { useState } from "react";
 import {
   UploadCloud,
@@ -246,7 +247,7 @@ export default function EditalImporter({ action, working, history = [] }) {
                       </Field>
                       <Field label="Assuntos, um por linha">
                         <TextareaAutosize
-                          rows={Math.min(
+                          minRows={Math.min(
                             8,
                             Math.max(3, g.text.split("\n").length + 1),
                           )}

@@ -1,4 +1,5 @@
 import { createTheme } from "@mui/material/styles";
+
 export const theme = createTheme({
   palette: { primary: { main: "#39745d" }, background: { default: "#f5f7f5" } },
   typography: {
@@ -6,5 +7,19 @@ export const theme = createTheme({
     button: { textTransform: "none" },
   },
   shape: { borderRadius: 10 },
-  components: { MuiButton: { defaultProps: { disableElevation: true } } },
+  components: {
+    MuiButton: {
+      defaultProps: { disableElevation: true },
+      styleOverrides: { root: { minWidth: 0, gap: 6, flexShrink: 0 } },
+    },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: { backgroundColor: "#fff", minWidth: 0, maxWidth: "100%" },
+        input: { fontSize: 14, padding: "10px 12px", boxSizing: "border-box" },
+      },
+    },
+    MuiSelect: { styleOverrides: { select: { minWidth: 0 } } },
+    MuiFormControl: { styleOverrides: { root: { minWidth: 0 } } },
+    MuiIconButton: { defaultProps: { size: "small" } },
+  },
 });

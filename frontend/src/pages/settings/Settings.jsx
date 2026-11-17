@@ -1,4 +1,5 @@
-import { Input } from "@mui/material";
+import { Input } from "../../shared/components/FormControls.jsx";
+
 import { Target, Save, BookOpenText } from "lucide-react";
 import DangerZone from "../../shared/components/DangerZone.jsx";
 import { Panel, Field, PrimaryButton } from "../../shared/components/UI.jsx";

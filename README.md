@@ -109,3 +109,14 @@ O frontend usa React e Material UI. `src/shared` reúne componentes reutilizados
 O backend é um monólito modular. Cada funcionalidade possui seus pacotes de controllers, services, entities e repositories. Os controllers extraídos delegam os casos de uso aos services, com injeção pelo construtor. Os módulos ainda compartilham relacionamentos JPA e algumas dependências de persistência entre funcionalidades.
 
 Classes e componentes usam PascalCase. Funções e variáveis usam camelCase. Para formatar o frontend, execute `npm run format` em `frontend`. Para validar, execute `npm run build`, `npm run test:logic` e `mvn test` em `backend`, usando JDK 21.
+
+
+### Agenda e revisões dos erros
+
+A agenda permite concluir e reabrir atividades e blocos de estudo, mover pendências entre dias pela alça de arrastar ou pelo menu Mover, buscar atividades e filtrar pendentes/concluídas. Prioridade e atraso aparecem nos cartões. A conclusão manual é persistida e não cria registros de tempo ou questões. O quadro semanal tem rolagem horizontal para manter os títulos legíveis em telas menores.
+
+Em Desempenho, as disciplinas podem ser comparadas por cobertura, taxa de acerto, horas estudadas e prioridade. Os detalhes e ajustes ficam na disciplina selecionada.
+
+Em Caderno de erros → Flashcards, cada erro existente vira um cartão. A pergunta usa a pegadinha e a resposta usa a explicação correta, incluindo as imagens cadastradas. O backend usa Java-FSRS 1.0.0, com retenção desejada de 90%, aprendizagem em 1 e 10 minutos e reaprendizagem em 10 minutos. Os parâmetros são os padrões da biblioteca. A variação aleatória dos intervalos está desativada. Estado e histórico são persistidos junto ao erro, e avaliações concorrentes são rejeitadas. O otimizador automático de parâmetros do Anki não faz parte desta implementação.
+
+Os novos campos são adicionados pela configuração existente `ddl-auto: update`. Validação do frontend inclui `npm run test:ui`, `npm run test:logic` e `npm run build`.

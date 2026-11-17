@@ -1,4 +1,5 @@
-import { Button, Input, NativeSelect, TextareaAutosize } from "@mui/material";
+import { Input, NativeSelect } from "../../shared/components/FormControls.jsx";
+import { Button, TextareaAutosize } from "@mui/material";
 import {
   Plus,
   Target,
@@ -476,7 +477,7 @@ export default function Questions({ data, action, working, focusTopicId }) {
             </Field>
             <Field label="Observação (opcional)">
               <TextareaAutosize
-                rows="2"
+                minRows="2"
                 maxLength="400"
                 value={form.notes}
                 onChange={(e) =>

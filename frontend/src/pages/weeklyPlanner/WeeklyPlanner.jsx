@@ -1,4 +1,9 @@
-import { Button, NativeSelect, Input, TextareaAutosize } from "@mui/material";
+import { Typography, Stack, TextField, MenuItem } from "@mui/material";
+import { AgendaDay } from "./sections/AgendaDay.jsx";
+import { WeekBoard } from "./sections/WeekBoard.jsx";
+import AssimilationPicker from "../../shared/components/AssimilationPicker.jsx";
+import { Input, NativeSelect } from "../../shared/components/FormControls.jsx";
+import { Button, TextareaAutosize } from "@mui/material";
 import {
   CalendarDays,
   CalendarRange,
@@ -67,14 +72,40 @@ export default function WeeklyPlanner({ data, action, working, navigate }) {
     saveGoal,
     applySuggestion,
     navigateBlock,
-    renderActivity,
-    dayContent,
+    statusFilter,
+    setStatusFilter,
+    search,
+    setSearch,
+    moveActivity,
+    dropActivity,
+    reviewToComplete,
+    setReviewToComplete,
   } = useWeeklyPlanner({
     data,
     action,
     working,
     navigate,
   });
+  const dayContent = (day) => (
+    <AgendaDay
+      day={day}
+      search={search}
+      showRecorded={
+        statusFilter !== "PENDING" && (area === "ALL" || area === "STUDY")
+      }
+      data={data}
+      items={activityForDay(day)}
+      reviews={statusFilter === "DONE" ? [] : reviewsForDay(day)}
+      finishedReviews={doneReviewsForDay(day)}
+      working={working}
+      dates={dates}
+      onComplete={toggle}
+      onEdit={openEdit}
+      onStart={navigateBlock}
+      onMove={moveActivity}
+      onReview={setReviewToComplete}
+    />
+  );
   return (
     <div className="n55-planner view-stack">
       <div className="n55-toolbar">
@@ -217,6 +248,30 @@ export default function WeeklyPlanner({ data, action, working, navigate }) {
           <small>As sugestões não são incluídas sem sua confirmação.</small>
         </section>
       )}
+      <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+        <TextField
+          size="small"
+          label="Buscar atividade"
+          value={search}
+          onChange={(event) => setSearch(event.target.value)}
+        />
+        <TextField
+          select
+          size="small"
+          label="Situação"
+          value={statusFilter}
+          onChange={(event) => setStatusFilter(event.target.value)}
+          sx={{ minWidth: 180 }}
+        >
+          <MenuItem value="ALL">Todas</MenuItem>
+          <MenuItem value="PENDING">Pendentes</MenuItem>
+          <MenuItem value="DONE">Concluídas</MenuItem>
+        </TextField>
+      </Stack>
+      <Typography variant="caption" color="text.secondary">
+        Arraste as atividades pendentes pela alça para outro dia ou use o botão
+        Mover. Role o quadro para ver os demais dias.
+      </Typography>
       <section className="n55-calendar">
         <div className="n55-calendar-head">
           <div className="n55-date-nav">
@@ -309,39 +364,14 @@ export default function WeeklyPlanner({ data, action, working, navigate }) {
             </div>
           </div>
         ) : (
-          <div className="n55-week-grid">
-            {dates.map((day, i) => (
-              <section
-                className={`n55-week-day ${day === TODAY() ? "today" : ""}`}
-                key={day}
-              >
-                <header>
-                  <span>{WD[i]}</span>
-                  <strong>{parseDate(day).getDate()}</strong>
-                  <Button
-                    onClick={() => openAdd(day, true)}
-                    title="Planejar estudo"
-                    type="button"
-                  >
-                    <Plus size={17} />
-                  </Button>
-                </header>
-                <div className="n55-day-body">
-                  {dayContent(day)}
-                  {!activityForDay(day).length &&
-                    !reviewsForDay(day).length && (
-                      <Button
-                        className="n55-day-empty"
-                        onClick={() => openAdd(day, true)}
-                        type="button"
-                      >
-                        Planejar
-                      </Button>
-                    )}
-                </div>
-              </section>
-            ))}
-          </div>
+          <WeekBoard
+            dates={dates}
+            working={working}
+            itemsForDay={activityForDay}
+            renderDay={dayContent}
+            onDrop={dropActivity}
+            onAdd={openAdd}
+          />
         )}
       </section>
       {selectedDay && (
@@ -542,7 +572,7 @@ export default function WeeklyPlanner({ data, action, working, navigate }) {
               <Field label="Notas">
                 <TextareaAutosize
                   maxLength="1200"
-                  rows={2}
+                  minRows={2}
                   value={form.notes || ""}
                   onChange={(e) =>
                     setForm({
@@ -652,6 +682,21 @@ export default function WeeklyPlanner({ data, action, working, navigate }) {
             </div>
           </form>
         </Modal>
+      )}
+      {reviewToComplete && (
+        <AssimilationPicker
+          subject={reviewToComplete.topic.title}
+          working={working}
+          onClose={() => setReviewToComplete(null)}
+          onConfirm={(level) =>
+            action(
+              `reviews/${reviewToComplete.id}/complete`,
+              "PATCH",
+              { level },
+              "Revisão concluída e reagendada.",
+            )
+          }
+        />
       )}
     </div>
   );

@@ -33,9 +33,10 @@ export const globalStyles = [
     },
   },
   {
-    "button,input,select,textarea": {
-      font: "inherit",
-    },
+    "button,input:not(.MuiInputBase-input),select:not(.MuiInputBase-input),textarea":
+      {
+        font: "inherit",
+      },
   },
   {
     button: {
@@ -66,25 +67,26 @@ export const globalStyles = [
     },
   },
   {
-    "input,textarea,select": {
+    "input:not(.MuiInputBase-input),textarea,select:not(.MuiInputBase-input)": {
       outline: "none",
       maxWidth: "100%",
       color: "var(--dark)",
     },
   },
   {
-    "input::placeholder,textarea::placeholder": {
+    "input:not(.MuiInputBase-input)::placeholder,textarea::placeholder": {
       color: "#a5afbd",
     },
   },
   {
-    "input:focus,textarea:focus,select:focus": {
-      borderColor: "#8da5ff !important",
-      boxShadow: "0 0 0 3px #e8eeff",
-    },
+    "input:not(.MuiInputBase-input):focus,textarea:focus,select:not(.MuiInputBase-input):focus":
+      {
+        borderColor: "#8da5ff !important",
+        boxShadow: "0 0 0 3px #e8eeff",
+      },
   },
   {
-    "input[type=checkbox]": {
+    "input:not(.MuiInputBase-input)[type=checkbox]": {
       accentColor: "var(--accent)",
     },
   },
@@ -1747,7 +1749,7 @@ export const globalStyles = [
     },
   },
   {
-    ".search-wrap input": {
+    ".search-wrap input:not(.MuiInputBase-input)": {
       width: "100%",
       border: "0",
       background: "transparent",
@@ -3282,16 +3284,17 @@ export const globalStyles = [
     },
   },
   {
-    ".field input,.field select,.field textarea": {
-      width: "100%",
-      border: "1px solid #e3e9f2",
-      background: "#fcfdff",
-      borderRadius: "8px",
-      padding: "11px 12px",
-      fontSize: "12px",
-      transition: "border .15s,box-shadow .15s",
-      minHeight: "41px",
-    },
+    ".field input:not(.MuiInputBase-input),.field select:not(.MuiInputBase-input),.field textarea":
+      {
+        width: "100%",
+        border: "1px solid #e3e9f2",
+        background: "#fcfdff",
+        borderRadius: "8px",
+        padding: "11px 12px",
+        fontSize: "12px",
+        transition: "border .15s,box-shadow .15s",
+        minHeight: "41px",
+      },
   },
   {
     ".field textarea": {
@@ -3336,10 +3339,11 @@ export const globalStyles = [
     },
   },
   {
-    ".form-check-row input,.checkbox-label input": {
-      height: "16px",
-      width: "16px",
-    },
+    ".form-check-row input:not(.MuiInputBase-input),.checkbox-label input:not(.MuiInputBase-input)":
+      {
+        height: "16px",
+        width: "16px",
+      },
   },
   {
     ".modal-actions": {
@@ -3361,7 +3365,7 @@ export const globalStyles = [
     },
   },
   {
-    ".color-field input": {
+    ".color-field input:not(.MuiInputBase-input)": {
       padding: "0",
       width: "50px",
       height: "38px",
@@ -3969,15 +3973,16 @@ export const globalStyles = [
     },
   },
   {
-    "input[type=checkbox]": {
+    "input:not(.MuiInputBase-input)[type=checkbox]": {
       accentColor: "#327c6c",
     },
   },
   {
-    "input:focus,textarea:focus,select:focus": {
-      borderColor: "#62a48c !important",
-      boxShadow: "0 0 0 3px #75b49b28 !important",
-    },
+    "input:not(.MuiInputBase-input):focus,textarea:focus,select:not(.MuiInputBase-input):focus":
+      {
+        borderColor: "#62a48c !important",
+        boxShadow: "0 0 0 3px #75b49b28 !important",
+      },
   },
   {
     "button:focus-visible,a:focus-visible": {
@@ -4336,11 +4341,12 @@ export const globalStyles = [
     },
   },
   {
-    ".field input,.field select,.field textarea": {
-      border: "1px solid #dce8dd",
-      background: "#fcfefc",
-      color: "#2c493d",
-    },
+    ".field input:not(.MuiInputBase-input),.field select:not(.MuiInputBase-input),.field textarea":
+      {
+        border: "1px solid #dce8dd",
+        background: "#fcfefc",
+        color: "#2c493d",
+      },
   },
   {
     ".modal-panel": {
@@ -4986,7 +4992,7 @@ export const globalStyles = [
     },
   },
   {
-    ".edital-dropzone input": {
+    ".edital-dropzone input:not(.MuiInputBase-input)": {
       position: "absolute",
       inset: "0",
       opacity: "0",
@@ -5238,7 +5244,7 @@ export const globalStyles = [
     },
   },
   {
-    ".week-filters select": {
+    ".week-filters select:not(.MuiInputBase-input)": {
       height: "37px",
       borderRadius: "9px",
       padding: "0 12px",
@@ -5962,7 +5968,7 @@ export const globalStyles = [
     },
   },
   {
-    ".nimbo-chat input": {
+    ".nimbo-chat input:not(.MuiInputBase-input)": {
       width: "100%",
       border: "1px solid #dce8dc",
       borderRadius: "9px",
@@ -6597,7 +6603,7 @@ export const globalStyles = [
       ".week-filters": {
         width: "100%",
       },
-      ".week-filters select": {
+      ".week-filters select:not(.MuiInputBase-input)": {
         width: "100%",
       },
       ".edital-upload-icon": {
@@ -6696,22 +6702,23 @@ export const globalStyles = [
     },
   },
   {
-    ".nimbo-theme button,.nimbo-theme input,.nimbo-theme select,.nimbo-theme textarea":
+    ".nimbo-theme button,.nimbo-theme input:not(.MuiInputBase-input),.nimbo-theme select:not(.MuiInputBase-input),.nimbo-theme textarea":
       {
         fontSize: "14px",
       },
   },
   {
-    ".nimbo-theme input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=color]),\n.nimbo-theme select,.nimbo-theme textarea":
+    ".nimbo-theme input:not(.MuiInputBase-input):not([type=checkbox]):not([type=radio]):not([type=range]):not([type=color]),\n.nimbo-theme select:not(.MuiInputBase-input),.nimbo-theme textarea":
       {
         minHeight: "43px",
         lineHeight: "1.45",
       },
   },
   {
-    ".nimbo-theme input::placeholder,.nimbo-theme textarea::placeholder": {
-      color: "#84968d",
-    },
+    ".nimbo-theme input:not(.MuiInputBase-input)::placeholder,.nimbo-theme textarea::placeholder":
+      {
+        color: "#84968d",
+      },
   },
   {
     ".nimbo-theme .btn": {
@@ -6945,7 +6952,7 @@ export const globalStyles = [
     },
   },
   {
-    ".nimbo-theme .field input,.nimbo-theme .field select,.nimbo-theme .field textarea":
+    ".nimbo-theme .field input:not(.MuiInputBase-input),.nimbo-theme .field select:not(.MuiInputBase-input),.nimbo-theme .field textarea":
       {
         fontSize: "14px",
         borderRadius: "10px",
@@ -7122,7 +7129,7 @@ export const globalStyles = [
     },
   },
   {
-    ".nimbo-theme .search-wrap input": {
+    ".nimbo-theme .search-wrap input:not(.MuiInputBase-input)": {
       fontSize: "14px",
       minHeight: "40px !important",
       lineHeight: "1.4",
@@ -7557,7 +7564,7 @@ export const globalStyles = [
     },
   },
   {
-    ".nimbo-theme .nimbo-chat input": {
+    ".nimbo-theme .nimbo-chat input:not(.MuiInputBase-input)": {
       fontSize: "12px",
     },
   },
@@ -7619,19 +7626,20 @@ export const globalStyles = [
     },
   },
   {
-    ".filter-item input,.filter-item select": {
-      width: "100%",
-      border: "1px solid #dce8de",
-      borderRadius: "10px",
-      background: "#fbfdfb",
-      color: "#244639",
-      padding: "9px 11px",
-      minHeight: "43px",
-      fontSize: "13px",
-    },
+    ".filter-item input:not(.MuiInputBase-input),.filter-item select:not(.MuiInputBase-input)":
+      {
+        width: "100%",
+        border: "1px solid #dce8de",
+        borderRadius: "10px",
+        background: "#fbfdfb",
+        color: "#244639",
+        padding: "9px 11px",
+        minHeight: "43px",
+        fontSize: "13px",
+      },
   },
   {
-    ".filter-item .search-wrap input": {
+    ".filter-item .search-wrap input:not(.MuiInputBase-input)": {
       padding: "0",
       background: "transparent",
       border: "0",
@@ -8882,7 +8890,7 @@ export const globalStyles = [
     },
   },
   {
-    ".nimbo-theme .analytics-filters select": {
+    ".nimbo-theme .analytics-filters select:not(.MuiInputBase-input)": {
       minHeight: "43px",
       fontSize: "13px",
       flex: "1 1 150px",
@@ -9065,7 +9073,7 @@ export const globalStyles = [
     },
   },
   {
-    ".nimbo-theme button,.nimbo-theme select,.nimbo-theme input,.nimbo-theme textarea":
+    ".nimbo-theme button,.nimbo-theme select:not(.MuiInputBase-input),.nimbo-theme input:not(.MuiInputBase-input),.nimbo-theme textarea":
       {
         fontFamily: "inherit",
       },
@@ -9122,7 +9130,7 @@ export const globalStyles = [
     },
   },
   {
-    ".nimbo-theme .btn:focus-visible,.nimbo-theme button:focus-visible,.nimbo-theme select:focus-visible,.nimbo-theme input:focus-visible":
+    ".nimbo-theme .btn:focus-visible,.nimbo-theme button:focus-visible,.nimbo-theme select:not(.MuiInputBase-input):focus-visible,.nimbo-theme input:not(.MuiInputBase-input):focus-visible":
       {
         outline: "3px solid #8bcdb0",
         outlineOffset: "2px",
@@ -9171,7 +9179,7 @@ export const globalStyles = [
     },
   },
   {
-    ".nimbo-theme .filter-select,.nimbo-theme .search-wrap,.nimbo-theme .filter-item select,.nimbo-theme .analytics-filters select,.nimbo-theme .vault-filters select":
+    ".nimbo-theme .filter-select,.nimbo-theme .search-wrap,.nimbo-theme .filter-item select:not(.MuiInputBase-input),.nimbo-theme .analytics-filters select:not(.MuiInputBase-input),.nimbo-theme .vault-filters select:not(.MuiInputBase-input)":
       {
         minHeight: "44px",
         fontSize: "14px",
@@ -9182,7 +9190,7 @@ export const globalStyles = [
       },
   },
   {
-    ".nimbo-theme .search-wrap input": {
+    ".nimbo-theme .search-wrap input:not(.MuiInputBase-input)": {
       fontSize: "14px",
       minHeight: "40px",
       color: "#284d3a",
@@ -9345,7 +9353,7 @@ export const globalStyles = [
     },
   },
   {
-    ".nimbo-theme .vault-filters select": {
+    ".nimbo-theme .vault-filters select:not(.MuiInputBase-input)": {
       width: "100%",
       minWidth: "0",
       padding: "0 10px",
@@ -9708,7 +9716,7 @@ export const globalStyles = [
     },
   },
   {
-    ".nimbo-theme .analytics-filters select": {
+    ".nimbo-theme .analytics-filters select:not(.MuiInputBase-input)": {
       flex: "1",
       minWidth: "145px",
     },
@@ -10028,7 +10036,7 @@ export const globalStyles = [
     },
   },
   {
-    ".nimbo-theme .sheet-filter select": {
+    ".nimbo-theme .sheet-filter select:not(.MuiInputBase-input)": {
       height: "44px",
       minWidth: "0",
       width: "100%",
@@ -10049,7 +10057,7 @@ export const globalStyles = [
     },
   },
   {
-    ".nimbo-theme .sheet-filter input": {
+    ".nimbo-theme .sheet-filter input:not(.MuiInputBase-input)": {
       fontSize: "14px",
     },
   },
@@ -10165,24 +10173,8 @@ export const globalStyles = [
       lineHeight: "1.3",
     },
   },
-  {
-    ".nimbo-theme .sheet-inline-select": {
-      minHeight: "36px",
-      minWidth: "114px",
-      maxWidth: "140px",
-      padding: "0 6px",
-      background: "#fff",
-      border: "1px solid #d8e6dc",
-      borderRadius: "8px",
-      color: "#325f46",
-      fontSize: "12px",
-    },
-  },
-  {
-    ".nimbo-theme .sheet-inline-select.mastery-select": {
-      minWidth: "85px",
-    },
-  },
+  {},
+  {},
   {
     ".nimbo-theme .study-check,.nimbo-theme .review-check": {
       display: "inline-flex",
@@ -10367,7 +10359,7 @@ export const globalStyles = [
     },
   },
   {
-    ".nimbo-theme .sheet-footer select": {
+    ".nimbo-theme .sheet-footer select:not(.MuiInputBase-input)": {
       minHeight: "37px",
       border: "1px solid #cfdfd2",
       borderRadius: "8px",
@@ -10524,10 +10516,11 @@ export const globalStyles = [
     },
   },
   {
-    ".nimbo-theme .vault-upload-zone input[type=file]": {
-      maxWidth: "100%",
-      fontSize: "13px",
-    },
+    ".nimbo-theme .vault-upload-zone input:not(.MuiInputBase-input)[type=file]":
+      {
+        maxWidth: "100%",
+        fontSize: "13px",
+      },
   },
   {
     ".nimbo-theme .vault-or": {
@@ -10778,7 +10771,7 @@ export const globalStyles = [
     },
   },
   {
-    ".nimbo-theme .reader-check input": {
+    ".nimbo-theme .reader-check input:not(.MuiInputBase-input)": {
       width: "17px",
       height: "17px",
       flex: "0 0 17px",
@@ -10848,7 +10841,7 @@ export const globalStyles = [
       },
   },
   {
-    ".nimbo-theme .screenshot-file-button input": {
+    ".nimbo-theme .screenshot-file-button input:not(.MuiInputBase-input)": {
       display: "none",
     },
   },
@@ -11200,7 +11193,7 @@ export const globalStyles = [
     },
   },
   {
-    ".nimbo-theme .question-topic-picker select": {
+    ".nimbo-theme .question-topic-picker select:not(.MuiInputBase-input)": {
       width: "100%",
       minHeight: "42px",
       fontSize: "14px",
@@ -11212,9 +11205,10 @@ export const globalStyles = [
     },
   },
   {
-    ".nimbo-theme .question-topic-picker select:disabled": {
-      opacity: ".65",
-    },
+    ".nimbo-theme .question-topic-picker select:not(.MuiInputBase-input):disabled":
+      {
+        opacity: ".65",
+      },
   },
   {
     ".nimbo-theme .question-focus-clock": {
@@ -11486,9 +11480,10 @@ export const globalStyles = [
     },
   },
   {
-    ".ux-v54 button,.ux-v54 input,.ux-v54 select,.ux-v54 textarea": {
-      font: "inherit",
-    },
+    ".ux-v54 button,.ux-v54 input:not(.MuiInputBase-input),.ux-v54 select:not(.MuiInputBase-input),.ux-v54 textarea":
+      {
+        font: "inherit",
+      },
   },
   {
     ".ux-v54 button": {
@@ -11502,10 +11497,11 @@ export const globalStyles = [
     },
   },
   {
-    ".ux-v54 :is(button,input,select,textarea,summary,a):focus-visible": {
-      outline: "3px solid #72ad98 !important",
-      outlineOffset: "3px",
-    },
+    ".ux-v54 :is(button,input:not(.MuiInputBase-input),select:not(.MuiInputBase-input),textarea,summary,a):focus-visible":
+      {
+        outline: "3px solid #72ad98 !important",
+        outlineOffset: "3px",
+      },
   },
   {
     ".ux-v54 .sidebar": {
@@ -11904,7 +11900,7 @@ export const globalStyles = [
     },
   },
   {
-    ".ux-v54 :is(input:not([type='checkbox']):not([type='radio']):not([type='file']),select,textarea)":
+    ".ux-v54 :is(input:not(.MuiInputBase-input):not([type='checkbox']):not([type='radio']):not([type='file']),select:not(.MuiInputBase-input),textarea)":
       {
         fontSize: "15px",
         minHeight: "42px",
@@ -11927,7 +11923,7 @@ export const globalStyles = [
     },
   },
   {
-    ".ux-v54 .search-wrap input": {
+    ".ux-v54 .search-wrap input:not(.MuiInputBase-input)": {
       fontSize: "15px !important",
       height: "38px",
       minHeight: "38px !important",
@@ -12865,7 +12861,7 @@ export const globalStyles = [
     },
   },
   {
-    ".ux-v54 .ux-command-input input": {
+    ".ux-v54 .ux-command-input input:not(.MuiInputBase-input)": {
       flex: "1",
       minWidth: "0",
       border: "0 !important",
@@ -13270,12 +13266,7 @@ export const globalStyles = [
       minHeight: "33px",
     },
   },
-  {
-    ".ux-v54 .sheet-inline-select": {
-      fontSize: "13px !important",
-      minHeight: "35px !important",
-    },
-  },
+  {},
   {
     ".ux-v54 .sheet-footer": {
       fontSize: "13px",
@@ -13528,7 +13519,7 @@ export const globalStyles = [
     },
   },
   {
-    ".n55-area select": {
+    ".n55-area select:not(.MuiInputBase-input)": {
       minWidth: "124px",
       fontSize: "14px",
     },
@@ -13963,7 +13954,7 @@ export const globalStyles = [
     },
   },
   {
-    ".assimilation-choice input": {
+    ".assimilation-choice input:not(.MuiInputBase-input)": {
       accentColor: "#3c8767",
       width: "18px",
       height: "18px",
@@ -14131,6 +14122,13 @@ export const globalStyles = [
     ".n55-logged-event small": {
       fontSize: "12px",
       color: "#77709b",
+    },
+  },
+  {
+    ".nimbo-theme .search-wrap": {
+      border: 0,
+      padding: 0,
+      background: "transparent",
     },
   },
 ];

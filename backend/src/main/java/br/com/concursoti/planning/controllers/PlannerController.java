@@ -91,7 +91,7 @@ public class PlannerController {
       item.category == AgendaItem.Category.STUDY && request.topicId() != null
     ) {
       Topic t = topics
-        .findById(request.topicId())
+        .findLockedById(request.topicId())
         .orElseThrow(() ->
           new IllegalArgumentException("Assunto não encontrado.")
         );
@@ -137,11 +137,13 @@ public class PlannerController {
   }
 
   @PostMapping
+  @Transactional
   public AgendaItem add(@RequestBody AgendaInput input) {
     return repo.save(fill(new AgendaItem(), input));
   }
 
   @PutMapping("/{id}")
+  @Transactional
   public AgendaItem change(
     @PathVariable Long id,
     @RequestBody AgendaInput input
@@ -153,10 +155,8 @@ public class PlannerController {
   @Transactional
   public AgendaItem toggle(@PathVariable Long id) {
     AgendaItem item = repo.findById(id).orElseThrow();
-    if (item.topic != null) throw new IllegalArgumentException(
-      "Estudos vinculados são concluídos pelo cronômetro e registro de questões."
-    );
     item.completed = !item.completed;
+    item.completionOverride = item.completed;
     repo.save(item);
     if (item.completed && Boolean.TRUE.equals(item.repeatWeekly)) {
       LocalDate next = item.scheduledDate.plusWeeks(1);
@@ -187,6 +187,67 @@ public class PlannerController {
       }
     }
     return item;
+  }
+
+  public record CompletionInput(Boolean completed, Long expectedVersion) {}
+
+  @PatchMapping("/{id}/completion")
+  @Transactional
+  public AgendaItem complete(
+    @PathVariable Long id,
+    @RequestBody CompletionInput request
+  ) {
+    AgendaItem item = repo.findById(id).orElseThrow();
+    if (request.completed() == null) throw new IllegalArgumentException(
+      "Informe se a atividade foi concluída."
+    );
+    verifyVersion(item, request.expectedVersion());
+    if (Objects.equals(item.completed, request.completed())) {
+      item.completionOverride = request.completed();
+      return repo.save(item);
+    }
+    return toggle(id);
+  }
+
+  public record MoveInput(LocalDate scheduledDate, Long expectedVersion) {}
+
+  @PatchMapping("/{id}/move")
+  @Transactional
+  public AgendaItem move(
+    @PathVariable Long id,
+    @RequestBody MoveInput request
+  ) {
+    AgendaItem item = repo.findById(id).orElseThrow();
+    verifyVersion(item, request.expectedVersion());
+    if (request.scheduledDate() == null) throw new IllegalArgumentException(
+      "Informe o dia de destino."
+    );
+    if (Boolean.TRUE.equals(item.completed)) throw new IllegalArgumentException(
+      "Reabra a atividade antes de movê-la."
+    );
+    AgendaInput input = new AgendaInput(
+      item.title,
+      item.category,
+      request.scheduledDate(),
+      item.startTime,
+      item.durationMinutes,
+      item.priority,
+      item.repeatWeekly,
+      item.notes,
+      item.topic == null ? null : item.topic.id,
+      item.studyKind,
+      item.targetQuestions
+    );
+    return repo.save(fill(item, input));
+  }
+
+  private void verifyVersion(AgendaItem item, Long expectedVersion) {
+    if (expectedVersion == null || item.version != expectedVersion) {
+      throw new org.springframework.web.server.ResponseStatusException(
+        org.springframework.http.HttpStatus.CONFLICT,
+        "A atividade mudou. Atualize a agenda e tente novamente."
+      );
+    }
   }
 
   @GetMapping("/goals")

@@ -19,7 +19,9 @@ export async function api(path, method = "GET", body = undefined) {
     } catch {
       /* no JSON */
     }
-    throw new Error(message);
+    const error = new Error(message);
+    error.status = response.status;
+    throw error;
   }
   return response.status === 204 ||
     response.headers.get("content-length") === "0"

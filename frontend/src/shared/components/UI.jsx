@@ -1,3 +1,4 @@
+import { NativeSelect } from "./FormControls.jsx";
 import React from "react";
 import {
   Dialog,
@@ -14,7 +15,6 @@ import {
   FormControl,
   FormLabel,
   FormHelperText,
-  NativeSelect,
 } from "@mui/material";
 import { X, Trash2, Inbox } from "lucide-react";
 import { masteryLabels, statusLabels, fmtPercent } from "../utils/utils.js";
@@ -47,7 +47,7 @@ export function Modal({ title, subtitle, onClose, children, wide = false }) {
 export function Field({ label, hint, children }) {
   return (
     <FormControl component="label" fullWidth sx={{ gap: 1, my: 1 }}>
-      <FormLabel>{label}</FormLabel>
+      <FormLabel component="span">{label}</FormLabel>
       {children}
       {hint && <FormHelperText>{hint}</FormHelperText>}
     </FormControl>
@@ -95,7 +95,13 @@ export function Panel({ title, subtitle, action, children, className = "" }) {
       <Stack
         direction="row"
 
-        sx={{ mb: 2 }}
+        sx={{
+          mb: 2,
+          gap: 2,
+          alignItems: "center",
+          justifyContent: "space-between",
+          flexWrap: "wrap",
+        }}
       >
         <Stack>
           <Typography variant="h6">{title}</Typography>
@@ -174,12 +180,18 @@ export function AccuracyTag({ correct, total }) {
     />
   );
 }
-export function ProgressBar({ value, height = 7 }) {
+export function ProgressBar({ value, height = 7, color }) {
   return (
     <LinearProgress
       variant="determinate"
       value={Math.max(0, Math.min(100, value || 0))}
-      sx={{ height, borderRadius: 1 }}
+      sx={{
+        height,
+        borderRadius: 1,
+        ...(color
+          ? { "& .MuiLinearProgress-bar": { backgroundColor: color } }
+          : {}),
+      }}
     />
   );
 }
@@ -189,9 +201,9 @@ export function Tip({ children }) {
 export function SectionIntro({ kicker, title, description, action }) {
   return (
     <Stack
-      direction="row"
-
+      direction={{ xs: "column", sm: "row" }}
       spacing={2}
+      sx={{ alignItems: { sm: "center" }, justifyContent: "space-between" }}
     >
       <Stack>
         {kicker && <Typography variant="overline">{kicker}</Typography>}

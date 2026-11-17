@@ -1,7 +1,5 @@
-import { Button } from "@mui/material";
 import { useMemo, useState } from "react";
-import { Check, Clock3, PenLine, RotateCcw } from "lucide-react";
-import { TODAY, fmtHours } from "../../../shared/utils/utils.js";
+import { TODAY } from "../../../shared/utils/utils.js";
 import {
   isoDate,
   parseDate,
@@ -11,14 +9,16 @@ import {
   monthStart,
   monthEnd,
   periodSummary,
-  itemProgress,
+  isAgendaCompleted,
   findGoal,
   suggestWeek,
-  unplannedStudies,
 } from "../../../shared/utils/plannerMetrics.js";
 import { activeReview } from "../../../shared/utils/revisionLevels.js";
-import { CATEGORIES, formInitial } from "../utils/pageDefinitions.jsx";
+import { formInitial } from "../utils/pageDefinitions.jsx";
 export function useWeeklyPlanner({ data, action, working, navigate }) {
+  const [statusFilter, setStatusFilter] = useState("ALL");
+  const [search, setSearch] = useState("");
+  const [reviewToComplete, setReviewToComplete] = useState(null);
   const [mode, setMode] = useState("week"),
     [anchor, setAnchor] = useState(TODAY()),
     [area, setArea] = useState("ALL");
@@ -79,7 +79,13 @@ export function useWeeklyPlanner({ data, action, working, navigate }) {
     (data.agenda || [])
       .filter(
         (i) =>
-          i.scheduledDate === day && (area === "ALL" || i.category === area),
+          i.scheduledDate === day &&
+          (area === "ALL" || i.category === area) &&
+          (statusFilter === "ALL" ||
+            isAgendaCompleted(data, i) === (statusFilter === "DONE")) &&
+          i.title
+            .toLocaleLowerCase("pt-BR")
+            .includes(search.trim().toLocaleLowerCase("pt-BR")),
       )
       .sort((a, b) =>
         (a.startTime || "99:99").localeCompare(b.startTime || "99:99"),
@@ -88,7 +94,12 @@ export function useWeeklyPlanner({ data, action, working, navigate }) {
     area !== "ALL" && area !== "STUDY"
       ? []
       : (data.reviews || []).filter(
-          (r) => activeReview(r) && r.dueDate === day,
+          (review) =>
+            activeReview(review) &&
+            review.dueDate === day &&
+            review.topic.title
+              .toLocaleLowerCase("pt-BR")
+              .includes(search.trim().toLocaleLowerCase("pt-BR")),
         );
   const doneReviewsForDay = (day) =>
     area !== "ALL" && area !== "STUDY"
@@ -142,13 +153,33 @@ export function useWeeklyPlanner({ data, action, working, navigate }) {
     )
       setEditor(null);
   };
-  const toggle = (item) =>
+  const toggle = (item, completed) =>
     action(
-      `agenda/${item.id}/toggle`,
+      `agenda/${item.id}/completion`,
       "PATCH",
-      undefined,
+      { completed, expectedVersion: item.version ?? 0 },
       "Atividade atualizada.",
     );
+  const moveActivity = (item, scheduledDate) => {
+    if (
+      working ||
+      isAgendaCompleted(data, item) ||
+      item.scheduledDate === scheduledDate
+    )
+      return;
+    return action(
+      `agenda/${item.id}/move`,
+      "PATCH",
+      { scheduledDate, expectedVersion: item.version ?? 0 },
+      "Atividade movida.",
+    );
+  };
+  const dropActivity = (id, scheduledDate) => {
+    const item = (data.agenda || []).find(
+      (item) => String(item.id) === String(id),
+    );
+    if (item) return moveActivity(item, scheduledDate);
+  };
   const remove = async () => {
     if (window.confirm(`Excluir "${form.title}"?`)) {
       if (
@@ -192,124 +223,6 @@ export function useWeeklyPlanner({ data, action, working, navigate }) {
     navigate(item.studyKind === "QUESTIONS" ? "questions" : "cycle", {
       topicId: item.topic.id,
     });
-  const renderActivity = (item, compact = false) => {
-    const tracked = itemProgress(data, item),
-      isDone = tracked ? tracked.complete : item.completed;
-    const cat = CATEGORIES[item.category] || CATEGORIES.PERSONAL;
-    return (
-      <div
-        className={`n55-event ${isDone ? "done" : ""} ${tracked ? "study" : ""}`}
-        key={`agenda-${item.id}`}
-      >
-        {!tracked && (
-          <Button
-            className={`n55-check ${item.completed ? "checked" : ""}`}
-            onClick={() => toggle(item)}
-            disabled={working}
-            title={item.completed ? "Reabrir" : "Concluir"}
-            aria-label={`Concluir ${item.title}`}
-            type="button"
-          >
-            {item.completed && <Check size={13} />}
-          </Button>
-        )}
-        <div className="n55-event-body">
-          <strong>{item.title}</strong>
-          {!compact && (
-            <small>
-              {cat.name}
-              {item.startTime ? ` · ${item.startTime.slice(0, 5)}` : ""}
-              {tracked
-                ? ` · ${item.studyKind === "QUESTIONS" ? "Questões" : "Teoria"}`
-                : ""}
-            </small>
-          )}
-          {tracked && (
-            <span className="n55-event-progress">
-              {fmtHours(tracked.seconds)} / {item.durationMinutes} min
-              {tracked.targetQuestions > 0
-                ? ` · ${tracked.questions}/${tracked.targetQuestions} questões`
-                : ""}
-            </span>
-          )}
-        </div>
-        {!compact && (
-          <div className="n55-event-actions">
-            {tracked && (
-              <Button
-                className="n55-minibutton"
-                title="Iniciar estudo"
-                onClick={() => navigateBlock(item)}
-                type="button"
-              >
-                <Clock3 size={15} />
-              </Button>
-            )}
-            <Button
-              className="n55-minibutton"
-              title="Editar"
-              onClick={() => openEdit(item)}
-              type="button"
-            >
-              <PenLine size={15} />
-            </Button>
-          </div>
-        )}
-      </div>
-    );
-  };
-  const dayContent = (day, compact = false) => {
-    const scheduled = activityForDay(day),
-      reviews = reviewsForDay(day),
-      finished = doneReviewsForDay(day),
-      summary = actualForDay(day),
-      unplanned = unplannedStudies(data, day);
-    return (
-      <>
-        {scheduled.map((i) => renderActivity(i, compact))}
-        {reviews.map((r) => (
-          <Button
-            className="n55-review-event"
-            key={`review-${r.id}`}
-            onClick={() => navigate("reviews")}
-            title="Revisão agendada"
-            type="button"
-          >
-            <RotateCcw size={14} />
-            <span>{r.topic.title}</span>
-          </Button>
-        ))}
-        {!compact &&
-          unplanned.map((item) => (
-            <div className="n55-logged-event" key={`unplanned-${item.key}`}>
-              <span>Realizado</span>
-              <strong>{item.topic.title}</strong>
-              <small>
-                {item.kind === "QUESTIONS" ? "Questões" : "Teoria"} ·{" "}
-                {fmtHours(item.seconds)}
-                {item.questions > 0 ? ` · ${item.questions} questões` : ""}
-              </small>
-            </div>
-          ))}
-        {!compact && finished.length > 0 && (
-          <div className="n55-day-actual">
-            {finished.length} revisão(ões) concluída(s)
-          </div>
-        )}
-        {!compact && (summary.seconds > 0 || summary.questions > 0) && (
-          <div className="n55-day-actual">
-            Registrado: {fmtHours(summary.seconds)} · {summary.questions}{" "}
-            questões
-          </div>
-        )}
-        {compact && scheduled.length + reviews.length > 2 && (
-          <span className="n55-more-count">
-            +{scheduled.length + reviews.length - 2} itens
-          </span>
-        )}
-      </>
-    );
-  };
   return {
     mode,
     setMode,
@@ -357,7 +270,13 @@ export function useWeeklyPlanner({ data, action, working, navigate }) {
     saveGoal,
     applySuggestion,
     navigateBlock,
-    renderActivity,
-    dayContent,
+    statusFilter,
+    setStatusFilter,
+    search,
+    setSearch,
+    moveActivity,
+    dropActivity,
+    reviewToComplete,
+    setReviewToComplete,
   };
 }

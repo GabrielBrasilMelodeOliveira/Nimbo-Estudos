@@ -1,4 +1,5 @@
-import { Button, Input } from "@mui/material";
+import { Input } from "./FormControls.jsx";
+import { Button } from "@mui/material";
 import React, { useState } from "react";
 import { AlertTriangle, Trash2 } from "lucide-react";
 import { Modal } from "./UI.jsx";

@@ -1,4 +1,5 @@
-import { Button, NativeSelect, Input } from "@mui/material";
+import { Input, NativeSelect } from "../../shared/components/FormControls.jsx";
+import { Button } from "@mui/material";
 import {
   Play,
   Pause,
