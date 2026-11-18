@@ -486,7 +486,7 @@ export const globalStyles = [
   },
   {
     ".main-content": {
-      maxWidth: "1600px",
+      maxWidth: "none",
       margin: "auto",
       padding: "39px 40px 20px",
     },
@@ -4215,7 +4215,7 @@ export const globalStyles = [
   },
   {
     ".main-content": {
-      maxWidth: "1510px",
+      maxWidth: "none",
       padding: "34px 36px 25px",
     },
   },
@@ -6371,7 +6371,7 @@ export const globalStyles = [
   {
     "@media (min-width:1600px)": {
       ".app-main": {
-        marginRight: "310px",
+        marginRight: 0,
       },
       ".main-content": {
         padding: "38px 35px",
@@ -6686,7 +6686,7 @@ export const globalStyles = [
   },
   {
     ".nimbo-theme .main-content": {
-      maxWidth: "1540px",
+      maxWidth: "none",
       padding: "36px clamp(16px,3vw,44px) 28px",
     },
   },
@@ -9069,7 +9069,7 @@ export const globalStyles = [
   },
   {
     ".nimbo-theme .main-content": {
-      maxWidth: "1660px",
+      maxWidth: "none",
     },
   },
   {
@@ -11770,7 +11770,7 @@ export const globalStyles = [
   },
   {
     ".ux-v54 .main-content": {
-      maxWidth: "1500px",
+      maxWidth: "none",
       padding: "30px clamp(18px,3vw,44px) 45px",
     },
   },
@@ -12922,7 +12922,7 @@ export const globalStyles = [
   {
     "@media (min-width:1600px)": {
       ".ux-v54 .app-main": {
-        marginRight: "300px",
+        marginRight: 0,
       },
     },
   },

@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Button, Tabs, Tab } from "@mui/material";
 import {
   CalendarDays,
   CheckCircle2,
@@ -30,29 +30,18 @@ export default function Reviews({ data, action, working, navigate }) {
   return (
     <div className="view-stack">
       <Panel title="Revisões">
-        <div className="tabs" role="tablist">
-          <Button
-            className={tab === "due" ? "active" : ""}
-            onClick={() => setTab("due")}
-            type="button"
-          >
-            Pendentes <span>{due.length}</span>
-          </Button>
-          <Button
-            className={tab === "upcoming" ? "active" : ""}
-            onClick={() => setTab("upcoming")}
-            type="button"
-          >
-            Próximas <span>{upcoming.length}</span>
-          </Button>
-          <Button
-            className={tab === "done" ? "active" : ""}
-            onClick={() => setTab("done")}
-            type="button"
-          >
-            Histórico <span>{done.length}</span>
-          </Button>
-        </div>
+        <Tabs
+          value={tab}
+          onChange={(_, value) => setTab(value)}
+          variant="scrollable"
+          scrollButtons="auto"
+          aria-label="Filtrar revisões"
+          sx={{ mb: 2 }}
+        >
+          <Tab value="due" label={`Pendentes (${due.length})`} />
+          <Tab value="upcoming" label={`Próximas (${upcoming.length})`} />
+          <Tab value="done" label={`Histórico (${done.length})`} />
+        </Tabs>
         {current.length ? (
           <div className="review-list">
             {current.map((r) => (

@@ -1,449 +1,271 @@
-import { DisciplineCharts } from "./components/DisciplineCharts.jsx";
-import { Input, NativeSelect } from "../../shared/components/FormControls.jsx";
-import { Button } from "@mui/material";
+import {
+  Box,
+  Paper,
+  Stack,
+  Typography,
+  TextField,
+  MenuItem,
+} from "@mui/material";
 import { BarChart } from "@mui/x-charts/BarChart";
-import React from "react";
-import {
-  Target,
-  Clock3,
-  ChartNoAxesCombined,
-  BookOpenText,
-  Search,
-  SlidersHorizontal,
-  Edit3,
-  ArrowRight,
-} from "lucide-react";
-import {
-  Panel,
-  Modal,
-  PrimaryButton,
-  SubtleButton,
-  ProgressBar,
-  MasteryPill,
-  StatusPill,
-  Empty,
-} from "../../shared/components/UI.jsx";
+import { PieChart } from "@mui/x-charts/PieChart";
+import { TopicSelect } from "../../shared/components/UI.jsx";
 import { fmtHours, dateBR } from "../../shared/utils/utils.js";
-import { fmt } from "./utils/pageDefinitions.jsx";
-import { Priority } from "./components/Priority.jsx";
-import { Ratings } from "./components/Ratings.jsx";
 import { useAnalytics } from "./hooks/useAnalytics.jsx";
-export default function Analytics({ data, action, working, navigate }) {
-  const {
-    analysis,
-    search,
-    setSearch,
-    disc,
-    setDisc,
-    status,
-    setStatus,
-    mastery,
-    setMastery,
-    order,
-    setOrder,
-    editing,
-    setEditing,
-    tuning,
-    setTuning,
-    topicEditing,
-    setTopicEditing,
-    topicImportance,
-    setTopicImportance,
-    selected,
-    setSelected,
-    filtered,
-    saveTuning,
-    saveTopic,
-    selectRow,
-    allTopics,
-    statusDistribution,
-    priorityDistribution,
-  } = useAnalytics({
-    data,
-    action,
-    working,
-    navigate,
-  });
-  return (
-    <div className="view-stack analytics-page">
-      <div className="analytics-intro">
-        <div>
-          <span className="ux-muted-intro">Entenda seus pontos de atenção</span>
-        </div>
-        <Button
-          className="btn btn-subtle"
-          onClick={() => navigate("cycle")}
-          type="button"
-        >
-          Ir para o cronômetro <ArrowRight size={16} />
-        </Button>
-      </div>
-      <div className="analytics-kpis">
-        <div>
-          <BookOpenText size={21} />
-          <span>Assuntos acompanhados</span>
-          <strong>{fmt(analysis.totalTopics)}</strong>
-          <small>{fmt(analysis.completedTopics)} concluídos</small>
-        </div>
-        <div>
-          <Target size={21} />
-          <span>Questões resolvidas</span>
-          <strong>{fmt(analysis.totalQuestions)}</strong>
-          <small>
-            {analysis.totalQuestions
-              ? `${analysis.accuracy}% de acertos`
-              : "Sem registros ainda"}
-          </small>
-        </div>
-        <div>
-          <Clock3 size={21} />
-          <span>Tempo líquido</span>
-          <strong>{fmtHours(analysis.totalSeconds || 0)}</strong>
-          <small>
-            Teoria {fmtHours(analysis.totalTheorySeconds || 0)} · Questões{" "}
-            {fmtHours(analysis.totalQuestionSeconds || 0)}
-          </small>
-        </div>
-        <div>
-          <ChartNoAxesCombined size={21} />
-          <span>Revisões pendentes</span>
-          <strong>{fmt(analysis.dueReviews)}</strong>
-          <small>Até hoje</small>
-        </div>
-      </div>
-      <details className="ux-collapsible ux-analytics-charts">
-        <summary>Gráficos de cobertura e prioridades</summary>
-        <div className="ux-collapsible-body">
-          {" "}
-          <div className="analytics-chart-pair">
-            <Panel title="Cobertura do edital">
-              <BarChart
-                height={240}
-                layout="horizontal"
-                yAxis={[
-                  {
-                    scaleType: "band",
-                    data: statusDistribution.map((item) => item.name),
-                  },
-                ]}
-                series={[
-                  {
-                    data: statusDistribution.map((item) => item.n),
-                    label: "Assuntos",
-                  },
-                ]}
-              />
-            </Panel>
-            <Panel title="Prioridades">
-              <BarChart
-                height={240}
-                layout="horizontal"
-                yAxis={[
-                  {
-                    scaleType: "band",
-                    data: priorityDistribution.map((item) => item.name),
-                  },
-                ]}
-                series={[
-                  {
-                    data: priorityDistribution.map((item) => item.n),
-                    label: "Assuntos",
-                  },
-                ]}
-              />
-            </Panel>
-          </div>
-        </div>
-      </details>
-      <Panel
-        title="Disciplinas"
-        action={
-          <span className="small-chip">
-            {analysis.disciplines?.length || 0} disciplinas
-          </span>
-        }
-      >
-        <DisciplineCharts
-          disciplines={analysis.disciplines || []}
-          onEdit={(discipline) => {
-            setEditing(discipline);
-            setTuning({
-              importance: discipline.importance,
-              examWeight: discipline.examWeight,
-              confidence: discipline.confidence,
-            });
-          }}
-        />
-      </Panel>
-      <Panel
-        title="Todos os assuntos"
-        action={<span className="small-chip">{filtered.length} assuntos</span>}
-      >
-        <div className="analytics-filters">
-          <div className="search-wrap">
-            <Search size={17} />
-            <Input
-              type="search"
-              placeholder="Buscar disciplina ou assunto"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-          </div>
-          <NativeSelect
-            aria-label="Disciplina"
-            value={disc}
-            onChange={(e) => setDisc(e.target.value)}
-          >
-            <option value="all">Todas as disciplinas</option>
-            {data.disciplines.map((d) => (
-              <option value={d.id} key={d.id}>
-                {d.name}
-              </option>
-            ))}
-          </NativeSelect>
-          <NativeSelect
-            aria-label="Status"
-            value={status}
-            onChange={(e) => setStatus(e.target.value)}
-          >
-            <option value="all">Todos os status</option>
-            <option value="NOT_STARTED">A iniciar</option>
-            <option value="IN_PROGRESS">Em andamento</option>
-            <option value="COMPLETED">Concluído</option>
-          </NativeSelect>
-          <NativeSelect
-            aria-label="Domínio"
-            value={mastery}
-            onChange={(e) => setMastery(e.target.value)}
-          >
-            <option value="all">Todos os domínios</option>
-            <option value="WEAK">Fraco</option>
-            <option value="MEDIUM">Médio</option>
-            <option value="STRONG">Forte</option>
-          </NativeSelect>
-          <NativeSelect
-            aria-label="Ordenação"
-            value={order}
-            onChange={(e) => setOrder(e.target.value)}
-          >
-            <option value="priority">Maior prioridade</option>
-            <option value="accuracy">Menor acerto</option>
-            <option value="questions">Mais questões</option>
-            <option value="name">Nome A–Z</option>
-          </NativeSelect>
-        </div>
-        <div className="table-scroll">
-          <table className="data-table analytics-table">
-            <thead>
-              <tr>
-                <th>ASSUNTO</th>
-                <th>PRIORIDADE</th>
-                <th>STATUS</th>
-                <th>DOMÍNIO</th>
-                <th>QUESTÕES</th>
-                <th>TAXA DE ACERTO</th>
-                <th>TEORIA</th>
-                <th>TEMPO QUESTÕES</th>
-                <th>REVISÕES</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filtered.map((t) => (
-                <React.Fragment key={t.id}>
-                  <tr
-                    className={`analytics-clickable ${selected === t.id ? "opened" : ""}`}
-                    onClick={() => selectRow(t)}
-                  >
-                    <td>
-                      <div className="analytics-topic-name">
-                        <span
-                          className="radar-dot"
-                          style={{
-                            background: t.color,
-                          }}
-                        />
-                        <div>
-                          <strong>{t.title}</strong>
-                          <small>{t.discipline}</small>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      <Priority value={t.priority} />
-                    </td>
-                    <td>
-                      <StatusPill value={t.status} />
-                    </td>
-                    <td>
-                      <MasteryPill value={t.mastery} />
-                    </td>
-                    <td>
-                      {fmt(t.total)}
-                      {t.sampleLow && (
-                        <small className="analytics-sample">
-                          {t.total > 0 ? "amostra pequena" : "sem dados"}
-                        </small>
-                      )}
-                    </td>
-                    <td>
-                      <span
-                        className="analytics-accuracy"
-                        style={{
-                          color:
-                            t.total && t.accuracy < 60 ? "#ce7768" : undefined,
-                        }}
-                      >
-                        {t.total ? `${t.accuracy}%` : "—"}
-                      </span>
-                    </td>
-                    <td>{fmtHours(t.theorySeconds || 0)}</td>
-                    <td>{fmtHours(t.questionSeconds || 0)}</td>
-                    <td>{t.dueReviews || "—"}</td>
-                  </tr>
-                  {selected === t.id && (
-                    <tr className="analytics-detail-row">
-                      <td colSpan={9}>
-                        <div className="topic-detail">
-                          <div>
-                            <span className="eyebrow">DETALHES DO ASSUNTO</span>
-                            <h3>{t.title}</h3>
-                            <p>
-                              {t.correct} acertos · {t.wrong} erros · {t.total}{" "}
-                              questões.{" "}
-                              {t.sampleLow
-                                ? "Com menos de 20 questões, a taxa de acerto ainda pode oscilar bastante."
-                                : ""}
-                            </p>
-                            <div className="topic-detail-stats">
-                              <span>Teoria {t.theoryDone ? "✅" : "○"}</span>
-                              <span>Resumo {t.summaryDone ? "✅" : "○"}</span>
-                              <span>{t.dueReviews} revisões pendentes</span>
-                              <span>
-                                Último estudo:{" "}
-                                {t.lastStudy
-                                  ? dateBR(t.lastStudy)
-                                  : "não registrado"}
-                              </span>
-                            </div>
-                          </div>
-                          <div className="topic-detail-actions">
-                            <Button
-                              className="btn btn-subtle"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setTopicEditing(t);
-                                setTopicImportance(t.importance || 3);
-                              }}
-                              type="button"
-                            >
-                              <SlidersHorizontal size={15} /> Importância{" "}
-                              {t.importance}/5
-                            </Button>
-                            <Button
-                              className="btn btn-primary"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                navigate("questions", {
-                                  topicId: t.id,
-                                });
-                              }}
-                              type="button"
-                            >
-                              Praticar questões <ArrowRight size={15} />
-                            </Button>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                  )}
-                </React.Fragment>
-              ))}
-            </tbody>
-          </table>
-          {!filtered.length && (
-            <Empty
-              title="Nenhum assunto encontrado"
-              description="Experimente outros filtros ou cadastre novos assuntos no edital."
-            />
-          )}
-        </div>
-      </Panel>
+import { ChartPanel } from "./components/ChartPanel.jsx";
 
-      {editing && (
-        <Modal
-          title={`Ajustar ${editing.name}`}
-          subtitle="Quanto maior a importância e o peso, maior a prioridade. Quanto menor o entendimento, maior o reforço."
-          onClose={() => setEditing(null)}
+export default function Analytics({ data }) {
+  const {
+    disciplineId,
+    setDisciplineId,
+    topicId,
+    setTopicId,
+    days,
+    setDays,
+    metric,
+    setMetric,
+    analysis,
+    topics,
+    daily,
+    coverage,
+    metrics,
+    ranked,
+  } = useAnalytics(data);
+  const dateAxis = [
+    {
+      scaleType: "band",
+      data: daily.map((day) => day.date),
+      valueFormatter: (date) => dateBR(date).slice(0, 5),
+    },
+  ];
+  const summaryCards = [
+    [
+      "Assuntos acompanhados",
+      analysis.totalTopics || 0,
+      `${analysis.completedTopics || 0} concluídos`,
+    ],
+    [
+      "Questões resolvidas",
+      analysis.totalQuestions || 0,
+      analysis.totalQuestions
+        ? `${analysis.accuracy}% de acertos`
+        : "Sem registros ainda",
+    ],
+    [
+      "Tempo líquido",
+      fmtHours(analysis.totalSeconds),
+      `Teoria ${fmtHours(analysis.totalTheorySeconds)} · Questões ${fmtHours(analysis.totalQuestionSeconds)}`,
+    ],
+    ["Revisões pendentes", analysis.dueReviews || 0, "Até hoje"],
+  ];
+  return (
+    <Stack spacing={3} sx={{ width: "100%", minWidth: 0 }}>
+      <Box>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+          Resumo geral • todo o histórico
+        </Typography>
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: {
+              xs: "1fr",
+              sm: "repeat(2, minmax(0, 1fr))",
+              xl: "repeat(4, minmax(0, 1fr))",
+            },
+            gap: 2,
+          }}
         >
-          <form className="form-stack" onSubmit={saveTuning}>
-            <Ratings
-              label="Importância para mim"
-              description="1 = pouco importante · 5 = essencial"
-              value={tuning.importance}
-              onChange={(value) =>
-                setTuning({
-                  ...tuning,
-                  importance: value,
-                })
-              }
-            />
-            <Ratings
-              label="Peso na prova"
-              description="1 = peso baixo · 5 = peso muito alto"
-              value={tuning.examWeight}
-              onChange={(value) =>
-                setTuning({
-                  ...tuning,
-                  examWeight: value,
-                })
-              }
-            />
-            <Ratings
-              label="Quanto eu entendo"
-              description="1 = quase nada · 5 = domino a matéria"
-              value={tuning.confidence}
-              onChange={(value) =>
-                setTuning({
-                  ...tuning,
-                  confidence: value,
-                })
-              }
-            />
-            <div className="modal-actions">
-              <SubtleButton type="button" onClick={() => setEditing(null)}>
-                Cancelar
-              </SubtleButton>
-              <PrimaryButton type="submit" loading={working}>
-                Recalcular prioridades
-              </PrimaryButton>
-            </div>
-          </form>
-        </Modal>
-      )}
-      {topicEditing && (
-        <Modal
-          title={`Prioridade de ${topicEditing.title}`}
-          subtitle="Defina o quanto este assunto importa para seu concurso."
-          onClose={() => setTopicEditing(null)}
+          {summaryCards.map(([label, value, description]) => (
+            <Paper key={label} variant="outlined" sx={{ p: 2.5 }}>
+              <Typography color="text.secondary">{label}</Typography>
+              <Typography variant="h4" sx={{ my: 1 }}>
+                {value}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                {description}
+              </Typography>
+            </Paper>
+          ))}
+        </Box>
+      </Box>
+      <Paper
+        variant="outlined"
+        sx={{
+          p: 2,
+          display: "grid",
+          gridTemplateColumns: { xs: "1fr", md: "1fr 1.5fr 1fr" },
+          gap: 2,
+        }}
+      >
+        <TextField
+          select
+          label="Disciplina"
+          value={disciplineId}
+          onChange={(event) => {
+            setDisciplineId(event.target.value);
+            setTopicId("");
+          }}
         >
-          <form className="form-stack" onSubmit={saveTopic}>
-            <Ratings
-              label="Importância específica"
-              description="1 baixa · 5 alta"
-              value={topicImportance}
-              onChange={setTopicImportance}
-            />
-            <div className="modal-actions">
-              <SubtleButton type="button" onClick={() => setTopicEditing(null)}>
-                Cancelar
-              </SubtleButton>
-              <PrimaryButton type="submit" loading={working}>
-                Salvar importância
-              </PrimaryButton>
-            </div>
-          </form>
-        </Modal>
-      )}
-    </div>
+          <MenuItem value="">Todas as disciplinas</MenuItem>
+          {(data.disciplines || []).map((discipline) => (
+            <MenuItem key={discipline.id} value={String(discipline.id)}>
+              {discipline.name}
+            </MenuItem>
+          ))}
+        </TextField>
+        <TopicSelect
+          topics={topics}
+          value={topicId}
+          onChange={setTopicId}
+          required={false}
+          placeholder="Todos os assuntos • digite para buscar"
+        />
+        <TextField
+          select
+          label="Período dos registros"
+          value={days}
+          onChange={(event) => setDays(Number(event.target.value))}
+        >
+          {[7, 30, 90].map((period) => (
+            <MenuItem key={period} value={period}>
+              Últimos {period} dias
+            </MenuItem>
+          ))}
+        </TextField>
+      </Paper>
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateColumns: {
+            xs: "minmax(0, 1fr)",
+            lg: "repeat(2, minmax(0, 1fr))",
+          },
+          gap: 3,
+        }}
+      >
+        <ChartPanel
+          title="Questões por dia"
+          description="Acertos e erros no período e nos assuntos selecionados."
+        >
+          <BarChart
+            height={280}
+            xAxis={dateAxis}
+            series={[
+              {
+                data: daily.map((day) => day.correct),
+                label: "Acertos",
+                stack: "questions",
+                color: "#39745d",
+              },
+              {
+                data: daily.map((day) => day.incorrect),
+                label: "Erros",
+                stack: "questions",
+                color: "#c57664",
+              },
+            ]}
+          />
+        </ChartPanel>
+        <ChartPanel
+          title="Tempo de estudo por dia"
+          description="Horas líquidas de teoria e questões, sem duplicar o cronômetro."
+        >
+          <BarChart
+            height={280}
+            xAxis={dateAxis}
+            series={[
+              {
+                data: daily.map((day) => day.theorySeconds / 3600),
+                label: "Teoria",
+                stack: "time",
+                color: "#39745d",
+                valueFormatter: (value) => fmtHours(value * 3600),
+              },
+              {
+                data: daily.map((day) => day.questionSeconds / 3600),
+                label: "Questões",
+                stack: "time",
+                color: "#dfaf55",
+                valueFormatter: (value) => fmtHours(value * 3600),
+              },
+            ]}
+            yAxis={[{ label: "Horas" }]}
+          />
+        </ChartPanel>
+        <ChartPanel
+          title="Cobertura do edital"
+          description="Situação atual dos assuntos selecionados, independente do período."
+        >
+          <PieChart
+            height={260}
+            series={[
+              {
+                data: coverage,
+                innerRadius: 55,
+                outerRadius: 90,
+                paddingAngle: 3,
+              },
+            ]}
+          />
+        </ChartPanel>
+        <ChartPanel
+          title={
+            disciplineId || topicId
+              ? "Comparação entre assuntos"
+              : "Comparação entre disciplinas"
+          }
+          description="Até 8 maiores resultados no período. Selecione uma disciplina para detalhar os assuntos."
+        >
+          <TextField
+            select
+            size="small"
+            fullWidth
+            label="Indicador"
+            value={metric}
+            onChange={(event) => setMetric(event.target.value)}
+          >
+            {Object.entries(metrics).map(([value, item]) => (
+              <MenuItem key={value} value={value}>
+                {item.label}
+              </MenuItem>
+            ))}
+          </TextField>
+          <BarChart
+            height={280}
+            layout="horizontal"
+            yAxis={[
+              {
+                scaleType: "band",
+                data: ranked.map((group) => group.name),
+                width: 140,
+                valueFormatter: (name, context) =>
+                  context.location === "tick" && name.length > 22
+                    ? `${name.slice(0, 21)}…`
+                    : name,
+              },
+            ]}
+            xAxis={[{ min: 0, ...(metric === "accuracy" ? { max: 100 } : {}) }]}
+            series={[
+              {
+                data: ranked.map((group) =>
+                  metric === "seconds" ? group.seconds / 3600 : group[metric],
+                ),
+                label:
+                  metric === "seconds"
+                    ? "Horas de estudo"
+                    : metrics[metric].label,
+                color: "#39745d",
+                valueFormatter: (value) =>
+                  metrics[metric].format(
+                    metric === "seconds" ? value * 3600 : value,
+                  ),
+              },
+            ]}
+            localeText={{
+              noData: "Sem registros para os filtros selecionados",
+            }}
+          />
+        </ChartPanel>
+      </Box>
+    </Stack>
   );
 }

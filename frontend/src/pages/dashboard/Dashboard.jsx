@@ -1,3 +1,4 @@
+import StudySummary from "./sections/StudySummary.jsx";
 import { Checkbox, IconButton } from "@mui/material";
 import { isAgendaCompleted } from "../../shared/utils/plannerMetrics.js";
 import { Button } from "@mui/material";
@@ -5,15 +6,12 @@ import {
   ArrowRight,
   BookOpenText,
   CalendarDays,
-  Check,
   Clock3,
   Repeat2,
   Target,
   Timer,
-  TrendingUp,
 } from "lucide-react";
 import { PetPicker } from "../../shared/components/Pet.jsx";
-import { ProgressBar } from "../../shared/components/UI.jsx";
 import { dateBR, fmtHours } from "../../shared/utils/utils.js";
 import { area, priorityLabel } from "./utils/pageDefinitions.jsx";
 import { useDashboard } from "./hooks/useDashboard.jsx";
@@ -29,8 +27,6 @@ export default function Dashboard({ data, action, working, navigate }) {
     weekly,
     goalSeconds,
     daily,
-    maxSeconds,
-    dayLabel,
     greet,
   } = useDashboard({
     data,
@@ -261,76 +257,12 @@ export default function Dashboard({ data, action, working, navigate }) {
           )}
         </section>
       </div>
-      <section className="ux-home-panel ux-home-week">
-        <div className="ux-home-panel-head">
-          <div>
-            <h3>
-              <TrendingUp size={19} /> Estudo nos últimos 7 dias
-            </h3>
-            <p>Tempo líquido salvo</p>
-          </div>
-          <Button type="button" onClick={() => navigate("analytics")}>
-            Desempenho <ArrowRight size={16} />
-          </Button>
-        </div>
-        <div className="ux-week-head">
-          <strong>
-            {fmtHours(daily.reduce((sum, x) => sum + (x.seconds || 0), 0))}
-          </strong>
-          <span>
-            Teoria{" "}
-            {fmtHours(
-              daily.reduce(
-                (sum, x) => sum + (x.theorySeconds ?? x.seconds ?? 0),
-                0,
-              ),
-            )}{" "}
-            · Questões{" "}
-            {fmtHours(
-              daily.reduce((sum, x) => sum + (x.questionSeconds || 0), 0),
-            )}
-          </span>
-        </div>
-        <div
-          className="ux-week-bars"
-          role="img"
-          aria-label="Tempo líquido por dia nos últimos sete dias: parte verde teoria e parte amarela questões."
-        >
-          {daily.map((x) => (
-            <div
-              className="ux-week-day"
-              key={x.date}
-              title={`${dateBR(x.date)}: ${fmtHours(x.seconds || 0)}`}
-            >
-              <div className="ux-week-track">
-                <span
-                  style={{
-                    height: `${x.seconds ? Math.max(6, (100 * x.seconds) / maxSeconds) : 0}%`,
-                  }}
-                >
-                  <i
-                    style={{
-                      height: `${x.seconds ? (100 * (x.questionSeconds || 0)) / x.seconds : 0}%`,
-                    }}
-                  />
-                </span>
-              </div>
-              <small>{dayLabel(x.date)}</small>
-            </div>
-          ))}
-        </div>
-        {goalSeconds > 0 && (
-          <div className="ux-goal-line">
-            <div>
-              <span>Meta da semana</span>
-              <strong>
-                {Math.min(100, Math.round((weekly / goalSeconds) * 100))}%
-              </strong>
-            </div>
-            <ProgressBar value={(100 * weekly) / goalSeconds} />
-          </div>
-        )}
-      </section>
+      <StudySummary
+        daily={daily}
+        weekly={weekly}
+        goalSeconds={goalSeconds}
+        navigate={navigate}
+      />
     </div>
   );
 }

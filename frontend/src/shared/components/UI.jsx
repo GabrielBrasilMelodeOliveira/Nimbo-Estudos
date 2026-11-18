@@ -1,4 +1,4 @@
-import { NativeSelect } from "./FormControls.jsx";
+import { Autocomplete, TextField, createFilterOptions } from "@mui/material";
 import React from "react";
 import {
   Dialog,
@@ -138,28 +138,48 @@ export function TopicSelect({
   required = true,
   disabled = false,
 }) {
-  const topicsByDiscipline = Object.groupBy(
-    topics,
-    (topic) => topic.discipline.name,
+  const options = [...topics].sort((firstTopic, secondTopic) =>
+    (firstTopic.discipline?.name || "").localeCompare(
+      secondTopic.discipline?.name || "",
+      "pt-BR",
+    ),
   );
   return (
-    <NativeSelect
-      required={required}
+    <Autocomplete
+      fullWidth
+      size="small"
+      options={options}
+      value={
+        options.find((topic) => String(topic.id) === String(value)) || null
+      }
+      onChange={(_, topic) => onChange(topic ? String(topic.id) : "")}
+      getOptionLabel={(topic) => topic.title}
+      getOptionKey={(topic) => topic.id}
+      isOptionEqualToValue={(option, selected) => option.id === selected.id}
+      groupBy={(topic) => topic.discipline?.name || "Sem disciplina"}
+      filterOptions={createFilterOptions({
+        stringify: (topic) => `${topic.title} ${topic.discipline?.name || ""}`,
+      })}
       disabled={disabled}
-      value={value}
-      onChange={(event) => onChange(event.target.value)}
-    >
-      <option value="">{placeholder}</option>
-      {Object.entries(topicsByDiscipline).map(([name, items]) => (
-        <optgroup key={name} label={name}>
-          {items.map((topic) => (
-            <option key={topic.id} value={topic.id}>
-              {topic.title}
-            </option>
-          ))}
-        </optgroup>
-      ))}
-    </NativeSelect>
+      noOptionsText="Nenhum assunto encontrado"
+      clearText="Limpar assunto"
+      openText="Mostrar assuntos"
+      closeText="Fechar assuntos"
+      renderInput={(parameters) => (
+        <TextField
+          {...parameters}
+          required={required}
+          placeholder={placeholder}
+          slotProps={{
+            ...parameters.slotProps,
+            htmlInput: {
+              ...parameters.slotProps.htmlInput,
+              "aria-label": placeholder,
+            },
+          }}
+        />
+      )}
+    />
   );
 }
 export function MasteryPill({ value }) {

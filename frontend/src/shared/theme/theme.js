@@ -14,8 +14,19 @@ export const theme = createTheme({
     },
     MuiOutlinedInput: {
       styleOverrides: {
-        root: { backgroundColor: "#fff", minWidth: 0, maxWidth: "100%" },
-        input: { fontSize: 14, padding: "10px 12px", boxSizing: "border-box" },
+        root: {
+          backgroundColor: "#fff",
+          minWidth: 0,
+          maxWidth: "100%",
+          minHeight: 44,
+        },
+        input: {
+          fontSize: 14,
+          padding: "10px 12px",
+          boxSizing: "content-box",
+          height: "1.5em",
+          "&.MuiInputBase-inputMultiline": { height: "auto", padding: 0 },
+        },
       },
     },
     MuiSelect: { styleOverrides: { select: { minWidth: 0 } } },
