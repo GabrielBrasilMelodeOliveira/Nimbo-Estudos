@@ -57,3 +57,27 @@ test("no questions means unknown accuracy", () => {
   );
   assert.equal(result.comparisons[0].accuracy, null);
 });
+
+test("compares all subjects and excludes completed or cancelled reviews from forecast", () => {
+  const result = buildChartData(
+    {
+      ...data,
+      reviews: [
+        { topic, dueDate: "2026-11-17" },
+        { topic, dueDate: "2026-11-18" },
+        { topic: otherTopic, dueDate: "2026-11-19", completedAt: "2026-11-18" },
+        { topic, dueDate: "2026-11-19", cancelledAt: "2026-11-18" },
+      ],
+    },
+    { comparisonLevel: "topic", days: 7, today: "2026-11-18" },
+  );
+  assert.equal(result.comparisons.length, 2);
+  assert.equal(
+    result.comparisons.find((group) => group.id === 2).accuracy,
+    100,
+  );
+  assert.equal(result.comparisons.find((group) => group.id === 3).accuracy, 0);
+  assert.equal(result.reviewForecast[0].count, 1);
+  assert.equal(result.reviewForecast[1].count, 1);
+  assert.equal(result.reviewForecast[2].count, 0);
+});

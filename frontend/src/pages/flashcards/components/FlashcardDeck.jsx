@@ -59,8 +59,9 @@ export function FlashcardDeck() {
         </Button>
       </Stack>
       <Typography variant="body2" color="text.secondary">
-        Cada erro é um cartão. Tente lembrar a resposta antes de revelá-la. FSRS
-        com retenção de 90% ajusta o próximo intervalo conforme sua avaliação.
+        Cada erro vinculado é um cartão. Tente lembrar a resposta antes de
+        revelá-la. FSRS com retenção de 90% ajusta o próximo intervalo conforme
+        sua avaliação.
       </Typography>
       {error && (
         <Alert
@@ -171,7 +172,7 @@ export function FlashcardDeck() {
         <Alert severity="success">
           {total
             ? `Revisões em dia. Próximo cartão em ${nextDue.toLocaleString("pt-BR")}.`
-            : "Registre seu primeiro erro para começar os flashcards."}
+            : "Vincule um erro do caderno para começar os flashcards."}
         </Alert>
       )}
     </Stack>

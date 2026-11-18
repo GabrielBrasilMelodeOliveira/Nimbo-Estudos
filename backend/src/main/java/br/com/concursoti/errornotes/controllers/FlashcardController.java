@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/error-notes/flashcards")
+@RequestMapping({ "/api/flashcards", "/api/error-notes/flashcards" })
 public class FlashcardController {
 
   private final FlashcardService flashcardService;
@@ -17,6 +17,15 @@ public class FlashcardController {
   @GetMapping
   public List<FlashcardService.FlashcardView> list() {
     return flashcardService.list();
+  }
+
+  @PatchMapping("/{id}/link")
+  @ResponseStatus(org.springframework.http.HttpStatus.NO_CONTENT)
+  public void setLinked(
+    @PathVariable Long id,
+    @RequestBody FlashcardService.LinkInput request
+  ) {
+    flashcardService.setLinked(id, request);
   }
 
   @PostMapping("/{id}/review")

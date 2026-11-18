@@ -57,7 +57,7 @@ export default function StudySummary({ daily, weekly, goalSeconds, navigate }) {
           display: "grid",
           gridTemplateColumns: {
             xs: "minmax(0, 1fr)",
-            md: "minmax(0, 3fr) minmax(220px, 1fr)",
+            md: "minmax(0, 1fr)",
           },
           gap: 3,
           alignItems: "center",
@@ -93,7 +93,15 @@ export default function StudySummary({ daily, weekly, goalSeconds, navigate }) {
             ]}
           />
         </Box>
-        <Stack spacing={2}>
+        <Stack
+          direction={{ xs: "column", sm: "row" }}
+          spacing={3}
+          sx={{
+            justifyContent: "space-between",
+            alignItems: { sm: "center" },
+            "& > *": { flex: 1 },
+          }}
+        >
           <Box>
             <Typography variant="h4">{fmtHours(totalSeconds)}</Typography>
             <Typography color="text.secondary">

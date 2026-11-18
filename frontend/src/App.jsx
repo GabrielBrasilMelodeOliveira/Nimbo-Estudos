@@ -1,11 +1,14 @@
+import Flashcards from "./pages/flashcards/Flashcards.jsx";
+import { version as appVersion } from "../package.json";
 import { Input } from "./shared/components/FormControls.jsx";
-import { Button } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   LayoutDashboard,
   BookOpenText,
   ListChecks,
   Timer,
+  Layers,
   Repeat2,
   ClipboardCheck,
   LibraryBig,
@@ -59,6 +62,11 @@ const mainMenu = [
     icon: Timer,
   },
   {
+    key: "flashcards",
+    label: "Flashcards",
+    icon: Layers,
+  },
+  {
     key: "questions",
     label: "Questões",
     icon: ListChecks,
@@ -106,6 +114,7 @@ const labels = {
   weekly: "Agenda",
   edital: "Meu edital",
   cycle: "Estudar",
+  flashcards: "Flashcards",
   questions: "Questões",
   materials: "Materiais",
   analytics: "Desempenho",
@@ -257,6 +266,7 @@ export default function App() {
     weekly: WeeklyPlanner,
     edital: Edital,
     cycle: StudyCycle,
+    flashcards: Flashcards,
     questions: Questions,
     materials: Materials,
     analytics: Analytics,
@@ -299,7 +309,10 @@ export default function App() {
     </Button>
   );
   return (
-    <div className="app-shell nimbo-theme ux-v54">
+    <Box
+      className="app-shell nimbo-theme ux-v54"
+      sx={{ width: "100%", minWidth: 0 }}
+    >
       {mobileNav && (
         <div className="mobile-dim" onClick={() => setMobileNav(false)} />
       )}
@@ -355,8 +368,23 @@ export default function App() {
             </div>
           </div>
         </nav>
+        <Typography
+          variant="caption"
+          sx={{ display: "block", px: 3, py: 2, color: "#bed6cc" }}
+        >
+          Nimbo v{appVersion}
+        </Typography>
       </aside>
-      <div className="app-main">
+      <Box
+        sx={{
+          minWidth: 0,
+          flex: 1,
+          ml: 0,
+          "@media (min-width:761px)": { ml: "204px" },
+          "@media (min-width:1021px)": { ml: "220px" },
+          "@media (min-width:1261px)": { ml: "244px" },
+        }}
+      >
         <header className="topbar">
           <div className="topbar-left">
             <Button
@@ -389,7 +417,11 @@ export default function App() {
             </span>
           </div>
         </header>
-        <main id="conteudo" className="main-content">
+        <Box
+          component="main"
+          id="conteudo"
+          sx={{ width: "100%", minWidth: 0, p: { xs: 2, sm: 3, lg: 4 } }}
+        >
           {error && (
             <div className="api-error" role="alert">
               <AlertCircle size={20} />
@@ -424,8 +456,8 @@ export default function App() {
               focusTopicId={focusTopicId}
             />
           )}
-        </main>
-      </div>
+        </Box>
+      </Box>
       {!loading && (
         <PetCompanion
           pet={data.pet}
@@ -515,6 +547,6 @@ export default function App() {
           </Button>
         </div>
       )}
-    </div>
+    </Box>
   );
 }

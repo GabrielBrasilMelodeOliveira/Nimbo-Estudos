@@ -1,4 +1,7 @@
-import { Input, NativeSelect } from "../../shared/components/FormControls.jsx";
+import {
+  Input,
+  SearchableSelect,
+} from "../../shared/components/FormControls.jsx";
 import { Button } from "@mui/material";
 import React from "react";
 import {
@@ -190,32 +193,38 @@ export default function Edital({ data, action, working, navigate }) {
           </label>
           <label className="sheet-filter">
             <span>Disciplina</span>
-            <NativeSelect value={filter} onChange={changeFilters(setFilter)}>
+            <SearchableSelect
+              value={filter}
+              onChange={changeFilters(setFilter)}
+            >
               <option value="all">Todas as disciplinas</option>
               {data.disciplines.map((d) => (
                 <option key={d.id} value={d.id}>
                   {d.name}
                 </option>
               ))}
-            </NativeSelect>
+            </SearchableSelect>
           </label>
           <label className="sheet-filter">
             <span>Status</span>
-            <NativeSelect value={status} onChange={changeFilters(setStatus)}>
+            <SearchableSelect
+              value={status}
+              onChange={changeFilters(setStatus)}
+            >
               <option value="all">Todos</option>
               {Object.entries(statusLabels).map(([k, v]) => (
                 <option key={k} value={k}>
                   {v}
                 </option>
               ))}
-            </NativeSelect>
+            </SearchableSelect>
           </label>
           <details className="ux-more-filters">
             <summary>Mais filtros e ordenação</summary>
             <div className="ux-extra-filter-grid">
               <label className="sheet-filter">
                 <span>Domínio</span>
-                <NativeSelect
+                <SearchableSelect
                   value={masteryFilter}
                   onChange={changeFilters(setMasteryFilter)}
                 >
@@ -225,11 +234,11 @@ export default function Edital({ data, action, working, navigate }) {
                       {v}
                     </option>
                   ))}
-                </NativeSelect>
+                </SearchableSelect>
               </label>
               <label className="sheet-filter">
                 <span>Revisão</span>
-                <NativeSelect
+                <SearchableSelect
                   value={reviewFilter}
                   onChange={changeFilters(setReviewFilter)}
                 >
@@ -238,11 +247,14 @@ export default function Edital({ data, action, working, navigate }) {
                   <option value="pending">Pendentes</option>
                   <option value="done">Com revisão feita</option>
                   <option value="notScheduled">Sem agendamento</option>
-                </NativeSelect>
+                </SearchableSelect>
               </label>
               <label className="sheet-filter">
                 <span>Ordenar por</span>
-                <NativeSelect value={order} onChange={changeFilters(setOrder)}>
+                <SearchableSelect
+                  value={order}
+                  onChange={changeFilters(setOrder)}
+                >
                   <option value="discipline">Disciplina</option>
                   <option value="title">Assunto A–Z</option>
                   <option value="review">Mais revisões vencidas</option>
@@ -250,7 +262,7 @@ export default function Edital({ data, action, working, navigate }) {
                   <option value="questions">Mais questões</option>
                   <option value="time">Mais tempo de estudo</option>
                   <option value="progress">Mais etapas concluídas</option>
-                </NativeSelect>
+                </SearchableSelect>
               </label>
             </div>
           </details>
@@ -314,7 +326,7 @@ export default function Edital({ data, action, working, navigate }) {
                         </Button>
                       </td>
                       <td>
-                        <NativeSelect
+                        <SearchableSelect
                           sx={{ minWidth: 150, maxWidth: 190 }}
                           value={t.status}
                           disabled={working}
@@ -330,7 +342,7 @@ export default function Edital({ data, action, working, navigate }) {
                               {v}
                             </option>
                           ))}
-                        </NativeSelect>
+                        </SearchableSelect>
                       </td>
                       <td>
                         <StepBox
@@ -393,7 +405,7 @@ export default function Edital({ data, action, working, navigate }) {
                         />
                       </td>
                       <td>
-                        <NativeSelect
+                        <SearchableSelect
                           sx={{ minWidth: 120, maxWidth: 170 }}
                           value={t.mastery}
                           disabled={working}
@@ -409,7 +421,7 @@ export default function Edital({ data, action, working, navigate }) {
                               {v}
                             </option>
                           ))}
-                        </NativeSelect>
+                        </SearchableSelect>
                       </td>
                       <td className="sheet-num">{fmtNumber(row.total)}</td>
                       <td className="sheet-num sheet-good">
@@ -548,7 +560,7 @@ export default function Edital({ data, action, working, navigate }) {
           </span>
           <label>
             Linhas por página{" "}
-            <NativeSelect
+            <SearchableSelect
               value={pageSize}
               onChange={(e) => {
                 setPageSize(Number(e.target.value));
@@ -559,7 +571,7 @@ export default function Edital({ data, action, working, navigate }) {
               <option value={30}>30</option>
               <option value={60}>60</option>
               <option value={200}>200</option>
-            </NativeSelect>
+            </SearchableSelect>
           </label>
           <div className="sheet-pager">
             <Button
@@ -598,7 +610,7 @@ export default function Edital({ data, action, working, navigate }) {
         >
           <form className="form-stack" onSubmit={saveTopic}>
             <Field label="Disciplina">
-              <NativeSelect
+              <SearchableSelect
                 required
                 value={form.disciplineId}
                 onChange={(e) =>
@@ -613,7 +625,7 @@ export default function Edital({ data, action, working, navigate }) {
                     {d.name}
                   </option>
                 ))}
-              </NativeSelect>
+              </SearchableSelect>
             </Field>
             <Field label="Assunto">
               <Input
@@ -631,7 +643,7 @@ export default function Edital({ data, action, working, navigate }) {
             </Field>
             <div className="form-grid">
               <Field label="Status">
-                <NativeSelect
+                <SearchableSelect
                   value={form.status}
                   onChange={(e) =>
                     setForm({
@@ -645,10 +657,10 @@ export default function Edital({ data, action, working, navigate }) {
                       {v}
                     </option>
                   ))}
-                </NativeSelect>
+                </SearchableSelect>
               </Field>
               <Field label="Domínio">
-                <NativeSelect
+                <SearchableSelect
                   value={form.mastery}
                   onChange={(e) =>
                     setForm({
@@ -662,11 +674,11 @@ export default function Edital({ data, action, working, navigate }) {
                       {v}
                     </option>
                   ))}
-                </NativeSelect>
+                </SearchableSelect>
               </Field>
             </div>
             <Field label="Assimilação">
-              <NativeSelect
+              <SearchableSelect
                 value={form.assimilationLevel || 2}
                 onChange={(e) =>
                   setForm({
@@ -679,7 +691,7 @@ export default function Edital({ data, action, working, navigate }) {
                 <option value={2}>2 — Vou esquecer logo (7 dias)</option>
                 <option value={3}>3 — Assimilei bem (14 dias)</option>
                 <option value={4}>4 — Domino (42 dias)</option>
-              </NativeSelect>
+              </SearchableSelect>
             </Field>
             <Field label={`Importância: ${form.importance}/5`}>
               <input

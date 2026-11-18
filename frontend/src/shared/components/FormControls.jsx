@@ -1,4 +1,4 @@
-import { OutlinedInput, Select } from "@mui/material";
+import { OutlinedInput } from "@mui/material";
 
 export function Input({
   min,
@@ -31,25 +31,4 @@ export function Input({
   );
 }
 
-export function NativeSelect({
-  children,
-  inputProps,
-  "aria-label": ariaLabel,
-  "aria-describedby": ariaDescribedBy,
-  ...props
-}) {
-  return (
-    <Select
-      native
-      size="small"
-      {...props}
-      inputProps={{
-        "aria-label": ariaLabel,
-        "aria-describedby": ariaDescribedBy,
-        ...inputProps,
-      }}
-    >
-      {children}
-    </Select>
-  );
-}
+export { SearchableSelect } from "./SearchableSelect.jsx";

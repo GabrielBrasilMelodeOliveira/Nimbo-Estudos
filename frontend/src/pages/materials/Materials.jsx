@@ -1,4 +1,7 @@
-import { Input, NativeSelect } from "../../shared/components/FormControls.jsx";
+import {
+  Input,
+  SearchableSelect,
+} from "../../shared/components/FormControls.jsx";
 import { Button, TextareaAutosize } from "@mui/material";
 import {
   LibraryBig,
@@ -120,7 +123,7 @@ export default function Materials({ data, action, working }) {
           </div>
           <label>
             <SlidersHorizontal size={15} />
-            <NativeSelect
+            <SearchableSelect
               aria-label="Tipo de material"
               value={filter}
               onChange={(e) => setFilter(e.target.value)}
@@ -135,9 +138,9 @@ export default function Materials({ data, action, working }) {
                   {v}
                 </option>
               ))}
-            </NativeSelect>
+            </SearchableSelect>
           </label>
-          <NativeSelect
+          <SearchableSelect
             aria-label="Leitura e revisão"
             value={stateFilter}
             onChange={(e) => setStateFilter(e.target.value)}
@@ -147,8 +150,8 @@ export default function Materials({ data, action, working }) {
             <option value="unread">Não lidos</option>
             <option value="reviewed">Já revisados</option>
             <option value="notreviewed">Pendentes de revisão</option>
-          </NativeSelect>
-          <NativeSelect
+          </SearchableSelect>
+          <SearchableSelect
             aria-label="Domínio"
             value={masteryFilter}
             onChange={(e) => setMasteryFilter(e.target.value)}
@@ -157,7 +160,7 @@ export default function Materials({ data, action, working }) {
             <option value="WEAK">Fraco</option>
             <option value="MEDIUM">Médio</option>
             <option value="STRONG">Forte</option>
-          </NativeSelect>
+          </SearchableSelect>
         </div>
         {visible.length ? (
           <div className="vault-grid">
@@ -306,7 +309,7 @@ export default function Materials({ data, action, working }) {
             </Field>
             {!form.assetId && (
               <Field label="Tipo de link">
-                <NativeSelect
+                <SearchableSelect
                   value={form.type}
                   onChange={(e) =>
                     setForm({
@@ -320,7 +323,7 @@ export default function Materials({ data, action, working }) {
                       {v}
                     </option>
                   ))}
-                </NativeSelect>
+                </SearchableSelect>
               </Field>
             )}
             <Field label="Assunto relacionado">
@@ -553,7 +556,7 @@ export default function Materials({ data, action, working }) {
                   Já revisei
                 </label>
                 <Field label="Quanto domino?">
-                  <NativeSelect
+                  <SearchableSelect
                     value={active.mastery || "WEAK"}
                     onChange={(e) =>
                       updateStatus(active, "mastery", e.target.value)
@@ -562,7 +565,7 @@ export default function Materials({ data, action, working }) {
                     <option value="WEAK">🔴 Fraco</option>
                     <option value="MEDIUM">🟡 Médio</option>
                     <option value="STRONG">🟢 Forte</option>
-                  </NativeSelect>
+                  </SearchableSelect>
                 </Field>
               </aside>
             </div>

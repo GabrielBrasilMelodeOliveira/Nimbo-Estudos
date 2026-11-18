@@ -1,12 +1,7 @@
-import {
-  Box,
-  Paper,
-  Stack,
-  Typography,
-  TextField,
-  MenuItem,
-} from "@mui/material";
+import { SearchableSelect } from "../../shared/components/FormControls.jsx";
+import { Box, Paper, Stack, Typography, MenuItem } from "@mui/material";
 import { BarChart } from "@mui/x-charts/BarChart";
+import { LineChart } from "@mui/x-charts/LineChart";
 import { PieChart } from "@mui/x-charts/PieChart";
 import { TopicSelect } from "../../shared/components/UI.jsx";
 import { fmtHours, dateBR } from "../../shared/utils/utils.js";
@@ -15,6 +10,11 @@ import { ChartPanel } from "./components/ChartPanel.jsx";
 
 export default function Analytics({ data }) {
   const {
+    comparisonLevel,
+    setComparisonLevel,
+    rankOrder,
+    setRankOrder,
+    reviewForecast,
     disciplineId,
     setDisciplineId,
     topicId,
@@ -96,13 +96,13 @@ export default function Analytics({ data }) {
           gap: 2,
         }}
       >
-        <TextField
-          select
+        <SearchableSelect
           label="Disciplina"
           value={disciplineId}
           onChange={(event) => {
             setDisciplineId(event.target.value);
             setTopicId("");
+            setComparisonLevel(event.target.value ? "topic" : "discipline");
           }}
         >
           <MenuItem value="">Todas as disciplinas</MenuItem>
@@ -111,7 +111,7 @@ export default function Analytics({ data }) {
               {discipline.name}
             </MenuItem>
           ))}
-        </TextField>
+        </SearchableSelect>
         <TopicSelect
           topics={topics}
           value={topicId}
@@ -119,8 +119,7 @@ export default function Analytics({ data }) {
           required={false}
           placeholder="Todos os assuntos • digite para buscar"
         />
-        <TextField
-          select
+        <SearchableSelect
           label="Período dos registros"
           value={days}
           onChange={(event) => setDays(Number(event.target.value))}
@@ -130,7 +129,7 @@ export default function Analytics({ data }) {
               Últimos {period} dias
             </MenuItem>
           ))}
-        </TextField>
+        </SearchableSelect>
       </Paper>
       <Box
         sx={{
@@ -209,14 +208,36 @@ export default function Analytics({ data }) {
         </ChartPanel>
         <ChartPanel
           title={
-            disciplineId || topicId
+            comparisonLevel === "topic" || topicId
               ? "Comparação entre assuntos"
               : "Comparação entre disciplinas"
           }
-          description="Até 8 maiores resultados no período. Selecione uma disciplina para detalhar os assuntos."
+          description="Compare até 8 resultados e encontre os assuntos que precisam de reforço."
         >
-          <TextField
-            select
+          <Stack
+            direction={{ xs: "column", sm: "row" }}
+            spacing={1}
+            sx={{ mb: 2 }}
+          >
+            <SearchableSelect
+              label="Comparar por"
+              value={topicId ? "topic" : comparisonLevel}
+              disabled={Boolean(topicId)}
+              onChange={(event) => setComparisonLevel(event.target.value)}
+            >
+              <option value="discipline">Disciplinas</option>
+              <option value="topic">Assuntos</option>
+            </SearchableSelect>
+            <SearchableSelect
+              label="Ordem"
+              value={rankOrder}
+              onChange={(event) => setRankOrder(event.target.value)}
+            >
+              <option value="highest">Maiores resultados</option>
+              <option value="lowest">Menores resultados</option>
+            </SearchableSelect>
+          </Stack>
+          <SearchableSelect
             size="small"
             fullWidth
             label="Indicador"
@@ -228,7 +249,7 @@ export default function Analytics({ data }) {
                 {item.label}
               </MenuItem>
             ))}
-          </TextField>
+          </SearchableSelect>
           <BarChart
             height={280}
             layout="horizontal"
@@ -263,6 +284,50 @@ export default function Analytics({ data }) {
             localeText={{
               noData: "Sem registros para os filtros selecionados",
             }}
+          />
+        </ChartPanel>
+        <ChartPanel
+          title="Evolução dos acertos"
+          description="Taxa diária nos registros filtrados. Dias sem questões não são tratados como erro."
+        >
+          <LineChart
+            height={280}
+            xAxis={dateAxis}
+            yAxis={[{ min: 0, max: 100, label: "%" }]}
+            series={[
+              {
+                data: daily.map((day) =>
+                  day.correct + day.incorrect
+                    ? (100 * day.correct) / (day.correct + day.incorrect)
+                    : null,
+                ),
+                label: "Taxa de acertos",
+                color: "#39745d",
+                valueFormatter: (value) =>
+                  value == null ? "Sem questões" : `${value.toFixed(1)}%`,
+              },
+            ]}
+          />
+        </ChartPanel>
+        <ChartPanel
+          title="Carga de revisões"
+          description="Revisões pendentes dos assuntos selecionados: atrasadas e próximos 7 dias, independente do período de registros."
+        >
+          <BarChart
+            height={280}
+            xAxis={[
+              {
+                scaleType: "band",
+                data: reviewForecast.map((day) => day.label),
+              },
+            ]}
+            series={[
+              {
+                data: reviewForecast.map((day) => day.count),
+                label: "Revisões pendentes",
+                color: "#b38c40",
+              },
+            ]}
           />
         </ChartPanel>
       </Box>

@@ -37,6 +37,11 @@ public class ErrorNote {
   @Column(length = 36)
   public String answerImageId;
 
+  // Existing rows were already cards; preserve them when Hibernate adds this column.
+  // New notes opt in through the explicit linking action.
+  @Column(nullable = false, columnDefinition = "boolean default true")
+  public boolean flashcardEnabled = false;
+
   @com.fasterxml.jackson.annotation.JsonIgnore
   @Column(columnDefinition = "text")
   public String flashcardState;

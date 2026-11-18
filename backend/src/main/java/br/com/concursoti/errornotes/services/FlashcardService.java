@@ -54,6 +54,7 @@ public class FlashcardService {
     return errorNoteRepository
       .findAll()
       .stream()
+      .filter(errorNote -> errorNote.flashcardEnabled)
       .map(errorNote -> view(errorNote, now))
       .sorted(
         Comparator.comparing(FlashcardView::due).thenComparing(
@@ -75,6 +76,12 @@ public class FlashcardService {
       );
     }
     ErrorNote errorNote = errorNoteRepository.findLockedById(id).orElseThrow();
+    if (!errorNote.flashcardEnabled) {
+      throw new ResponseStatusException(
+        HttpStatus.CONFLICT,
+        "Este erro não está vinculado aos flashcards."
+      );
+    }
     if (errorNote.flashcardRevision != request.expectedRevision()) {
       throw new ResponseStatusException(
         HttpStatus.CONFLICT,
@@ -106,6 +113,30 @@ public class FlashcardService {
     }
     errorNoteRepository.save(errorNote);
     return view(errorNote, now);
+  }
+
+  public record LinkInput(Boolean enabled) {}
+
+  @Transactional
+  public void setLinked(Long id, LinkInput request) {
+    if (request == null || request.enabled() == null) {
+      throw new IllegalArgumentException(
+        "Informe se o erro deve ser vinculado."
+      );
+    }
+    ErrorNote errorNote = errorNoteRepository
+      .findLockedById(id)
+      .orElseThrow(() ->
+        new ResponseStatusException(
+          HttpStatus.NOT_FOUND,
+          "Erro não encontrado."
+        )
+      );
+    if (errorNote.flashcardEnabled != request.enabled()) {
+      errorNote.flashcardEnabled = request.enabled();
+      errorNote.flashcardRevision++;
+      errorNoteRepository.save(errorNote);
+    }
   }
 
   private Card restore(ErrorNote errorNote, Instant now) {

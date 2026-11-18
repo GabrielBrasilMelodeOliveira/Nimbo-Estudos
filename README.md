@@ -1,4 +1,16 @@
-# Nimbo 5.5 — Revisões por assimilação e agenda integrada
+# Nimbo 5.6 — Dashboard de estudos e flashcards independentes
+
+A versão **5.6.0** aparece no menu lateral. Para atualizar uma instalação Docker existente:
+
+```bash
+git pull --ff-only origin main
+docker compose up -d --build
+```
+
+Recarregue a página após a reconstrução. Apenas `git pull` não substitui o frontend que já está no container. Os volumes existentes são preservados.
+
+Nesta versão, os seletores permitem busca por digitação em todas as telas; o conteúdo usa toda a largura disponível; Desempenho contém cards, filtros e seis gráficos; Flashcards fica abaixo de Estudar. No caderno, use **Vincular aos flashcards**. Cartões anteriores permanecem vinculados e mantêm a programação FSRS; novas anotações só entram na fila após o vínculo. Desvincular preserva o histórico.
+
 
 Aplicação local para concursos e organização pessoal. **Java 21 / Spring Boot 3.5, React 19, PostgreSQL 17 e Docker Compose**. Esta atualização preserva os recursos e dados da versão 5.4 e modifica o backend, frontend e o esquema de dados.
 

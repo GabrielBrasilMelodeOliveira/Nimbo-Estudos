@@ -1,4 +1,7 @@
-import { Input, NativeSelect } from "../../shared/components/FormControls.jsx";
+import {
+  Input,
+  SearchableSelect,
+} from "../../shared/components/FormControls.jsx";
 import { Button } from "@mui/material";
 import {
   Play,
@@ -145,7 +148,7 @@ export default function StudyCycle({ data, action, working, focusTopicId }) {
             </div>
             <div className="timer-selects">
               <Field label="Disciplina">
-                <NativeSelect
+                <SearchableSelect
                   disabled={running || seconds > 0}
                   value={disciplineId}
                   onChange={(e) => {
@@ -159,10 +162,10 @@ export default function StudyCycle({ data, action, working, focusTopicId }) {
                       {d.name}
                     </option>
                   ))}
-                </NativeSelect>
+                </SearchableSelect>
               </Field>
               <Field label="Assunto (opcional)">
-                <NativeSelect
+                <SearchableSelect
                   disabled={running || seconds > 0}
                   value={topicId}
                   onChange={(e) => setTopicId(e.target.value)}
@@ -173,7 +176,7 @@ export default function StudyCycle({ data, action, working, focusTopicId }) {
                       {t.title}
                     </option>
                   ))}
-                </NativeSelect>
+                </SearchableSelect>
               </Field>
             </div>
             <div className="timer-actions">
@@ -495,7 +498,7 @@ export default function StudyCycle({ data, action, working, focusTopicId }) {
         >
           <form className="form-stack" onSubmit={saveManual}>
             <Field label="Disciplina">
-              <NativeSelect
+              <SearchableSelect
                 required
                 value={manual.disciplineId}
                 onChange={(e) =>
@@ -512,10 +515,10 @@ export default function StudyCycle({ data, action, working, focusTopicId }) {
                     {d.name}
                   </option>
                 ))}
-              </NativeSelect>
+              </SearchableSelect>
             </Field>
             <Field label="Assunto (opcional)">
-              <NativeSelect
+              <SearchableSelect
                 value={manual.topicId}
                 onChange={(e) =>
                   setManual({
@@ -530,7 +533,7 @@ export default function StudyCycle({ data, action, working, focusTopicId }) {
                     {t.title}
                   </option>
                 ))}
-              </NativeSelect>
+              </SearchableSelect>
             </Field>
             <div className="form-grid">
               <Field label="Horas">

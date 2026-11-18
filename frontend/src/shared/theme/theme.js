@@ -8,6 +8,18 @@ export const theme = createTheme({
   },
   shape: { borderRadius: 10 },
   components: {
+    MuiButtonBase: {
+      defaultProps: { disableRipple: true },
+      styleOverrides: {
+        root: {
+          "&.Mui-focusVisible": {
+            outline: "2px solid #39745d",
+            outlineOffset: 2,
+          },
+        },
+      },
+    },
+    MuiTextField: { defaultProps: { size: "small", fullWidth: true } },
     MuiButton: {
       defaultProps: { disableElevation: true },
       styleOverrides: { root: { minWidth: 0, gap: 6, flexShrink: 0 } },

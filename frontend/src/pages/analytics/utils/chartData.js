@@ -1,10 +1,17 @@
+import { activeReview } from "../../../shared/utils/revisionLevels.js";
 import { addDays } from "../../../shared/utils/plannerMetrics.js";
 import { TODAY, statusLabels } from "../../../shared/utils/utils.js";
 
 /** Question durations also exist in study sessions: count only the consolidated sessions. */
 export function buildChartData(
   data,
-  { disciplineId = "", topicId = "", days = 30, today = TODAY() } = {},
+  {
+    disciplineId = "",
+    topicId = "",
+    days = 30,
+    comparisonLevel = "discipline",
+    today = TODAY(),
+  } = {},
 ) {
   const startDate = addDays(today, 1 - days);
   const matchesTopic = (topic) =>
@@ -19,16 +26,21 @@ export function buildChartData(
     questionSeconds: 0,
   }));
   const daysByDate = new Map(daily.map((day) => [day.date, day]));
-  const compareTopics = Boolean(disciplineId || topicId);
-  const comparisons = (compareTopics ? topics : data.disciplines || []).map(
-    (item) => ({
-      id: item.id,
-      name: item.title || item.name,
-      correct: 0,
-      total: 0,
-      seconds: 0,
-    }),
-  );
+  const compareTopics = Boolean(topicId || comparisonLevel === "topic");
+  const comparisons = (
+    compareTopics
+      ? topics
+      : (data.disciplines || []).filter(
+          (discipline) =>
+            !disciplineId || String(discipline.id) === String(disciplineId),
+        )
+  ).map((item) => ({
+    id: item.id,
+    name: item.title || item.name,
+    correct: 0,
+    total: 0,
+    seconds: 0,
+  }));
   const groupsById = new Map(
     comparisons.map((group) => [String(group.id), group]),
   );
@@ -70,6 +82,30 @@ export function buildChartData(
       ...group,
       accuracy: group.total ? (100 * group.correct) / group.total : null,
     })),
+    reviewForecast: [
+      {
+        label: "Atrasadas",
+        count: (data.reviews || []).filter(
+          (review) =>
+            activeReview(review) &&
+            matchesTopic(review.topic) &&
+            review.dueDate < today,
+        ).length,
+      },
+      ...Array.from({ length: 7 }, (_, index) => {
+        const date = addDays(today, index);
+        return {
+          label:
+            index === 0 ? "Hoje" : `${date.slice(8, 10)}/${date.slice(5, 7)}`,
+          count: (data.reviews || []).filter(
+            (review) =>
+              activeReview(review) &&
+              matchesTopic(review.topic) &&
+              review.dueDate === date,
+          ).length,
+        };
+      }),
+    ],
     coverage: Object.entries(statusLabels).map(([status, label], index) => ({
       id: status,
       label,

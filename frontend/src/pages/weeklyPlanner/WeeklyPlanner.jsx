@@ -2,7 +2,10 @@ import { Typography, Stack, TextField, MenuItem } from "@mui/material";
 import { AgendaDay } from "./sections/AgendaDay.jsx";
 import { WeekBoard } from "./sections/WeekBoard.jsx";
 import AssimilationPicker from "../../shared/components/AssimilationPicker.jsx";
-import { Input, NativeSelect } from "../../shared/components/FormControls.jsx";
+import {
+  Input,
+  SearchableSelect,
+} from "../../shared/components/FormControls.jsx";
 import { Button, TextareaAutosize } from "@mui/material";
 import {
   CalendarDays,
@@ -248,25 +251,25 @@ export default function WeeklyPlanner({ data, action, working, navigate }) {
           <small>As sugestões não são incluídas sem sua confirmação.</small>
         </section>
       )}
-      <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+      <Stack direction={{ xs: "column", md: "row" }} spacing={2}>
         <TextField
           size="small"
           label="Buscar atividade"
+          sx={{ flex: 1, minWidth: 0 }}
           value={search}
           onChange={(event) => setSearch(event.target.value)}
         />
-        <TextField
-          select
+        <SearchableSelect
           size="small"
           label="Situação"
           value={statusFilter}
           onChange={(event) => setStatusFilter(event.target.value)}
-          sx={{ minWidth: 180 }}
+          sx={{ width: { xs: "100%", md: 240 }, flexShrink: 0 }}
         >
           <MenuItem value="ALL">Todas</MenuItem>
           <MenuItem value="PENDING">Pendentes</MenuItem>
           <MenuItem value="DONE">Concluídas</MenuItem>
-        </TextField>
+        </SearchableSelect>
       </Stack>
       <Typography variant="caption" color="text.secondary">
         Arraste as atividades pendentes pela alça para outro dia ou use o botão
@@ -306,7 +309,7 @@ export default function WeeklyPlanner({ data, action, working, navigate }) {
           </div>
           <label className="n55-area">
             Área{" "}
-            <NativeSelect
+            <SearchableSelect
               value={area}
               onChange={(e) => setArea(e.target.value)}
             >
@@ -316,7 +319,7 @@ export default function WeeklyPlanner({ data, action, working, navigate }) {
                   {value.name}
                 </option>
               ))}
-            </NativeSelect>
+            </SearchableSelect>
           </label>
         </div>
         {mode === "month" ? (
@@ -399,7 +402,7 @@ export default function WeeklyPlanner({ data, action, working, navigate }) {
         >
           <form onSubmit={save} className="form-stack n55-editor">
             <Field label="Área">
-              <NativeSelect
+              <SearchableSelect
                 value={form.category}
                 onChange={(e) =>
                   setForm({
@@ -415,12 +418,12 @@ export default function WeeklyPlanner({ data, action, working, navigate }) {
                     {item.name}
                   </option>
                 ))}
-              </NativeSelect>
+              </SearchableSelect>
             </Field>
             {form.category === "STUDY" && (
               <>
                 <Field label="Assunto (vincula automaticamente às métricas)">
-                  <NativeSelect
+                  <SearchableSelect
                     value={form.topicId || ""}
                     onChange={(e) => {
                       const t = data.topics.find(
@@ -441,12 +444,12 @@ export default function WeeklyPlanner({ data, action, working, navigate }) {
                         {t.discipline.name} · {t.title}
                       </option>
                     ))}
-                  </NativeSelect>
+                  </SearchableSelect>
                 </Field>
                 {form.topicId && (
                   <div className="form-grid">
                     <Field label="Tipo">
-                      <NativeSelect
+                      <SearchableSelect
                         value={form.studyKind || "THEORY"}
                         onChange={(e) =>
                           setForm({
@@ -457,7 +460,7 @@ export default function WeeklyPlanner({ data, action, working, navigate }) {
                       >
                         <option value="THEORY">Teoria</option>
                         <option value="QUESTIONS">Questões</option>
-                      </NativeSelect>
+                      </SearchableSelect>
                     </Field>
                     {form.studyKind === "QUESTIONS" && (
                       <Field label="Meta de questões">
@@ -537,7 +540,7 @@ export default function WeeklyPlanner({ data, action, working, navigate }) {
                 />
               </Field>
               <Field label="Prioridade">
-                <NativeSelect
+                <SearchableSelect
                   value={form.priority}
                   onChange={(e) =>
                     setForm({
@@ -549,7 +552,7 @@ export default function WeeklyPlanner({ data, action, working, navigate }) {
                   <option value={1}>Baixa</option>
                   <option value={2}>Normal</option>
                   <option value={3}>Alta</option>
-                </NativeSelect>
+                </SearchableSelect>
               </Field>
             </div>
             {!(form.category === "STUDY" && form.topicId) && (

@@ -31,6 +31,7 @@ class FlashcardServiceTest {
     service = new FlashcardService(repository, new ObjectMapper());
     errorNote = new ErrorNote();
     errorNote.id = 42L;
+    errorNote.flashcardEnabled = true;
     errorNote.topic = new Topic(
       new Discipline("Java", "#123456", 0),
       "Transações"
@@ -88,5 +89,32 @@ class FlashcardServiceTest {
       )
     );
     assertEquals(1, errorNote.flashcardRevision);
+  }
+
+  @Test
+  void newNotesRequireExplicitLinkingAndUnlinkingPreservesSchedule() {
+    assertFalse(new ErrorNote().flashcardEnabled);
+    service.review(42L, new FlashcardService.ReviewInput(Rating.GOOD, 0L));
+    String savedState = errorNote.flashcardState;
+    String savedHistory = errorNote.flashcardHistory;
+    when(repository.findAll()).thenReturn(List.of(errorNote));
+    service.setLinked(42L, new FlashcardService.LinkInput(false));
+    assertTrue(service.list().isEmpty());
+    assertThrows(ResponseStatusException.class, () ->
+      service.review(
+        42L,
+        new FlashcardService.ReviewInput(
+          Rating.GOOD,
+          errorNote.flashcardRevision
+        )
+      )
+    );
+    service.setLinked(42L, new FlashcardService.LinkInput(true));
+    assertEquals(1, service.list().size());
+    assertEquals(savedState, errorNote.flashcardState);
+    assertEquals(savedHistory, errorNote.flashcardHistory);
+    long revision = errorNote.flashcardRevision;
+    service.setLinked(42L, new FlashcardService.LinkInput(true));
+    assertEquals(revision, errorNote.flashcardRevision);
   }
 }

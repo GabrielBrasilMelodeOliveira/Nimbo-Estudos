@@ -1,4 +1,7 @@
-import { Input, NativeSelect } from "../../shared/components/FormControls.jsx";
+import {
+  Input,
+  SearchableSelect,
+} from "../../shared/components/FormControls.jsx";
 import { Button, TextareaAutosize } from "@mui/material";
 import {
   Plus,
@@ -170,7 +173,7 @@ export default function Questions({ data, action, working, focusTopicId }) {
           </label>
           <label className="filter-item">
             <span>Disciplina</span>
-            <NativeSelect
+            <SearchableSelect
               value={discipline}
               onChange={(e) => {
                 setDiscipline(e.target.value);
@@ -183,11 +186,11 @@ export default function Questions({ data, action, working, focusTopicId }) {
                   {d.name}
                 </option>
               ))}
-            </NativeSelect>
+            </SearchableSelect>
           </label>
           <label className="filter-item">
             <span>Assunto</span>
-            <NativeSelect
+            <SearchableSelect
               value={topic}
               onChange={(e) => setTopic(e.target.value)}
             >
@@ -197,14 +200,14 @@ export default function Questions({ data, action, working, focusTopicId }) {
                   {t.title}
                 </option>
               ))}
-            </NativeSelect>
+            </SearchableSelect>
           </label>
           <details className="ux-more-filters">
             <summary>Mais filtros: acertos, datas e ordem</summary>
             <div className="ux-extra-filter-grid">
               <label className="filter-item">
                 <span>Acertos</span>
-                <NativeSelect
+                <SearchableSelect
                   value={result}
                   onChange={(e) => setResult(e.target.value)}
                 >
@@ -213,7 +216,7 @@ export default function Questions({ data, action, working, focusTopicId }) {
                   <option value="medium">60–79%</option>
                   <option value="strong">80% ou mais</option>
                   <option value="errors">Com erros</option>
-                </NativeSelect>
+                </SearchableSelect>
               </label>
               <label className="filter-item">
                 <span>De</span>
@@ -235,7 +238,7 @@ export default function Questions({ data, action, working, focusTopicId }) {
               </label>
               <label className="filter-item">
                 <span>Ordenar</span>
-                <NativeSelect
+                <SearchableSelect
                   value={order}
                   onChange={(e) => setOrder(e.target.value)}
                 >
@@ -243,7 +246,7 @@ export default function Questions({ data, action, working, focusTopicId }) {
                   <option value="oldest">Antigos</option>
                   <option value="errors">Mais erros</option>
                   <option value="accuracy">Menor acerto</option>
-                </NativeSelect>
+                </SearchableSelect>
               </label>
             </div>
           </details>

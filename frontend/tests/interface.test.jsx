@@ -9,10 +9,13 @@ import {
 } from "@testing-library/react";
 import { ThemeProvider } from "@mui/material";
 import { theme } from "../src/shared/theme/theme.js";
-import { Input, NativeSelect } from "../src/shared/components/FormControls.jsx";
+import {
+  Input,
+  SearchableSelect,
+} from "../src/shared/components/FormControls.jsx";
 import { AgendaCard } from "../src/pages/weeklyPlanner/components/AgendaCard.jsx";
 import { WeekBoard } from "../src/pages/weeklyPlanner/sections/WeekBoard.jsx";
-import { FlashcardDeck } from "../src/pages/errorNotes/components/FlashcardDeck.jsx";
+import { FlashcardDeck } from "../src/pages/flashcards/components/FlashcardDeck.jsx";
 import { isAgendaCompleted } from "../src/shared/utils/plannerMetrics.js";
 
 const renderWithTheme = (element) =>
@@ -31,16 +34,16 @@ describe("Shared input controls", () => {
     renderWithTheme(
       <>
         <Input aria-label="Minutos" type="number" min={0} max={1440} />
-        <NativeSelect aria-label="Status">
+        <SearchableSelect aria-label="Status">
           <option value="pending">Pendente</option>
-        </NativeSelect>
+        </SearchableSelect>
       </>,
     );
     expect(
       screen.getByRole("spinbutton", { name: "Minutos" }).getAttribute("max"),
     ).toBe("1440");
     expect(screen.getByRole("combobox", { name: "Status" }).tagName).toBe(
-      "SELECT",
+      "INPUT",
     );
   });
 });
@@ -160,7 +163,7 @@ it("reveals flashcards before rating and sends the persisted revision", async ()
   fireEvent.click(screen.getByRole("button", { name: /^Bom/ }));
   await waitFor(() =>
     expect(fetchMock).toHaveBeenCalledWith(
-      "/api/error-notes/flashcards/42/review",
+      "/api/flashcards/42/review",
       expect.objectContaining({
         body: JSON.stringify({ rating: "GOOD", expectedRevision: 3 }),
       }),

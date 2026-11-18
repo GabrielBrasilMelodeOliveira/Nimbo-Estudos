@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { Tabs, Tab } from "@mui/material";
-import { FlashcardDeck } from "./components/FlashcardDeck.jsx";
-import { Input, NativeSelect } from "../../shared/components/FormControls.jsx";
+import {
+  Input,
+  SearchableSelect,
+} from "../../shared/components/FormControls.jsx";
 import { Button, TextareaAutosize } from "@mui/material";
 import {
   NotebookPen,
@@ -28,8 +28,7 @@ import { fileUrl } from "../../shared/services/api.js";
 import { dateBR } from "../../shared/utils/utils.js";
 import { ScreenshotInput } from "./components/ScreenshotInput.jsx";
 import { useErrorNotes } from "./hooks/useErrorNotes.jsx";
-export default function ErrorNotes({ data, action, working }) {
-  const [view, setView] = useState("notes");
+export default function ErrorNotes({ data, action, working, navigate }) {
   const {
     open,
     setOpen,
@@ -78,16 +77,7 @@ export default function ErrorNotes({ data, action, working }) {
         </div>
       </div>
 
-      <Tabs
-        value={view}
-        onChange={(_, value) => setView(value)}
-        aria-label="Modo do caderno de erros"
-      >
-        <Tab value="notes" label="Anotações" />
-        <Tab value="flashcards" label="Flashcards" />
-      </Tabs>
-      {view === "flashcards" && <FlashcardDeck key={notes.length} />}
-      <div hidden={view !== "notes"}>
+      <div>
         <Panel title="Encontrar anotação">
           <div className="filter-workspace">
             <label className="filter-item filter-search">
@@ -104,7 +94,7 @@ export default function ErrorNotes({ data, action, working }) {
             </label>
             <label className="filter-item">
               <span>Disciplina</span>
-              <NativeSelect
+              <SearchableSelect
                 value={discipline}
                 onChange={(e) => {
                   setDiscipline(e.target.value);
@@ -117,11 +107,11 @@ export default function ErrorNotes({ data, action, working }) {
                     {d.name}
                   </option>
                 ))}
-              </NativeSelect>
+              </SearchableSelect>
             </label>
             <label className="filter-item">
               <span>Assunto</span>
-              <NativeSelect
+              <SearchableSelect
                 value={topic}
                 onChange={(e) => setTopic(e.target.value)}
               >
@@ -131,25 +121,25 @@ export default function ErrorNotes({ data, action, working }) {
                     {t.title}
                   </option>
                 ))}
-              </NativeSelect>
+              </SearchableSelect>
             </label>
             <details className="ux-more-filters">
               <summary>Mais filtros</summary>
               <div className="ux-extra-filter-grid">
                 <label className="filter-item">
                   <span>Recorrência</span>
-                  <NativeSelect
+                  <SearchableSelect
                     value={recurring}
                     onChange={(e) => setRecurring(e.target.value)}
                   >
                     <option value="all">Todos os erros</option>
                     <option value="true">Errei mais de uma vez</option>
                     <option value="false">Não recorrentes</option>
-                  </NativeSelect>
+                  </SearchableSelect>
                 </label>
                 <label className="filter-item">
                   <span>Capturas anexadas</span>
-                  <NativeSelect
+                  <SearchableSelect
                     value={photo}
                     onChange={(e) => setPhoto(e.target.value)}
                   >
@@ -157,7 +147,7 @@ export default function ErrorNotes({ data, action, working }) {
                     <option value="both">Questão e resposta</option>
                     <option value="some">Pelo menos um print</option>
                     <option value="missing">Falta algum print</option>
-                  </NativeSelect>
+                  </SearchableSelect>
                 </label>
                 <label className="filter-item">
                   <span>De</span>
@@ -179,14 +169,14 @@ export default function ErrorNotes({ data, action, working }) {
                 </label>
                 <label className="filter-item">
                   <span>Ordenação</span>
-                  <NativeSelect
+                  <SearchableSelect
                     value={order}
                     onChange={(e) => setOrder(e.target.value)}
                   >
                     <option value="recent">Mais recentes</option>
                     <option value="oldest">Mais antigos</option>
                     <option value="topic">Por assunto</option>
-                  </NativeSelect>
+                  </SearchableSelect>
                 </label>
               </div>
             </details>
@@ -295,6 +285,24 @@ export default function ErrorNotes({ data, action, working }) {
                         ))}
                     </div>
                   )}
+                  <Button
+                    variant="outlined"
+                    disabled={working}
+                    onClick={() =>
+                      n.flashcardEnabled
+                        ? navigate("flashcards")
+                        : action(
+                            `flashcards/${n.id}/link`,
+                            "PATCH",
+                            { enabled: true },
+                            "Erro vinculado aos flashcards.",
+                          )
+                    }
+                  >
+                    {n.flashcardEnabled
+                      ? "Abrir nos flashcards"
+                      : "Vincular aos flashcards"}
+                  </Button>
                   <div className="note-block">
                     <span>POR QUE ERREI?</span>
                     <p>{n.trap}</p>
