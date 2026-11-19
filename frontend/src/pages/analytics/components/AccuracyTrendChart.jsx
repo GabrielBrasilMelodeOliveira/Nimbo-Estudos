@@ -1,11 +1,16 @@
 import { LineChart } from "@mui/x-charts/LineChart";
+import { chartColors, chartSx } from "../../../shared/theme/chartTheme.js";
 import { dateBR } from "../../../shared/utils/utils.js";
 export default function AccuracyTrendChart({ daily, width }) {
+  const recordedDays = daily.filter(
+    (day) => day.correct + day.incorrect > 0,
+  ).length;
   return (
     <LineChart
       height={320}
       width={width}
       skipAnimation
+      grid={{ horizontal: true }}
       xAxis={[
         {
           scaleType: "point",
@@ -30,10 +35,11 @@ export default function AccuracyTrendChart({ daily, width }) {
               : null,
           ),
           label: "Acertos",
-          color: "#39745d",
-          showMark: true,
+          color: chartColors.correct,
+          showMark: recordedDays === 1,
           connectNulls: true,
-          curve: "linear",
+          curve: "monotoneX",
+          area: true,
           valueFormatter: (value) =>
             value == null ? "Sem questões" : `${value.toFixed(1)}%`,
         },
@@ -45,18 +51,16 @@ export default function AccuracyTrendChart({ daily, width }) {
               : null,
           ),
           label: "Erros",
-          color: "#c54e4e",
-          showMark: true,
+          color: chartColors.incorrect,
+          showMark: recordedDays === 1,
           connectNulls: true,
-          curve: "linear",
+          curve: "monotoneX",
+          area: true,
           valueFormatter: (value) =>
             value == null ? "Sem questões" : `${value.toFixed(1)}%`,
         },
       ]}
-      sx={{
-        "& .MuiLineChart-mark": { opacity: 1, strokeWidth: 2 },
-        "& .MuiLineChart-line": { strokeWidth: 3 },
-      }}
+      sx={chartSx}
     />
   );
 }

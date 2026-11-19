@@ -1,6 +1,6 @@
-# Nimbo 5.8 — Fechamento do dia, flashcards e vida do Nimbo
+# Nimbo 5.9 — Gráficos e leitura de materiais
 
-A versão **5.8.0** aparece no menu lateral. Para atualizar uma instalação Docker existente:
+A versão **5.9.0** aparece no menu lateral. Para atualizar uma instalação Docker existente:
 
 ```bash
 git pull --ff-only origin main
@@ -10,6 +10,15 @@ docker compose up -d --build
 Recarregue a página após a reconstrução. Apenas `git pull` não substitui o frontend que já está no container. Os volumes existentes são preservados.
 
 Nesta versão:
+
+- Desempenho: “Questões por dia” na primeira linha inteira e “Tempo de estudo por dia” na segunda. Gráficos com linhas suaves, cores consistentes, grade discreta e barras arredondadas. Um registro isolado continua visível; os demais pontos aparecem ao interagir.
+- Início: barras agrupadas para tempo de teoria e questões, com a quantidade de questões resolvidas em outro gráfico de linha.
+- Flashcards: pergunta e resposta lado a lado no computador. No celular, adaptam-se em uma coluna. A resposta continua escondida até ser revelada.
+- Materiais: PDF, imagens, visualização de DOCX com formatação e vídeos do YouTube dentro do Nimbo. Botão “Tela cheia” amplia a leitura; Escape retorna ao tamanho normal sem fechar o material. O player do YouTube também oferece tela cheia nativa.
+- Links do YouTube (watch, youtu.be, shorts e live) são reconhecidos ao cadastrar. Vídeos com incorporação desativada pelo autor mantêm o acesso pelo link externo. Links de documentos em servidores que bloqueiam incorporação/CORS podem exigir enviar o arquivo para o Nimbo.
+- A visualização DOCX acontece no navegador, sem enviar o documento para serviços de terceiros. O editor de texto existente fica recolhido e opcional; salvar uma edição simples continua preservando o arquivo original para download. A representação visual pode variar em documentos com recursos avançados do Word.
+
+Recursos da versão 5.8 preservados:
 
 - **Fechamento do dia** no Início e na Agenda: metas diárias editáveis, tempo/questões/assuntos realizados, atividades planejadas/concluídas/pendentes, histórico de 14 dias e reagendamento em lote. Pode incluir pendências anteriores e escolher a data de destino. A operação inteira é cancelada se uma atividade mudou, já foi concluída ou conflita com um estudo no destino.
 - **Flashcards** com filtro pesquisável por disciplina, Espaço para revelar, teclas 1–4 para avaliar e Z para desfazer a última avaliação da sessão. Desfazer restaura o estado e o histórico FSRS anteriores; revisões feitas em outra aba são protegidas por uma revisão numérica. Atalhos ficam inativos ao digitar ou abrir diálogos.

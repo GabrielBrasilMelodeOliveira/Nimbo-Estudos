@@ -1,7 +1,9 @@
+import { youtubeVideo } from "../utils/youtube.js";
 import { useEffect, useState } from "react";
 import { api, uploadFile } from "../../../shared/services/api.js";
 import { blank } from "../utils/pageDefinitions.jsx";
 export function useMaterials({ data, action, working }) {
+  const [documentLoading, setDocumentLoading] = useState(false);
   const [open, setOpen] = useState(false),
     [form, setForm] = useState(blank),
     [search, setSearch] = useState(""),
@@ -39,15 +41,28 @@ export function useMaterials({ data, action, working }) {
   };
   const active = viewing ? data.materials.find((m) => m.id === viewing) : null;
   const currentType = active?.type;
-  const hasTextEditor = currentType === "DOCX";
+  const hasTextEditor = currentType === "DOCX" && !!active?.assetId;
   useEffect(() => {
     if (!active) return;
+    let current = true;
     setEditorError("");
+    setDraft("");
+    setDocumentLoading(hasTextEditor);
     if (hasTextEditor) {
       api(`materials/${active.id}/document`)
-        .then((r) => setDraft(r.content || ""))
-        .catch((e) => setEditorError(e.message));
+        .then((response) => {
+          if (current) setDraft(response.content || "");
+        })
+        .catch((exception) => {
+          if (current) setEditorError(exception.message);
+        })
+        .finally(() => {
+          if (current) setDocumentLoading(false);
+        });
     } else setDraft(active.notes || "");
+    return () => {
+      current = false;
+    };
   }, [active?.id, active?.assetId, hasTextEditor]);
   const save = async (e) => {
     e.preventDefault();
@@ -56,12 +71,20 @@ export function useMaterials({ data, action, working }) {
       setFormError("Selecione um arquivo ou informe um link.");
       return;
     }
+    const video = !form.assetId && youtubeVideo(form.url);
+    if (!form.assetId && form.type === "VIDEO" && !video) {
+      setFormError(
+        "Informe o link de um vídeo do YouTube (watch, youtu.be, shorts ou live).",
+      );
+      return;
+    }
     if (
       await action(
         "materials",
         "POST",
         {
           ...form,
+          type: video ? "VIDEO" : form.type,
           topicId: form.topicId ? Number(form.topicId) : null,
         },
         "Material adicionado à biblioteca!",
@@ -113,7 +136,7 @@ export function useMaterials({ data, action, working }) {
     );
   };
   const saveDocument = async () => {
-    if (!active) return;
+    if (!active || (hasTextEditor && (documentLoading || editorError))) return;
     setEditorBusy(true);
     setEditorError("");
     try {
@@ -174,6 +197,7 @@ export function useMaterials({ data, action, working }) {
     active,
     currentType,
     hasTextEditor,
+    documentLoading,
     save,
     attach,
     updateStatus,

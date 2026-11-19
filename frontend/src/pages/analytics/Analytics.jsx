@@ -1,3 +1,4 @@
+import { chartColors, chartSx } from "../../shared/theme/chartTheme.js";
 import StudyActivityChart from "../../shared/components/StudyActivityChart.jsx";
 import { SearchableSelect } from "../../shared/components/FormControls.jsx";
 import { Box, Paper, Stack, Typography, MenuItem } from "@mui/material";
@@ -142,10 +143,14 @@ export default function Analytics({ data }) {
         }}
       >
         <ChartPanel
+          fullWidth
           title="Questões por dia"
           description="Acertos e erros no período e nos assuntos selecionados."
         >
           <BarChart
+            sx={chartSx}
+            borderRadius={5}
+            grid={{ horizontal: true }}
             height={280}
             xAxis={dateAxis}
             series={[
@@ -153,20 +158,21 @@ export default function Analytics({ data }) {
                 data: daily.map((day) => day.correct),
                 label: "Acertos",
                 stack: "questions",
-                color: "#39745d",
+                color: chartColors.correct,
               },
               {
                 data: daily.map((day) => day.incorrect),
                 label: "Erros",
                 stack: "questions",
-                color: "#c57664",
+                color: chartColors.incorrect,
               },
             ]}
           />
         </ChartPanel>
         <ChartPanel
+          fullWidth
           title="Tempo de estudo por dia"
-          description="Tempo registrado no eixo esquerdo e quantidade de questões no direito. Questões sem duração também aparecem."
+          description="Tempo líquido de teoria e de resolução de questões, em barras agrupadas."
         >
           <StudyActivityChart daily={daily} />
         </ChartPanel>
@@ -175,11 +181,13 @@ export default function Analytics({ data }) {
           description="Situação atual dos assuntos selecionados, independente do período."
         >
           <PieChart
+            sx={chartSx}
             height={260}
             series={[
               {
                 data: coverage,
-                innerRadius: 55,
+                innerRadius: 65,
+                cornerRadius: 5,
                 outerRadius: 90,
                 paddingAngle: 3,
               },
@@ -231,6 +239,9 @@ export default function Analytics({ data }) {
             ))}
           </SearchableSelect>
           <BarChart
+            sx={chartSx}
+            borderRadius={5}
+            grid={{ horizontal: true }}
             height={280}
             layout="horizontal"
             yAxis={[
@@ -252,14 +263,14 @@ export default function Analytics({ data }) {
                       data: ranked.map((group) => group.accuracy),
                       label: "Acertos",
                       stack: "accuracy",
-                      color: "#39745d",
+                      color: chartColors.correct,
                       valueFormatter: (value) => `${value.toFixed(1)}%`,
                     },
                     {
                       data: ranked.map((group) => 100 - group.accuracy),
                       label: "Erros",
                       stack: "accuracy",
-                      color: "#c54e4e",
+                      color: chartColors.incorrect,
                       valueFormatter: (value) => `${value.toFixed(1)}%`,
                     },
                   ]
@@ -274,7 +285,7 @@ export default function Analytics({ data }) {
                         metric === "seconds"
                           ? "Horas de estudo"
                           : metrics[metric].label,
-                      color: "#39745d",
+                      color: chartColors.correct,
                       valueFormatter: (value) =>
                         metrics[metric].format(
                           metric === "seconds" ? value * 3600 : value,
@@ -290,7 +301,7 @@ export default function Analytics({ data }) {
         <ChartPanel
           fullWidth
           title="Evolução de acertos e erros"
-          description="Taxas por dia com questões registradas. Os pontos permanecem visíveis e os dias sem registros não são contados como erros."
+          description="Taxas por dia com questões registradas. Dias sem registros não são contados como erros."
         >
           <AccuracyTrendChart daily={daily} />
         </ChartPanel>

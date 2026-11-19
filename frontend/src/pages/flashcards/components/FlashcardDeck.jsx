@@ -4,7 +4,6 @@ import {
   Button,
   Chip,
   CircularProgress,
-  Divider,
   Paper,
   Stack,
   Typography,
@@ -118,51 +117,38 @@ export function FlashcardDeck() {
           <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
             Fonte · {card.source}
           </Typography>
-          <Typography
-            component="h3"
-            variant="h6"
-            sx={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere" }}
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: {
+                xs: "minmax(0, 1fr)",
+                md: "repeat(2, minmax(0, 1fr))",
+              },
+              gap: 3,
+              alignItems: "stretch",
+            }}
           >
-            {card.question}
-          </Typography>
-          {card.questionImageId && (
-            <Box
-              component="img"
-              src={fileUrl(card.questionImageId)}
-              alt="Imagem da questão"
-              sx={{
-                maxWidth: "100%",
-                maxHeight: 480,
-                objectFit: "contain",
-                mt: 2,
-              }}
-            />
-          )}
-          {!revealed ? (
-            <Button
-              variant="contained"
-              disabled={saving}
-              onClick={() => setRevealed(true)}
-              sx={{ mt: 3 }}
+            <Paper
+              component="section"
+              aria-label="Pergunta do flashcard"
+              variant="outlined"
+              sx={{ p: { xs: 2, md: 3 }, minWidth: 0 }}
             >
-              Mostrar resposta
-            </Button>
-          ) : (
-            <>
-              <Divider sx={{ my: 3 }} />
-              <Typography variant="subtitle2" color="primary" sx={{ mb: 1 }}>
-                Resposta
+              <Typography variant="overline" color="text.secondary">
+                Pergunta
               </Typography>
               <Typography
-                sx={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere" }}
+                component="h3"
+                variant="h6"
+                sx={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere", mt: 1 }}
               >
-                {card.answer}
+                {card.question}
               </Typography>
-              {card.answerImageId && (
+              {card.questionImageId && (
                 <Box
                   component="img"
-                  src={fileUrl(card.answerImageId)}
-                  alt="Imagem da resposta"
+                  src={fileUrl(card.questionImageId)}
+                  alt="Imagem da questão"
                   sx={{
                     maxWidth: "100%",
                     maxHeight: 480,
@@ -171,6 +157,65 @@ export function FlashcardDeck() {
                   }}
                 />
               )}
+            </Paper>
+            <Paper
+              component="section"
+              aria-label="Resposta do flashcard"
+              variant="outlined"
+              sx={{
+                p: { xs: 2, md: 3 },
+                minWidth: 0,
+                bgcolor: "action.hover",
+                minHeight: 240,
+              }}
+            >
+              <Typography variant="overline" color="primary">
+                Resposta
+              </Typography>
+              {revealed ? (
+                <>
+                  <Typography
+                    sx={{
+                      whiteSpace: "pre-wrap",
+                      overflowWrap: "anywhere",
+                      mt: 1,
+                    }}
+                  >
+                    {card.answer}
+                  </Typography>
+                  {card.answerImageId && (
+                    <Box
+                      component="img"
+                      src={fileUrl(card.answerImageId)}
+                      alt="Imagem da resposta"
+                      sx={{
+                        maxWidth: "100%",
+                        maxHeight: 480,
+                        objectFit: "contain",
+                        mt: 2,
+                      }}
+                    />
+                  )}
+                </>
+              ) : (
+                <Stack spacing={2} sx={{ alignItems: "flex-start", mt: 3 }}>
+                  <Typography variant="body2" color="text.secondary">
+                    Tente lembrar antes de revelar. A pergunta continuará
+                    visível ao lado.
+                  </Typography>
+                  <Button
+                    variant="contained"
+                    disabled={saving}
+                    onClick={() => setRevealed(true)}
+                  >
+                    Mostrar resposta
+                  </Button>
+                </Stack>
+              )}
+            </Paper>
+          </Box>
+          {revealed && (
+            <>
               <Typography variant="body2" sx={{ mt: 3, mb: 1 }}>
                 Quanto você lembrou?
               </Typography>

@@ -16,15 +16,28 @@ import {
   FormLabel,
   FormHelperText,
 } from "@mui/material";
-import { X, Trash2, Inbox } from "lucide-react";
+import { X, Trash2, Inbox, Maximize2, Minimize2 } from "lucide-react";
 import { masteryLabels, statusLabels, fmtPercent } from "../utils/utils.js";
 
-export function Modal({ title, subtitle, onClose, children, wide = false }) {
+export function Modal({
+  title,
+  subtitle,
+  onClose,
+  children,
+  wide = false,
+  fullScreen = false,
+  onToggleFullScreen,
+}) {
   return (
     <Dialog
       open
-      onClose={onClose}
+      onClose={(event, reason) => {
+        if (fullScreen && reason === "escapeKeyDown" && onToggleFullScreen)
+          onToggleFullScreen();
+        else onClose(event, reason);
+      }}
       fullWidth
+      fullScreen={fullScreen}
       maxWidth={wide ? "lg" : "sm"}
       aria-label={title}
     >
@@ -33,7 +46,20 @@ export function Modal({ title, subtitle, onClose, children, wide = false }) {
           direction="row"
           sx={{ justifyContent: "space-between", alignItems: "center" }}
         >
-          <Typography variant="h6">{title}</Typography>
+          <Typography
+            variant="h6"
+            sx={{ flex: 1, minWidth: 0, overflowWrap: "anywhere" }}
+          >
+            {title}
+          </Typography>
+          {onToggleFullScreen && (
+            <IconButton
+              onClick={onToggleFullScreen}
+              aria-label={fullScreen ? "Sair da tela cheia" : "Tela cheia"}
+            >
+              {fullScreen ? <Minimize2 /> : <Maximize2 />}
+            </IconButton>
+          )}
           <IconButton onClick={onClose} aria-label="Fechar">
             <X />
           </IconButton>

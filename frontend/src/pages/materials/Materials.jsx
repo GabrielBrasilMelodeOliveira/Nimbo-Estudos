@@ -1,3 +1,13 @@
+import { useState } from "react";
+import {
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Box,
+  Typography,
+} from "@mui/material";
+import { ChevronDown } from "lucide-react";
+import MaterialPreview from "./components/MaterialPreview.jsx";
 import {
   Input,
   SearchableSelect,
@@ -33,6 +43,8 @@ import { fileUrl, previewUrl } from "../../shared/services/api.js";
 import { icons, blank, mastery, fmt } from "./utils/pageDefinitions.jsx";
 import { useMaterials } from "./hooks/useMaterials.jsx";
 export default function Materials({ data, action, working }) {
+  const [readerExpanded, setReaderExpanded] = useState(false);
+  const [editingDocument, setEditingDocument] = useState(false);
   const {
     open,
     setOpen,
@@ -63,6 +75,7 @@ export default function Materials({ data, action, working }) {
     active,
     currentType,
     hasTextEditor,
+    documentLoading,
     save,
     attach,
     updateStatus,
@@ -171,12 +184,7 @@ export default function Materials({ data, action, working }) {
                 <article className="vault-card" key={m.id}>
                   <Button
                     className="vault-preview"
-                    onClick={() =>
-                      m.assetId
-                        ? setViewing(m.id)
-                        : m.url &&
-                          window.open(m.url, "_blank", "noopener,noreferrer")
-                    }
+                    onClick={() => setViewing(m.id)}
                     aria-label={`Abrir ${m.title}`}
                     type="button"
                   >
@@ -193,8 +201,7 @@ export default function Materials({ data, action, working }) {
                       </div>
                     )}
                     <span className="vault-preview-action">
-                      <Eye size={15} />{" "}
-                      {m.assetId ? "Visualizar" : "Abrir link"}
+                      <Eye size={15} /> Visualizar
                     </span>
                   </Button>
                   <div className="vault-card-body">
@@ -279,11 +286,11 @@ export default function Materials({ data, action, working }) {
             <div className="vault-or">
               <span>ou continue com um link</span>
             </div>
-            <Field label="Link externo (opcional para arquivos)">
+            <Field label="Link externo ou vídeo do YouTube">
               <Input
                 type="url"
                 maxLength="2000"
-                placeholder="https://..."
+                placeholder="https://www.youtube.com/watch?v=..."
                 value={form.url}
                 onChange={(e) =>
                   setForm({
@@ -388,8 +395,14 @@ export default function Materials({ data, action, working }) {
         <Modal
           title={active.title}
           subtitle={active.topic?.title || "Material geral"}
+          fullScreen={readerExpanded}
+          onToggleFullScreen={() => setReaderExpanded(!readerExpanded)}
           wide
-          onClose={() => setViewing(null)}
+          onClose={() => {
+            setViewing(null);
+            setReaderExpanded(false);
+            setEditingDocument(false);
+          }}
         >
           <div className="vault-reader">
             <div className="reader-toolbar">
@@ -431,60 +444,56 @@ export default function Materials({ data, action, working }) {
                 )}
               </div>
             </div>
-            <div className="reader-layout">
-              <div className="reader-primary">
-                {active.assetId && active.type === "PDF" && (
-                  <iframe
-                    key={active.assetId}
-                    className="reader-pdf"
-                    title={`Leitura do PDF ${active.title}`}
-                    src={`${fileUrl(active.assetId)}#toolbar=1`}
-                  />
-                )}
-                {active.assetId && active.type === "IMAGE" && (
-                  <img
-                    className="reader-image"
-                    src={fileUrl(active.assetId)}
-                    alt={active.title}
-                  />
-                )}
-                {active.assetId && active.type === "DOCX" && (
-                  <div className="docx-editor">
-                    <div className="docx-editor-header">
-                      <PencilLine size={18} /> Editor de texto DOCX
-                    </div>
-                    <TextareaAutosize
-                      aria-label="Texto editável do documento Word"
-                      spellCheck
-                      value={draft}
-                      onChange={(e) => setDraft(e.target.value)}
-                      placeholder="Carregando texto do documento..."
-                    />
-                    <p>
-                      Ao salvar, será criada uma nova versão DOCX em formatação
-                      simples. O arquivo original permanece disponível para
-                      download. Tabelas, imagens e formatação avançada não são
-                      preservadas no texto editado.
-                    </p>
-                  </div>
-                )}
-                {!active.assetId && (
-                  <div className="reader-empty">
-                    <Link2 size={34} />
-                    <h3>Material disponível em outro site</h3>
-                    <p>
-                      Abra o link acima. Você também pode registrar sua leitura
-                      e domínio aqui.
-                    </p>
-                    {active.previewAssetId && (
-                      <img
-                        src={previewUrl(active.previewAssetId)}
-                        alt="Capa do material"
-                      />
-                    )}
-                  </div>
-                )}
-                {active.assetId && active.type === "PDF" && (
+            <Box
+              sx={{
+                display: "grid",
+                gridTemplateColumns: {
+                  xs: "minmax(0, 1fr)",
+                  md: readerExpanded
+                    ? "minmax(0, 1fr)"
+                    : "minmax(0, 1fr) 250px",
+                },
+                gap: 3,
+              }}
+            >
+              <Box sx={{ minWidth: 0 }}>
+                <MaterialPreview material={active} expanded={readerExpanded} />
+                {!readerExpanded &&
+                  active.assetId &&
+                  active.type === "DOCX" && (
+                    <Accordion
+                      expanded={editingDocument}
+                      onChange={(_, expanded) => setEditingDocument(expanded)}
+                      sx={{ mt: 2 }}
+                    >
+                      <AccordionSummary expandIcon={<ChevronDown size={18} />}>
+                        <Typography>Editar texto do DOCX (opcional)</Typography>
+                      </AccordionSummary>
+                      <AccordionDetails>
+                        <div className="docx-editor">
+                          <div className="docx-editor-header">
+                            <PencilLine size={18} /> Editor de texto DOCX
+                          </div>
+                          <TextareaAutosize
+                            aria-label="Texto editável do documento Word"
+                            disabled={documentLoading || !!editorError}
+                            spellCheck
+                            value={draft}
+                            onChange={(e) => setDraft(e.target.value)}
+                            placeholder="Carregando texto do documento..."
+                          />
+                          <p>
+                            Ao salvar, será criada uma nova versão DOCX em
+                            formatação simples. O arquivo original permanece
+                            disponível para download. Tabelas, imagens e
+                            formatação avançada não são preservadas no texto
+                            editado.
+                          </p>
+                        </div>
+                      </AccordionDetails>
+                    </Accordion>
+                  )}
+                {!readerExpanded && active.assetId && active.type === "PDF" && (
                   <div className="reader-notes">
                     <strong>
                       <PencilLine size={17} /> Escrever dentro do PDF — páginas
@@ -504,71 +513,79 @@ export default function Materials({ data, action, working }) {
                     />
                   </div>
                 )}
-                {(!active.assetId || active.type === "IMAGE") && (
-                  <div className="reader-notes">
-                    <strong>Anotações pessoais</strong>
-                    <TextareaAutosize
-                      minRows="4"
-                      maxLength="12000"
-                      value={draft}
-                      onChange={(e) => setDraft(e.target.value)}
-                      placeholder="Escreva suas anotações..."
-                    />
-                  </div>
-                )}
+                {!readerExpanded &&
+                  (!active.assetId || active.type === "IMAGE") && (
+                    <div className="reader-notes">
+                      <strong>Anotações pessoais</strong>
+                      <TextareaAutosize
+                        minRows="4"
+                        maxLength="12000"
+                        value={draft}
+                        onChange={(e) => setDraft(e.target.value)}
+                        placeholder="Escreva suas anotações..."
+                      />
+                    </div>
+                  )}
                 {editorError && (
                   <div className="inline-error" role="alert">
                     {editorError}
                   </div>
                 )}
-                <PrimaryButton
-                  onClick={saveDocument}
-                  loading={editorBusy || working}
-                >
-                  <Save size={16} />{" "}
-                  {active.type === "PDF" && active.assetId
-                    ? "Gravar anotação no PDF"
-                    : active.type === "DOCX"
-                      ? "Salvar nova versão DOCX"
-                      : "Salvar anotações"}
-                </PrimaryButton>
-              </div>
-              <aside className="reader-aside">
-                <h3>Meu acompanhamento</h3>
-                <label className="reader-check">
-                  <input
-                    type="checkbox"
-                    checked={!!active.readDone}
-                    onChange={(e) =>
-                      updateStatus(active, "readDone", e.target.checked)
+                {!readerExpanded && (!hasTextEditor || editingDocument) && (
+                  <PrimaryButton
+                    disabled={
+                      hasTextEditor && (documentLoading || !!editorError)
                     }
-                  />{" "}
-                  Já li este material
-                </label>
-                <label className="reader-check">
-                  <input
-                    type="checkbox"
-                    checked={!!active.reviewed}
-                    onChange={(e) =>
-                      updateStatus(active, "reviewed", e.target.checked)
-                    }
-                  />{" "}
-                  Já revisei
-                </label>
-                <Field label="Quanto domino?">
-                  <SearchableSelect
-                    value={active.mastery || "WEAK"}
-                    onChange={(e) =>
-                      updateStatus(active, "mastery", e.target.value)
-                    }
+                    onClick={saveDocument}
+                    loading={editorBusy || working}
                   >
-                    <option value="WEAK">🔴 Fraco</option>
-                    <option value="MEDIUM">🟡 Médio</option>
-                    <option value="STRONG">🟢 Forte</option>
-                  </SearchableSelect>
-                </Field>
-              </aside>
-            </div>
+                    <Save size={16} />{" "}
+                    {active.type === "PDF" && active.assetId
+                      ? "Gravar anotação no PDF"
+                      : hasTextEditor
+                        ? "Salvar nova versão DOCX"
+                        : "Salvar anotações"}
+                  </PrimaryButton>
+                )}
+              </Box>
+              {!readerExpanded && (
+                <aside className="reader-aside">
+                  <h3>Meu acompanhamento</h3>
+                  <label className="reader-check">
+                    <input
+                      type="checkbox"
+                      checked={!!active.readDone}
+                      onChange={(e) =>
+                        updateStatus(active, "readDone", e.target.checked)
+                      }
+                    />{" "}
+                    Já li este material
+                  </label>
+                  <label className="reader-check">
+                    <input
+                      type="checkbox"
+                      checked={!!active.reviewed}
+                      onChange={(e) =>
+                        updateStatus(active, "reviewed", e.target.checked)
+                      }
+                    />{" "}
+                    Já revisei
+                  </label>
+                  <Field label="Quanto domino?">
+                    <SearchableSelect
+                      value={active.mastery || "WEAK"}
+                      onChange={(e) =>
+                        updateStatus(active, "mastery", e.target.value)
+                      }
+                    >
+                      <option value="WEAK">🔴 Fraco</option>
+                      <option value="MEDIUM">🟡 Médio</option>
+                      <option value="STRONG">🟢 Forte</option>
+                    </SearchableSelect>
+                  </Field>
+                </aside>
+              )}
+            </Box>
           </div>
         </Modal>
       )}

@@ -27,7 +27,7 @@ it("opens independent flashcards below Study and identifies the running release"
   );
   const user = userEvent.setup();
   await screen.findByText("Pronto para começar?");
-  expect(screen.getByText("Nimbo v5.8.0")).toBeTruthy();
+  expect(screen.getByText("Nimbo v5.9.0")).toBeTruthy();
   const navigation = screen.getByRole("navigation");
   const labels = within(navigation)
     .getAllByRole("button")

@@ -1,3 +1,4 @@
+import QuestionVolumeChart from "../../../shared/components/QuestionVolumeChart.jsx";
 import {
   Box,
   Paper,
@@ -8,12 +9,7 @@ import {
 } from "@mui/material";
 import StudyActivityChart from "../../../shared/components/StudyActivityChart.jsx";
 import { addDays } from "../../../shared/utils/plannerMetrics.js";
-import {
-  TODAY,
-  fmtHours,
-  dateBR,
-  weekday,
-} from "../../../shared/utils/utils.js";
+import { TODAY, fmtHours } from "../../../shared/utils/utils.js";
 
 export default function StudySummary({
   daily,
@@ -72,8 +68,42 @@ export default function StudySummary({
           alignItems: "center",
         }}
       >
-        <Box sx={{ minWidth: 0 }}>
-          <StudyActivityChart daily={days} />
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: {
+              xs: "minmax(0, 1fr)",
+              lg: "minmax(0, 1.3fr) minmax(0, 1fr)",
+            },
+            gap: 3,
+          }}
+        >
+          <Box
+            component="section"
+            aria-label="Tempo de estudo nos últimos 7 dias"
+            sx={{ minWidth: 0 }}
+          >
+            <Typography variant="subtitle1" fontWeight={600}>
+              Tempo de estudo
+            </Typography>
+            <Typography variant="caption" color="text.secondary">
+              Teoria e questões lado a lado
+            </Typography>
+            <StudyActivityChart daily={days} />
+          </Box>
+          <Box
+            component="section"
+            aria-label="Questões resolvidas nos últimos 7 dias"
+            sx={{ minWidth: 0 }}
+          >
+            <Typography variant="subtitle1" fontWeight={600}>
+              Questões resolvidas
+            </Typography>
+            <Typography variant="caption" color="text.secondary">
+              Quantidade registrada por dia
+            </Typography>
+            <QuestionVolumeChart daily={days} />
+          </Box>
         </Box>
         <Stack
           direction={{ xs: "column", sm: "row" }}

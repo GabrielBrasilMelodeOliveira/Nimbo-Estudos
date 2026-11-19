@@ -159,7 +159,15 @@ it("reveals flashcards before rating and sends the persisted revision", async ()
   await screen.findByText(card.question);
   expect(screen.queryByText(card.answer)).toBeNull();
   fireEvent.click(screen.getByRole("button", { name: "Mostrar resposta" }));
-  expect(screen.getByText(card.answer)).toBeTruthy();
+  const questionPanel = screen.getByRole("region", {
+    name: "Pergunta do flashcard",
+  });
+  const answerPanel = screen.getByRole("region", {
+    name: "Resposta do flashcard",
+  });
+  expect(questionPanel.parentElement).toBe(answerPanel.parentElement);
+  expect(within(answerPanel).getByText(card.answer)).toBeTruthy();
+  expect(within(questionPanel).getByText(card.question)).toBeTruthy();
   fireEvent.click(screen.getByRole("button", { name: /^Bom/ }));
   await waitFor(() =>
     expect(fetchMock).toHaveBeenCalledWith(
