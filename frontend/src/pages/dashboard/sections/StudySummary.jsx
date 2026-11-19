@@ -115,12 +115,6 @@ export default function StudySummary({
           }}
         >
           <Box>
-            <Typography variant="h4">{fmtHours(totalSeconds)}</Typography>
-            <Typography color="text.secondary">
-              Tempo líquido nos últimos 7 dias
-            </Typography>
-          </Box>
-          <Box>
             <Typography fontWeight={600}>
               {activeDays} de 7 dias ativos
             </Typography>
