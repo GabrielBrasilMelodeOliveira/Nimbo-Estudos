@@ -266,7 +266,7 @@ export default function Dashboard({ data, action, working, navigate }) {
                 direction="row"
                 sx={{ gap: 1, alignItems: "center", py: 1 }}
               >
-                <Chip size="small" color="success" label="Registrado" />
+                <Chip size="small" color="primary" label="Registrado" />
                 <Typography variant="body2">
                   {record.topic.title} · {fmtHours(record.seconds)}
                   {record.questions ? ` · ${record.questions} questões` : ""}

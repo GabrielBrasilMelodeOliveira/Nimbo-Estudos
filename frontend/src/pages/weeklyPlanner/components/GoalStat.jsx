@@ -1,4 +1,4 @@
-import { statusColors } from "../../../shared/theme/designColors.js";
+import { designColors } from "../../../shared/theme/designColors.js";
 import {
   Card,
   CardActionArea,
@@ -20,16 +20,16 @@ export function GoalStat({
       variant="outlined"
       sx={{
         height: "100%",
-        borderColor: completed ? "success.main" : "divider",
-        bgcolor: completed ? statusColors.successSoft : "background.paper",
+        borderColor: completed ? "primary.main" : "divider",
+        bgcolor: completed ? designColors.surface : "background.paper",
       }}
     >
       <CardActionArea
         onClick={onClick}
         sx={{
           height: "100%",
-          borderColor: completed ? "success.main" : "divider",
-          bgcolor: completed ? statusColors.successSoft : "background.paper",
+          borderColor: completed ? "primary.main" : "divider",
+          bgcolor: completed ? designColors.surface : "background.paper",
         }}
       >
         <CardContent>
@@ -44,7 +44,7 @@ export function GoalStat({
           {completed && (
             <Chip
               size="small"
-              color="success"
+              color="primary"
               label="✓ Meta cumprida! Bom trabalho!"
               sx={{ mb: 1 }}
             />

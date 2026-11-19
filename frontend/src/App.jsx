@@ -1,4 +1,7 @@
-import { designColors } from "./shared/theme/designColors.js";
+import Sidebar, {
+  sidebarWidths,
+} from "./shared/components/navigation/Sidebar.jsx";
+import { useSidebarPreference } from "./shared/hooks/useSidebarPreference.js";
 import {
   FocusTimerProvider,
   HideDuringFocus,
@@ -7,7 +10,7 @@ import FocusTimerOverlay from "./shared/components/focus/FocusTimerOverlay.jsx";
 import Flashcards from "./pages/flashcards/Flashcards.jsx";
 import { version as appVersion } from "../package.json";
 import { Input } from "./shared/components/FormControls.jsx";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   LayoutDashboard,
@@ -22,10 +25,8 @@ import {
   Settings2,
   Menu,
   X,
-  ChevronDown,
   AlertCircle,
   CheckCircle2,
-  Leaf,
   CalendarDays,
   BarChart3,
   UsersRound,
@@ -157,6 +158,7 @@ const initial = {
   },
 };
 export default function App() {
+  const { collapsed, toggleCollapsed } = useSidebarPreference();
   const [data, setData] = useState(initial),
     [page, setPage] = useState("dashboard"),
     [focusTopicId, setFocusTopicId] = useState(""),
@@ -275,102 +277,40 @@ export default function App() {
       ),
     [quickSearch],
   );
-  const navItem = (item) => (
-    <Button
-      type="button"
-      key={item.key}
-      className={`nav-item ${page === item.key ? "selected" : ""}`}
-      aria-current={page === item.key ? "page" : undefined}
-      onClick={() => navigate(item.key)}
-    >
-      <item.icon size={19} aria-hidden="true" />
-      <span>{item.label}</span>
-      {item.key === "reviews" && pending > 0 && (
-        <span
-          className="nav-count"
-          aria-label={`${pending} revisões pendentes`}
-        >
-          {pending}
-        </span>
-      )}
-    </Button>
-  );
   return (
     <FocusTimerProvider data={data} action={action} working={working}>
       <Box
         className="app-shell nimbo-theme ux-v54"
         sx={{ width: "100%", minWidth: 0 }}
       >
-        {mobileNav && (
-          <div className="mobile-dim" onClick={() => setMobileNav(false)} />
-        )}
-        <aside className={`sidebar ${mobileNav ? "nav-visible" : ""}`}>
-          <div className="brand">
-            <Button
-              type="button"
-              className="ux-brand-home"
-              onClick={() => navigate("dashboard")}
-              aria-label="Ir para o início"
-            >
-              <span className="brand-mark">
-                <Leaf size={22} />
-              </span>
-              <span className="brand-wordmark">
-                <strong>
-                  nimbo<span>.</span>
-                </strong>
-                <small>ESTUDOS & ROTINA</small>
-              </span>
-            </Button>
-            <Button
-              type="button"
-              className="nav-close"
-              onClick={() => setMobileNav(false)}
-              aria-label="Fechar menu"
-            >
-              <X size={20} />
-            </Button>
-          </div>
-          <nav className="nav-sections" aria-label="Navegação principal">
-            <div className="nav-section">
-              <div className="nav-label">PRINCIPAL</div>
-              {mainMenu.map(navItem)}
-            </div>
-            <div className="nav-section extra-section">
-              <Button
-                type="button"
-                className="more-toggle"
-                onClick={() => setMore((x) => !x)}
-                aria-expanded={more}
-                aria-controls="additional-navigation"
-              >
-                Outras ferramentas{" "}
-                <ChevronDown size={17} className={more ? "rotated" : ""} />
-              </Button>
-              <div
-                id="additional-navigation"
-                className="ux-extra-links"
-                hidden={!more}
-              >
-                {extraMenu.map(navItem)}
-              </div>
-            </div>
-          </nav>
-          <Typography
-            variant="caption"
-            sx={{ display: "block", px: 3, py: 2, color: designColors.light }}
-          >
-            Nimbo v{appVersion}
-          </Typography>
-        </aside>
+        <Sidebar
+          mainMenu={mainMenu}
+          extraMenu={extraMenu}
+          page={page}
+          navigate={navigate}
+          pending={pending}
+          version={appVersion}
+          collapsed={collapsed}
+          onToggleCollapsed={toggleCollapsed}
+          mobileOpen={mobileNav}
+          onMobileClose={() => setMobileNav(false)}
+          more={more}
+          onToggleMore={() => setMore((current) => !current)}
+        />
         <Box
           sx={{
             minWidth: 0,
             flex: 1,
             ml: 0,
-            "@media (min-width:761px)": { ml: "204px" },
-            "@media (min-width:1021px)": { ml: "220px" },
-            "@media (min-width:1261px)": { ml: "244px" },
+            "@media (min-width:761px)": {
+              ml: `${collapsed ? sidebarWidths.compact : sidebarWidths.narrow}px`,
+            },
+            "@media (min-width:1021px)": {
+              ml: `${collapsed ? sidebarWidths.compact : sidebarWidths.medium}px`,
+            },
+            "@media (min-width:1261px)": {
+              ml: `${collapsed ? sidebarWidths.compact : sidebarWidths.wide}px`,
+            },
           }}
         >
           <header className="topbar">

@@ -1,6 +1,6 @@
-# Nimbo 5.10 — Flashcards próprios, históricos e tema
+# Nimbo 5.10.1 — Cores, alinhamento e navegação
 
-A versão **5.10.0** aparece no menu lateral. Para atualizar uma instalação Docker existente:
+A versão **5.10.1** aparece no menu lateral. Para atualizar uma instalação Docker existente:
 
 ```bash
 git pull --ff-only origin main
@@ -10,6 +10,12 @@ docker compose up -d --build
 Recarregue a página após a reconstrução. Apenas `git pull` não substitui o frontend que já está no container. Os volumes existentes são preservados.
 
 Nesta versão:
+
+- Indicadores de fechamento do dia, registros e metas concluídas seguem a paleta ativa. Verde/vermelho permanecem nas métricas de acertos e erros.
+- “Por assunto”, em Questões, usa colunas alinhadas para acertos, erros, barras e percentuais, com disposição adaptada a telas menores.
+- Barra lateral MUI sem rolagem horizontal. O botão de recolher/expandir alterna entre menu completo e ícones com dicas; a preferência é lembrada. A área de conteúdo aproveita o espaço liberado. No celular, permanece um menu sobreposto, com fechamento por botão, Escape ou toque fora.
+
+Recursos da versão 5.10 preservados:
 
 - **Flashcards próprios:** botão “Novo flashcard”, pergunta/resposta lado a lado e disciplina/assunto opcionais. Em “Meus flashcards”, edite ou exclua os cartões criados. Usam a mesma revisão FSRS, atalhos e desfazer dos erros vinculados, sem criar uma anotação no caderno. Editar preserva o agendamento e invalida a avaliação pendente de desfazer. Excluir remove somente aquele cartão pessoal e seu histórico.
 - **Históricos de Estudar e Questões:** rolagem vertical com cabeçalho fixo, navegação por teclado e filtros “Por dia”, “Últimos 7 dias”, “Último mês” (30 dias incluindo hoje) e “Todo o histórico”. Na aba Questões, o período também atualiza as métricas e combina com os filtros de assunto, disciplina, acertos e datas personalizadas.

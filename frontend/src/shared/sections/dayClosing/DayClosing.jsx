@@ -21,7 +21,7 @@ import { useDayClosing } from "./hooks/useDayClosing.js";
 import DailyGoalEditor from "./components/DailyGoalEditor.jsx";
 
 const outcomes = {
-  COMPLETE: ["Completo", "success"],
+  COMPLETE: ["Completo", "primary"],
   PARTIAL: ["Parcial", "default"],
   MISSED: ["Sem progresso", "error"],
   PENDING: ["Em aberto", "default"],
@@ -74,7 +74,7 @@ export default function DayClosing({ data, action, working }) {
         preservados.
       </Typography>
       {goal.outcome === "COMPLETE" && (
-        <Alert severity="success" sx={{ mb: 2 }}>
+        <Alert severity="success" color="info" sx={{ mb: 2 }}>
           Todas as metas de hoje atingidas. Mais um dia para celebrar com o
           Nimbo!
         </Alert>
@@ -104,7 +104,7 @@ export default function DayClosing({ data, action, working }) {
             <LinearProgress
               variant="determinate"
               value={Math.min(100, (metric.actual / metric.target) * 100)}
-              color={metric.actual >= metric.target ? "success" : "primary"}
+              color="primary"
               sx={{ height: 8, borderRadius: 4 }}
             />
           </Box>
@@ -130,7 +130,7 @@ export default function DayClosing({ data, action, working }) {
               <Chip
                 key={discipline.id}
                 variant="outlined"
-                color={studied ? "success" : "default"}
+                color={studied ? "primary" : "default"}
                 label={`${discipline.name} · ${studied ? "estudada" : "planejada"}`}
               />
             );
@@ -158,7 +158,7 @@ export default function DayClosing({ data, action, working }) {
             />
             <Chip
               size="small"
-              color="success"
+              color="primary"
               variant="outlined"
               label={`${state.completed.length} concluídas`}
             />
@@ -236,7 +236,7 @@ export default function DayClosing({ data, action, working }) {
               </Typography>
             </>
           ) : (
-            <Alert severity="success">
+            <Alert severity="success" color="info">
               Nenhuma atividade pendente nesta seleção.
             </Alert>
           )}

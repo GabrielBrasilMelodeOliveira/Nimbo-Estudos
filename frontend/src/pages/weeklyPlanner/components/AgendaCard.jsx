@@ -124,7 +124,7 @@ export function AgendaCard({
           <Chip
             label="Concluído"
             size="small"
-            color="success"
+            color="primary"
             variant="outlined"
           />
         )}

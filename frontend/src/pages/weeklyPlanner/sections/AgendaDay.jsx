@@ -92,7 +92,7 @@ export function AgendaDay({
               />
               <Chip
                 size="small"
-                color="success"
+                color="primary"
                 variant="outlined"
                 label="Registrado"
               />

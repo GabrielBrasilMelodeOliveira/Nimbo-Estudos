@@ -1,4 +1,4 @@
-import { statusColors } from "../../shared/theme/designColors.js";
+import SubjectPerformanceList from "./components/SubjectPerformanceList.jsx";
 import HistoryPeriodFilter from "../../shared/components/history/HistoryPeriodFilter.jsx";
 import HistoryScrollArea from "../../shared/components/history/HistoryScrollArea.jsx";
 import FocusTimer from "../../shared/components/focus/FocusTimer.jsx";
@@ -18,7 +18,6 @@ import {
   TopicSelect,
   Empty,
   AccuracyTag,
-  ProgressBar,
   DeleteButton,
 } from "../../shared/components/UI.jsx";
 import {
@@ -226,39 +225,7 @@ export default function Questions({
           action={<span className="small-chip">{rows.length} assuntos</span>}
         >
           {rows.length ? (
-            <div className="topic-performance-list">
-              {rows.map((t) => (
-                <div className="performance-row" key={t.id}>
-                  <div className="performance-info">
-                    <div>
-                      <strong>{t.title}</strong>
-                      <span>{t.discipline.name}</span>
-                    </div>
-                  </div>
-                  <div className="performance-counts">
-                    <span>
-                      <b>{t.correct}</b> acertos
-                    </span>
-                    <span>
-                      <b>{t.total - t.correct}</b> erros
-                    </span>
-                  </div>
-                  <div className="performance-bar">
-                    <ProgressBar
-                      value={percentage(t.correct, t.total)}
-                      color={
-                        percentage(t.correct, t.total) >= 80
-                          ? statusColors.success
-                          : percentage(t.correct, t.total) >= 60
-                            ? statusColors.warning
-                            : statusColors.error
-                      }
-                    />
-                  </div>
-                  <AccuracyTag correct={t.correct} total={t.total} />
-                </div>
-              ))}
-            </div>
+            <SubjectPerformanceList subjects={rows} />
           ) : (
             <Empty
               title="Nenhuma questão encontrada"

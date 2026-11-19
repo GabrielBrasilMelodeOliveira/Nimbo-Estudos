@@ -1,3 +1,4 @@
+import userEvent from "@testing-library/user-event";
 import React from "react";
 import { it, expect, vi } from "vitest";
 import {
@@ -110,6 +111,7 @@ it("creates, edits and deletes a manual card without creating an error note", as
 });
 
 it("keeps error and manual cards with identical ids independent when rating and undoing", async () => {
+  const user = userEvent.setup();
   const errorCard = makeCard("ERROR_NOTE", "Erro cadastrado");
   const manualCard = makeCard("MANUAL", "Pergunta independente");
   const request = vi
@@ -126,18 +128,18 @@ it("keeps error and manual cards with identical ids independent when rating and 
     });
   show(<FlashcardDeck />);
   await screen.findByText("Erro cadastrado");
-  fireEvent.click(screen.getByRole("button", { name: "Mostrar resposta" }));
-  fireEvent.click(screen.getByRole("button", { name: "Bom", exact: true }));
+  await user.click(screen.getByRole("button", { name: "Mostrar resposta" }));
+  await user.click(screen.getByRole("button", { name: "Bom", exact: true }));
   await screen.findByText("Pergunta independente");
   expect(screen.queryByText("Resposta", { selector: "p" })).toBeNull();
-  fireEvent.click(screen.getByRole("button", { name: "Mostrar resposta" }));
-  fireEvent.click(screen.getByRole("button", { name: "Bom", exact: true }));
+  await user.click(screen.getByRole("button", { name: "Mostrar resposta" }));
+  await user.click(screen.getByRole("button", { name: "Bom", exact: true }));
   await screen.findByText(/Revisões em dia/);
   expect(request).toHaveBeenCalledWith("flashcards/manual/1/review", "POST", {
     rating: "GOOD",
     expectedRevision: 0,
   });
-  fireEvent.click(
+  await user.click(
     screen.getByRole("button", { name: "Desfazer última avaliação" }),
   );
   await screen.findByText("Pergunta independente");
