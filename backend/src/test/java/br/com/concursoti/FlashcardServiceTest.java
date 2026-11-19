@@ -92,8 +92,8 @@ class FlashcardServiceTest {
   }
 
   @Test
-  void newNotesRequireExplicitLinkingAndUnlinkingPreservesSchedule() {
-    assertFalse(new ErrorNote().flashcardEnabled);
+  void newNotesBecomeCardsAndUnlinkingPreservesSchedule() {
+    assertTrue(new ErrorNote().flashcardEnabled);
     service.review(42L, new FlashcardService.ReviewInput(Rating.GOOD, 0L));
     String savedState = errorNote.flashcardState;
     String savedHistory = errorNote.flashcardHistory;

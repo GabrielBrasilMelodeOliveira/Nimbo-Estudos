@@ -38,9 +38,9 @@ public class ErrorNote {
   public String answerImageId;
 
   // Existing rows were already cards; preserve them when Hibernate adds this column.
-  // New notes opt in through the explicit linking action.
+  // New notes enter the flashcard deck automatically.
   @Column(nullable = false, columnDefinition = "boolean default true")
-  public boolean flashcardEnabled = false;
+  public boolean flashcardEnabled = true;
 
   @com.fasterxml.jackson.annotation.JsonIgnore
   @Column(columnDefinition = "text")

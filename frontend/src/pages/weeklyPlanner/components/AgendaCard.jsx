@@ -33,7 +33,7 @@ export function AgendaCard({
       variant="outlined"
       data-agenda-id={item.id}
       sx={{
-        p: 1.5,
+        p: 1.1,
         minWidth: 0,
         borderColor: overdue ? "warning.main" : "divider",
         bgcolor: completed ? "action.hover" : "background.paper",

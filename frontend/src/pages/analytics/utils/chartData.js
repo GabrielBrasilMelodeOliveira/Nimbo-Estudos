@@ -1,4 +1,3 @@
-import { activeReview } from "../../../shared/utils/revisionLevels.js";
 import { addDays } from "../../../shared/utils/plannerMetrics.js";
 import { TODAY, statusLabels } from "../../../shared/utils/utils.js";
 
@@ -82,30 +81,6 @@ export function buildChartData(
       ...group,
       accuracy: group.total ? (100 * group.correct) / group.total : null,
     })),
-    reviewForecast: [
-      {
-        label: "Atrasadas",
-        count: (data.reviews || []).filter(
-          (review) =>
-            activeReview(review) &&
-            matchesTopic(review.topic) &&
-            review.dueDate < today,
-        ).length,
-      },
-      ...Array.from({ length: 7 }, (_, index) => {
-        const date = addDays(today, index);
-        return {
-          label:
-            index === 0 ? "Hoje" : `${date.slice(8, 10)}/${date.slice(5, 7)}`,
-          count: (data.reviews || []).filter(
-            (review) =>
-              activeReview(review) &&
-              matchesTopic(review.topic) &&
-              review.dueDate === date,
-          ).length,
-        };
-      }),
-    ],
     coverage: Object.entries(statusLabels).map(([status, label], index) => ({
       id: status,
       label,

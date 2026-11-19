@@ -13,14 +13,14 @@ export function useAnalytics(data) {
   const topics = (data.topics || []).filter(
     (topic) => !disciplineId || String(topic.discipline?.id) === disciplineId,
   );
-  const { daily, comparisons, coverage, reviewForecast } = useMemo(
+  const { daily, comparisons, coverage } = useMemo(
     () =>
       buildChartData(data, { disciplineId, topicId, days, comparisonLevel }),
     [data, disciplineId, topicId, days, comparisonLevel],
   );
   const metrics = {
     accuracy: {
-      label: "Taxa de acertos",
+      label: "Taxas de acertos e erros",
       format: (value) =>
         value == null ? "Sem questões" : `${value.toFixed(1)}%`,
     },
@@ -45,7 +45,6 @@ export function useAnalytics(data) {
     setComparisonLevel,
     rankOrder,
     setRankOrder,
-    reviewForecast,
     disciplineId,
     setDisciplineId,
     topicId,

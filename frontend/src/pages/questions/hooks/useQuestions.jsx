@@ -1,12 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { TODAY, percentage } from "../../../shared/utils/utils.js";
-import {
-  TIMER_KEY,
-  freshClock,
-  initialClock,
-  blank,
-  matchesAccuracy,
-} from "../utils/pageDefinitions.jsx";
+import { blank, matchesAccuracy } from "../utils/pageDefinitions.jsx";
 export function useQuestions({ data, action, working, focusTopicId }) {
   const [open, setOpen] = useState(false),
     [form, setForm] = useState(blank);
@@ -17,92 +11,20 @@ export function useQuestions({ data, action, working, focusTopicId }) {
     [from, setFrom] = useState(""),
     [to, setTo] = useState(""),
     [order, setOrder] = useState("recent");
-  const [clock, setClock] = useState(initialClock),
-    [now, setNow] = useState(Date.now());
   useEffect(() => {
-    if (!focusTopicId) return;
-    const selected = (data.topics || []).find(
-      (t) => String(t.id) === String(focusTopicId),
+    const selected = data.topics.find(
+      (topic) => String(topic.id) === String(focusTopicId),
     );
-    if (!selected) return;
-    setDiscipline(String(selected.discipline.id));
-    setTopic(String(selected.id));
-    setClock((c) =>
-      c.runningSince || c.elapsedMs > 0
-        ? c
-        : {
-            ...c,
-            topicId: String(focusTopicId),
-          },
-    );
+    if (selected) {
+      setDiscipline(String(selected.discipline.id));
+      setTopic(String(selected.id));
+    }
   }, [focusTopicId]);
-  const running = clock.runningSince !== null;
-  const seconds = Math.min(
-    86400,
-    Math.floor(
-      (clock.elapsedMs +
-        (running ? Math.max(0, now - clock.runningSince) : 0)) /
-        1000,
-    ),
-  );
-  useEffect(() => {
-    sessionStorage.setItem(TIMER_KEY, JSON.stringify(clock));
-  }, [clock]);
-  useEffect(() => {
-    if (!running) return;
-    const id = setInterval(() => setNow(Date.now()), 500);
-    return () => clearInterval(id);
-  }, [running]);
-  const pause = () => {
-    setClock((c) => ({
-      ...c,
-      elapsedMs: Math.min(
-        86400000,
-        c.elapsedMs +
-          (c.runningSince ? Math.max(0, Date.now() - c.runningSince) : 0),
-      ),
-      runningSince: null,
-    }));
-    setNow(Date.now());
-  };
-  const reset = () => {
-    setClock((c) => ({
-      ...freshClock(),
-      topicId: c.topicId,
-    }));
-    setNow(Date.now());
-  };
-  const start = () => {
-    if (!clock.topicId || seconds >= 86400) return;
-    setClock((c) => ({
-      ...c,
-      runningSince: c.runningSince || Date.now(),
-    }));
-    setNow(Date.now());
-  };
   const openManual = () => {
     setForm({
       ...blank,
-      topicId: clock.topicId || String(data.topics?.[0]?.id || ""),
+      topicId: focusTopicId || String(data.topics?.[0]?.id || ""),
       date: TODAY(),
-    });
-    setOpen(true);
-  };
-  const finishFocus = () => {
-    if (!clock.topicId || seconds < 1) return;
-    const duration = Math.min(
-      86400,
-      Math.floor(
-        (clock.elapsedMs + (running ? Date.now() - clock.runningSince : 0)) /
-          1000,
-      ),
-    );
-    pause();
-    setForm({
-      ...blank,
-      topicId: clock.topicId,
-      date: TODAY(),
-      durationSeconds: duration,
     });
     setOpen(true);
   };
@@ -125,7 +47,6 @@ export function useQuestions({ data, action, working, focusTopicId }) {
     );
     if (success) {
       setOpen(false);
-      if (form.durationSeconds > 0) reset();
       setForm(blank);
     }
   };
@@ -212,17 +133,7 @@ export function useQuestions({ data, action, working, focusTopicId }) {
     setTo,
     order,
     setOrder,
-    clock,
-    setClock,
-    now,
-    setNow,
-    running,
-    seconds,
-    pause,
-    reset,
-    start,
     openManual,
-    finishFocus,
     submit,
     records,
     topicsForDiscipline,

@@ -6,7 +6,7 @@ import {
   Button,
   LinearProgress,
 } from "@mui/material";
-import { BarChart } from "@mui/x-charts/BarChart";
+import StudyActivityChart from "../../../shared/components/StudyActivityChart.jsx";
 import { addDays } from "../../../shared/utils/plannerMetrics.js";
 import {
   TODAY,
@@ -15,13 +15,22 @@ import {
   weekday,
 } from "../../../shared/utils/utils.js";
 
-export default function StudySummary({ daily, weekly, goalSeconds, navigate }) {
+export default function StudySummary({
+  daily,
+  questions = [],
+  weekly,
+  goalSeconds,
+  navigate,
+}) {
   const today = TODAY();
   const days = Array.from({ length: 7 }, (_, index) => {
     const date = addDays(today, index - 6);
     const record = daily.find((day) => day.date === date) || {};
     return {
       date,
+      questions: questions
+        .filter((record) => record.date === date)
+        .reduce((total, record) => total + Number(record.total || 0), 0),
       seconds: record.seconds || 0,
       questionSeconds: record.questionSeconds || 0,
       theorySeconds:
@@ -64,34 +73,7 @@ export default function StudySummary({ daily, weekly, goalSeconds, navigate }) {
         }}
       >
         <Box sx={{ minWidth: 0 }}>
-          <BarChart
-            height={250}
-            xAxis={[
-              {
-                scaleType: "band",
-                data: days.map((day) => day.date),
-                valueFormatter: (date) =>
-                  `${weekday(date)} ${dateBR(date).slice(0, 5)}`,
-              },
-            ]}
-            yAxis={[{ label: "Horas" }]}
-            series={[
-              {
-                data: days.map((day) => day.theorySeconds / 3600),
-                stack: "study",
-                label: "Teoria",
-                color: "#39745d",
-                valueFormatter: (value) => fmtHours(value * 3600),
-              },
-              {
-                data: days.map((day) => day.questionSeconds / 3600),
-                stack: "study",
-                label: "Questões",
-                color: "#dfaf55",
-                valueFormatter: (value) => fmtHours(value * 3600),
-              },
-            ]}
-          />
+          <StudyActivityChart daily={days} />
         </Box>
         <Stack
           direction={{ xs: "column", sm: "row" }}

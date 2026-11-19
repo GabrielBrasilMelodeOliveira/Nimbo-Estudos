@@ -97,7 +97,7 @@ it("searches shared lists by typing and validates actual selection", async () =>
   expect(input.checkValidity()).toBe(true);
 });
 
-it("links errors from the notebook without embedding the review deck", async () => {
+it("keeps the notebook focused on notes without flashcard navigation buttons", async () => {
   const { default: ErrorNotes } =
     await import("../src/pages/errorNotes/ErrorNotes.jsx");
   const action = vi.fn();
@@ -126,15 +126,11 @@ it("links errors from the notebook without embedding the review deck", async () 
       />
     </ThemeProvider>,
   );
-  await userEvent.click(
-    screen.getByRole("button", { name: "Vincular aos flashcards" }),
-  );
-  expect(action).toHaveBeenCalledWith(
-    "flashcards/42/link",
-    "PATCH",
-    { enabled: true },
-    expect.any(String),
-  );
+  expect(
+    screen.queryByRole("button", {
+      name: /Vincular aos flashcards|Abrir nos flashcards/,
+    }),
+  ).toBeNull();
   expect(screen.queryByRole("tab", { name: "Flashcards" })).toBeNull();
   expect(screen.queryByRole("button", { name: "Mostrar resposta" })).toBeNull();
 });

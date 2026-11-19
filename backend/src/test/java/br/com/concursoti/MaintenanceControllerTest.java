@@ -26,6 +26,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class MaintenanceControllerTest {
 
   @Mock
+  br.com.concursoti.planning.repositories.DailyStudyPlanRepository dailyPlans;
+
+  @Mock
   DisciplineRepository disciplines;
 
   @Mock

@@ -27,7 +27,7 @@ it("opens independent flashcards below Study and identifies the running release"
   );
   const user = userEvent.setup();
   await screen.findByText("Pronto para começar?");
-  expect(screen.getByText("Nimbo v5.6.0")).toBeTruthy();
+  expect(screen.getByText("Nimbo v5.7.0")).toBeTruthy();
   const navigation = screen.getByRole("navigation");
   const labels = within(navigation)
     .getAllByRole("button")
@@ -37,10 +37,10 @@ it("opens independent flashcards below Study and identifies the running release"
     within(navigation).getByRole("button", { name: "Flashcards", exact: true }),
   );
   await screen.findByText(
-    "Vincule um erro do caderno para começar os flashcards.",
+    "Registre um erro no caderno para começar os flashcards.",
   );
   await user.click(
-    screen.getByRole("button", { name: "Vincular erros do caderno" }),
+    screen.getByRole("button", { name: "Abrir caderno de erros" }),
   );
   expect(
     await screen.findByRole("button", { name: "Anotar erro" }),

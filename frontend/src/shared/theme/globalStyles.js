@@ -1,8 +1,7 @@
 export const globalStyles = [
   {
     ":root": {
-      fontFamily:
-        "'DM Sans',ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif",
+      fontFamily: '"Inter Variable", sans-serif',
       color: "#202941",
       background: "#f6f8fb",
       fontSynthesis: "none",
@@ -62,7 +61,7 @@ export const globalStyles = [
   },
   {
     "h1,h2,h3,h4": {
-      fontFamily: "'Manrope','DM Sans',sans-serif",
+      fontFamily: '"Inter Variable", sans-serif',
       letterSpacing: "-.035em",
     },
   },
@@ -140,7 +139,7 @@ export const globalStyles = [
   },
   {
     ".brand-wordmark strong": {
-      fontFamily: "'Manrope'",
+      fontFamily: '"Inter Variable", sans-serif',
       fontSize: "27px",
       color: "#fff",
       lineHeight: "1.08",
@@ -1132,7 +1131,7 @@ export const globalStyles = [
   {
     ".metric-value": {
       color: "#202c46",
-      fontFamily: "'Manrope'",
+      fontFamily: '"Inter Variable", sans-serif',
       fontSize: "26px",
       fontWeight: "800",
       letterSpacing: "-1.6px",
@@ -1176,7 +1175,7 @@ export const globalStyles = [
   },
   {
     ".chart-sum strong": {
-      font: "800 23px 'Manrope'",
+      font: '800 23px "Inter Variable"',
       color: "#21314e",
       letterSpacing: "-1px",
     },
@@ -1319,7 +1318,7 @@ export const globalStyles = [
       color: "#253450",
       fontSize: "22px",
       letterSpacing: "-1px",
-      fontFamily: "Manrope",
+      fontFamily: '"Inter Variable", sans-serif',
     },
   },
   {
@@ -1347,7 +1346,7 @@ export const globalStyles = [
       fontSize: "15px",
       whiteSpace: "nowrap",
       color: "#26334d",
-      fontFamily: "Manrope",
+      fontFamily: '"Inter Variable", sans-serif',
     },
   },
   {
@@ -1688,7 +1687,7 @@ export const globalStyles = [
   },
   {
     ".edital-progress-main strong": {
-      font: "800 32px Manrope",
+      font: '800 32px "Inter Variable"',
       color: "#fff",
       letterSpacing: "-1px",
     },
@@ -2119,7 +2118,7 @@ export const globalStyles = [
   },
   {
     ".mini-metric>strong": {
-      font: "800 26px Manrope",
+      font: '800 26px "Inter Variable"',
       letterSpacing: "-1.1px",
       color: "#23314d",
       marginTop: "5px",
@@ -2221,7 +2220,7 @@ export const globalStyles = [
   },
   {
     ".inline-result strong": {
-      font: "800 16px Manrope",
+      font: '800 16px "Inter Variable"',
       color: "#3d66d6",
     },
   },
@@ -2369,7 +2368,7 @@ export const globalStyles = [
   },
   {
     ".timer-digits": {
-      font: "800 clamp(35px,4.6vw,58px) Manrope",
+      font: '800 clamp(35px,4.6vw,58px) "Inter Variable"',
       letterSpacing: "0",
       color: "#22324e",
       fontVariantNumeric: "tabular-nums",
@@ -2451,7 +2450,7 @@ export const globalStyles = [
   {
     ".hours-summary strong": {
       display: "block",
-      font: "800 33px Manrope",
+      font: '800 33px "Inter Variable"',
       color: "#253c69",
       margin: "10px 0 4px",
     },
@@ -2816,7 +2815,7 @@ export const globalStyles = [
   },
   {
     ".mock-grade strong,.mock-cutoff strong": {
-      font: "800 16px Manrope",
+      font: '800 16px "Inter Variable"',
       color: "#354968",
     },
   },
@@ -3956,7 +3955,7 @@ export const globalStyles = [
       "--success": "#4eaa89",
       "--sidebar": "#183b34",
       "--soft": "#f4f8f5",
-      fontFamily: "'DM Sans',system-ui,sans-serif",
+      fontFamily: '"Inter Variable", sans-serif',
       background: "#f5f8f4",
       color: "#243e38",
     },
@@ -5114,7 +5113,7 @@ export const globalStyles = [
   },
   {
     ".edital-preview-group .field textarea": {
-      fontFamily: "ui-monospace,Consolas,monospace",
+      fontFamily: '"Inter Variable", sans-serif',
       fontSize: "11px",
       lineHeight: "1.65",
     },
@@ -9075,7 +9074,7 @@ export const globalStyles = [
   {
     ".nimbo-theme button,.nimbo-theme select:not(.MuiInputBase-input),.nimbo-theme input:not(.MuiInputBase-input),.nimbo-theme textarea":
       {
-        fontFamily: "inherit",
+        fontFamily: '"Inter Variable", sans-serif',
       },
   },
   {
@@ -11693,7 +11692,7 @@ export const globalStyles = [
   {
     ".ux-v54 kbd": {
       fontSize: "11px",
-      fontFamily: "inherit",
+      fontFamily: '"Inter Variable", sans-serif',
       fontWeight: "650",
       border: "1px solid currentColor",
       borderRadius: "5px",

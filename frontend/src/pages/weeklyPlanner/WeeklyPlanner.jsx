@@ -1,3 +1,4 @@
+import DailyStudyPlan from "./components/DailyStudyPlan.jsx";
 import { Typography, Stack, TextField, MenuItem } from "@mui/material";
 import { AgendaDay } from "./sections/AgendaDay.jsx";
 import { WeekBoard } from "./sections/WeekBoard.jsx";
@@ -158,6 +159,7 @@ export default function WeeklyPlanner({ data, action, working, navigate }) {
           actual={+(metrics.seconds / 3600).toFixed(1)}
           target={+(targetMinutes / 60).toFixed(1)}
           unit="h"
+          completed={targetMinutes > 0 && metrics.seconds >= targetMinutes * 60}
           onClick={() => {
             setGoalForm(goalInitial(data, periodType, start));
             setGoalOpen(true);
@@ -272,8 +274,8 @@ export default function WeeklyPlanner({ data, action, working, navigate }) {
         </SearchableSelect>
       </Stack>
       <Typography variant="caption" color="text.secondary">
-        Arraste as atividades pendentes pela alça para outro dia ou use o botão
-        Mover. Role o quadro para ver os demais dias.
+        Arraste as atividades pendentes para outro dia ou use Mover. Planeje até
+        duas disciplinas em cada dia.
       </Typography>
       <section className="n55-calendar">
         <div className="n55-calendar-head">
@@ -311,6 +313,7 @@ export default function WeeklyPlanner({ data, action, working, navigate }) {
             Área{" "}
             <SearchableSelect
               value={area}
+              sx={{ width: 200 }}
               onChange={(e) => setArea(e.target.value)}
             >
               <option value="ALL">Todas</option>
@@ -368,6 +371,14 @@ export default function WeeklyPlanner({ data, action, working, navigate }) {
           </div>
         ) : (
           <WeekBoard
+            renderPlan={(day) => (
+              <DailyStudyPlan
+                day={day}
+                data={data}
+                action={action}
+                working={working}
+              />
+            )}
             dates={dates}
             working={working}
             itemsForDay={activityForDay}

@@ -4,11 +4,33 @@ import {
   CardContent,
   Typography,
   LinearProgress,
+  Chip,
 } from "@mui/material";
-export function GoalStat({ label, actual, target, onClick, unit = "" }) {
+export function GoalStat({
+  label,
+  actual,
+  target,
+  onClick,
+  unit = "",
+  completed = target > 0 && actual >= target,
+}) {
   return (
-    <Card variant="outlined" sx={{ height: "100%" }}>
-      <CardActionArea onClick={onClick} sx={{ height: "100%" }}>
+    <Card
+      variant="outlined"
+      sx={{
+        height: "100%",
+        borderColor: completed ? "success.main" : "divider",
+        bgcolor: completed ? "#edf7ef" : "background.paper",
+      }}
+    >
+      <CardActionArea
+        onClick={onClick}
+        sx={{
+          height: "100%",
+          borderColor: completed ? "success.main" : "divider",
+          bgcolor: completed ? "#edf7ef" : "background.paper",
+        }}
+      >
         <CardContent>
           <Typography variant="body2" color="text.secondary">
             {label}
@@ -18,6 +40,14 @@ export function GoalStat({ label, actual, target, onClick, unit = "" }) {
             {target > 0 ? ` / ${target}` : ""}
             {unit}
           </Typography>
+          {completed && (
+            <Chip
+              size="small"
+              color="success"
+              label="✓ Meta cumprida! Bom trabalho!"
+              sx={{ mb: 1 }}
+            />
+          )}
           {target > 0 ? (
             <LinearProgress
               variant="determinate"

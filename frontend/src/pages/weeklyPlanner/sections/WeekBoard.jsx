@@ -18,6 +18,7 @@ export function WeekBoard({
   working,
   itemsForDay,
   renderDay,
+  renderPlan,
   onDrop,
   onAdd,
 }) {
@@ -27,14 +28,16 @@ export function WeekBoard({
       sx={{ overflowX: "auto", pb: 1 }}
       role="region"
       tabIndex={0}
-      aria-label="Quadro semanal com rolagem horizontal"
+      aria-label="Quadro semanal"
     >
       <Box
         sx={{
           display: "grid",
-          gridTemplateColumns: "repeat(7, minmax(230px, 1fr))",
-          gap: 1.5,
-          minWidth: 1700,
+          gridTemplateColumns: {
+            xs: "repeat(7, minmax(180px, 1fr))",
+            lg: "repeat(7, minmax(0, 1fr))",
+          },
+          gap: 1,
           p: 1.5,
         }}
       >
@@ -67,7 +70,7 @@ export function WeekBoard({
               if (id && !working) onDrop(id, day);
             }}
             sx={{
-              p: 1.25,
+              p: 1,
               minHeight: 280,
               minWidth: 0,
               bgcolor:
@@ -96,6 +99,7 @@ export function WeekBoard({
                 <Plus size={18} />
               </IconButton>
             </Stack>
+            {renderPlan?.(day)}
             {renderDay(day)}
             {!itemsForDay(day).length && (
               <Button

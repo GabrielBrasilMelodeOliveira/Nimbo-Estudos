@@ -42,6 +42,7 @@ export const endpoints = [
   "pet",
   "analytics",
   "agenda",
+  "study-plan",
   "agenda/goals",
   "edital/imports",
 ];

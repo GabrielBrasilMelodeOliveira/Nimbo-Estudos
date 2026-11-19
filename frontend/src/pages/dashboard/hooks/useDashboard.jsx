@@ -1,10 +1,10 @@
+import {
+  plannedDisciplinesForDay,
+  nextPlannedDiscipline,
+} from "../../../shared/utils/dailyPlanning.js";
 import { TODAY } from "../../../shared/utils/utils.js";
 import { activeReview } from "../../../shared/utils/revisionLevels.js";
-import {
-  startWeek,
-  findGoal,
-  isAgendaCompleted,
-} from "../../../shared/utils/plannerMetrics.js";
+import { startWeek, findGoal } from "../../../shared/utils/plannerMetrics.js";
 export function useDashboard({ data, action, working, navigate }) {
   const overview = data.dashboard || {},
     today = TODAY();
@@ -12,9 +12,6 @@ export function useDashboard({ data, action, working, navigate }) {
     todayTasks = allTasks
       .filter((t) => t.scheduledDate === today)
       .sort((a, b) => (a.startTime || "99").localeCompare(b.startTime || "99"));
-  const pendingTasks = todayTasks.filter(
-    (task) => !isAgendaCompleted(data, task),
-  );
   const due = (data.reviews || [])
     .filter((r) => activeReview(r) && r.dueDate <= today)
     .sort((a, b) => a.dueDate.localeCompare(b.dueDate));
@@ -24,14 +21,7 @@ export function useDashboard({ data, action, working, navigate }) {
       ((findGoal(data, "WEEK", startWeek(today))?.targetMinutes ??
         data.plan?.weeklyGoalMinutes) ||
         0) * 60;
-  const daily = (overview.dailyHours || []).slice(-7),
-    maxSeconds = Math.max(3600, ...daily.map((x) => x.seconds || 0));
-  const dayLabel = (s) =>
-    new Intl.DateTimeFormat("pt-BR", {
-      weekday: "short",
-    })
-      .format(new Date(`${s}T12:00:00`))
-      .replace(".", "");
+  const daily = (overview.dailyHours || []).slice(-7);
   const greet =
     new Date().getHours() < 12
       ? "Bom dia"
@@ -43,14 +33,13 @@ export function useDashboard({ data, action, working, navigate }) {
     today,
     allTasks,
     todayTasks,
-    pendingTasks,
     due,
     focus,
+    plannedDisciplines: plannedDisciplinesForDay(data, today),
+    plannedDiscipline: nextPlannedDiscipline(data, today),
     weekly,
     goalSeconds,
     daily,
-    maxSeconds,
-    dayLabel,
     greet,
   };
 }

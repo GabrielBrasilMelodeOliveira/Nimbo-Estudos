@@ -1,7 +1,8 @@
+import StudyActivityChart from "../../shared/components/StudyActivityChart.jsx";
 import { SearchableSelect } from "../../shared/components/FormControls.jsx";
 import { Box, Paper, Stack, Typography, MenuItem } from "@mui/material";
 import { BarChart } from "@mui/x-charts/BarChart";
-import { LineChart } from "@mui/x-charts/LineChart";
+import AccuracyTrendChart from "./components/AccuracyTrendChart.jsx";
 import { PieChart } from "@mui/x-charts/PieChart";
 import { TopicSelect } from "../../shared/components/UI.jsx";
 import { fmtHours, dateBR } from "../../shared/utils/utils.js";
@@ -14,7 +15,6 @@ export default function Analytics({ data }) {
     setComparisonLevel,
     rankOrder,
     setRankOrder,
-    reviewForecast,
     disciplineId,
     setDisciplineId,
     topicId,
@@ -166,29 +166,9 @@ export default function Analytics({ data }) {
         </ChartPanel>
         <ChartPanel
           title="Tempo de estudo por dia"
-          description="Horas líquidas de teoria e questões, sem duplicar o cronômetro."
+          description="Tempo registrado no eixo esquerdo e quantidade de questões no direito. Questões sem duração também aparecem."
         >
-          <BarChart
-            height={280}
-            xAxis={dateAxis}
-            series={[
-              {
-                data: daily.map((day) => day.theorySeconds / 3600),
-                label: "Teoria",
-                stack: "time",
-                color: "#39745d",
-                valueFormatter: (value) => fmtHours(value * 3600),
-              },
-              {
-                data: daily.map((day) => day.questionSeconds / 3600),
-                label: "Questões",
-                stack: "time",
-                color: "#dfaf55",
-                valueFormatter: (value) => fmtHours(value * 3600),
-              },
-            ]}
-            yAxis={[{ label: "Horas" }]}
-          />
+          <StudyActivityChart daily={daily} />
         </ChartPanel>
         <ChartPanel
           title="Cobertura do edital"
@@ -265,70 +245,54 @@ export default function Analytics({ data }) {
               },
             ]}
             xAxis={[{ min: 0, ...(metric === "accuracy" ? { max: 100 } : {}) }]}
-            series={[
-              {
-                data: ranked.map((group) =>
-                  metric === "seconds" ? group.seconds / 3600 : group[metric],
-                ),
-                label:
-                  metric === "seconds"
-                    ? "Horas de estudo"
-                    : metrics[metric].label,
-                color: "#39745d",
-                valueFormatter: (value) =>
-                  metrics[metric].format(
-                    metric === "seconds" ? value * 3600 : value,
-                  ),
-              },
-            ]}
+            series={
+              metric === "accuracy"
+                ? [
+                    {
+                      data: ranked.map((group) => group.accuracy),
+                      label: "Acertos",
+                      stack: "accuracy",
+                      color: "#39745d",
+                      valueFormatter: (value) => `${value.toFixed(1)}%`,
+                    },
+                    {
+                      data: ranked.map((group) => 100 - group.accuracy),
+                      label: "Erros",
+                      stack: "accuracy",
+                      color: "#c54e4e",
+                      valueFormatter: (value) => `${value.toFixed(1)}%`,
+                    },
+                  ]
+                : [
+                    {
+                      data: ranked.map((group) =>
+                        metric === "seconds"
+                          ? group.seconds / 3600
+                          : group[metric],
+                      ),
+                      label:
+                        metric === "seconds"
+                          ? "Horas de estudo"
+                          : metrics[metric].label,
+                      color: "#39745d",
+                      valueFormatter: (value) =>
+                        metrics[metric].format(
+                          metric === "seconds" ? value * 3600 : value,
+                        ),
+                    },
+                  ]
+            }
             localeText={{
               noData: "Sem registros para os filtros selecionados",
             }}
           />
         </ChartPanel>
         <ChartPanel
-          title="Evolução dos acertos"
-          description="Taxa diária nos registros filtrados. Dias sem questões não são tratados como erro."
+          fullWidth
+          title="Evolução de acertos e erros"
+          description="Taxas por dia com questões registradas. Os pontos permanecem visíveis e os dias sem registros não são contados como erros."
         >
-          <LineChart
-            height={280}
-            xAxis={dateAxis}
-            yAxis={[{ min: 0, max: 100, label: "%" }]}
-            series={[
-              {
-                data: daily.map((day) =>
-                  day.correct + day.incorrect
-                    ? (100 * day.correct) / (day.correct + day.incorrect)
-                    : null,
-                ),
-                label: "Taxa de acertos",
-                color: "#39745d",
-                valueFormatter: (value) =>
-                  value == null ? "Sem questões" : `${value.toFixed(1)}%`,
-              },
-            ]}
-          />
-        </ChartPanel>
-        <ChartPanel
-          title="Carga de revisões"
-          description="Revisões pendentes dos assuntos selecionados: atrasadas e próximos 7 dias, independente do período de registros."
-        >
-          <BarChart
-            height={280}
-            xAxis={[
-              {
-                scaleType: "band",
-                data: reviewForecast.map((day) => day.label),
-              },
-            ]}
-            series={[
-              {
-                data: reviewForecast.map((day) => day.count),
-                label: "Revisões pendentes",
-                color: "#b38c40",
-              },
-            ]}
-          />
+          <AccuracyTrendChart daily={daily} />
         </ChartPanel>
       </Box>
     </Stack>

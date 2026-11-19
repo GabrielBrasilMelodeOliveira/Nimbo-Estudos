@@ -1,3 +1,4 @@
+import { FocusTimerProvider } from "../src/shared/hooks/FocusTimerContext.jsx";
 import React from "react";
 import { it, expect, vi } from "vitest";
 import { render } from "@testing-library/react";
@@ -70,13 +71,15 @@ for (const [path, load] of Object.entries(pages)) {
     const { default: Page } = await load();
     const { container } = render(
       <ThemeProvider theme={theme}>
-        <Page
-          data={data}
-          action={vi.fn()}
-          working={false}
-          navigate={vi.fn()}
-          focusTopicId=""
-        />
+        <FocusTimerProvider data={data} action={vi.fn()}>
+          <Page
+            data={data}
+            action={vi.fn()}
+            working={false}
+            navigate={vi.fn()}
+            focusTopicId=""
+          />
+        </FocusTimerProvider>
       </ThemeProvider>,
     );
     expect(container.textContent.length).toBeGreaterThan(0);

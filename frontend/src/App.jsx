@@ -1,3 +1,8 @@
+import {
+  FocusTimerProvider,
+  HideDuringFocus,
+} from "./shared/hooks/FocusTimerContext.jsx";
+import FocusTimerOverlay from "./shared/components/focus/FocusTimerOverlay.jsx";
 import Flashcards from "./pages/flashcards/Flashcards.jsx";
 import { version as appVersion } from "../package.json";
 import { Input } from "./shared/components/FormControls.jsx";
@@ -134,6 +139,7 @@ const initial = {
   materials: [],
   "error-notes": [],
   agenda: [],
+  "study-plan": [],
   "agenda/goals": [],
   "edital/imports": [],
   plan: {
@@ -153,6 +159,7 @@ export default function App() {
   const [data, setData] = useState(initial),
     [page, setPage] = useState("dashboard"),
     [focusTopicId, setFocusTopicId] = useState(""),
+    [focusDisciplineId, setFocusDisciplineId] = useState(""),
     [loading, setLoading] = useState(true),
     [error, setError] = useState(""),
     [toast, setToast] = useState(null),
@@ -251,6 +258,9 @@ export default function App() {
     }
   };
   const navigate = (key, options = {}) => {
+    setFocusDisciplineId(
+      options?.disciplineId != null ? String(options.disciplineId) : "",
+    );
     setFocusTopicId(options?.topicId != null ? String(options.topicId) : "");
     if (extraMenu.some((item) => item.key === key)) setMore(true);
     setPage(key);
@@ -309,244 +319,267 @@ export default function App() {
     </Button>
   );
   return (
-    <Box
-      className="app-shell nimbo-theme ux-v54"
-      sx={{ width: "100%", minWidth: 0 }}
-    >
-      {mobileNav && (
-        <div className="mobile-dim" onClick={() => setMobileNav(false)} />
-      )}
-      <aside className={`sidebar ${mobileNav ? "nav-visible" : ""}`}>
-        <div className="brand">
-          <Button
-            type="button"
-            className="ux-brand-home"
-            onClick={() => navigate("dashboard")}
-            aria-label="Ir para o início"
-          >
-            <span className="brand-mark">
-              <Leaf size={22} />
-            </span>
-            <span className="brand-wordmark">
-              <strong>
-                nimbo<span>.</span>
-              </strong>
-              <small>ESTUDOS & ROTINA</small>
-            </span>
-          </Button>
-          <Button
-            type="button"
-            className="nav-close"
-            onClick={() => setMobileNav(false)}
-            aria-label="Fechar menu"
-          >
-            <X size={20} />
-          </Button>
-        </div>
-        <nav className="nav-sections" aria-label="Navegação principal">
-          <div className="nav-section">
-            <div className="nav-label">PRINCIPAL</div>
-            {mainMenu.map(navItem)}
-          </div>
-          <div className="nav-section extra-section">
-            <Button
-              type="button"
-              className="more-toggle"
-              onClick={() => setMore((x) => !x)}
-              aria-expanded={more}
-              aria-controls="additional-navigation"
-            >
-              Outras ferramentas{" "}
-              <ChevronDown size={17} className={more ? "rotated" : ""} />
-            </Button>
-            <div
-              id="additional-navigation"
-              className="ux-extra-links"
-              hidden={!more}
-            >
-              {extraMenu.map(navItem)}
-            </div>
-          </div>
-        </nav>
-        <Typography
-          variant="caption"
-          sx={{ display: "block", px: 3, py: 2, color: "#bed6cc" }}
-        >
-          Nimbo v{appVersion}
-        </Typography>
-      </aside>
+    <FocusTimerProvider data={data} action={action} working={working}>
       <Box
-        sx={{
-          minWidth: 0,
-          flex: 1,
-          ml: 0,
-          "@media (min-width:761px)": { ml: "204px" },
-          "@media (min-width:1021px)": { ml: "220px" },
-          "@media (min-width:1261px)": { ml: "244px" },
-        }}
+        className="app-shell nimbo-theme ux-v54"
+        sx={{ width: "100%", minWidth: 0 }}
       >
-        <header className="topbar">
-          <div className="topbar-left">
+        {mobileNav && (
+          <div className="mobile-dim" onClick={() => setMobileNav(false)} />
+        )}
+        <aside className={`sidebar ${mobileNav ? "nav-visible" : ""}`}>
+          <div className="brand">
             <Button
               type="button"
-              className="mobile-menu icon-button"
-              onClick={() => setMobileNav(true)}
-              aria-label="Abrir menu"
+              className="ux-brand-home"
+              onClick={() => navigate("dashboard")}
+              aria-label="Ir para o início"
             >
-              <Menu size={22} />
+              <span className="brand-mark">
+                <Leaf size={22} />
+              </span>
+              <span className="brand-wordmark">
+                <strong>
+                  nimbo<span>.</span>
+                </strong>
+                <small>ESTUDOS & ROTINA</small>
+              </span>
             </Button>
-            <span className="topbar-path">
-              Nimbo <span>/</span> {labels[page]}
-            </span>
-          </div>
-          <div className="topbar-right">
             <Button
               type="button"
-              className="ux-top-search"
-              onClick={() => {
-                setQuickSearch("");
-                setQuickOpen(true);
-              }}
-              aria-label="Encontrar uma página"
+              className="nav-close"
+              onClick={() => setMobileNav(false)}
+              aria-label="Fechar menu"
             >
-              <Search size={18} /> <span>Ir para...</span>
-              <kbd>Ctrl K</kbd>
+              <X size={20} />
             </Button>
-            <span className="edition-chip" title="Concurso atual">
-              {data.plan?.name || "Concurso de TI"}
-            </span>
           </div>
-        </header>
-        <Box
-          component="main"
-          id="conteudo"
-          sx={{ width: "100%", minWidth: 0, p: { xs: 2, sm: 3, lg: 4 } }}
-        >
-          {error && (
-            <div className="api-error" role="alert">
-              <AlertCircle size={20} />
-              <div>
-                <strong>Não foi possível carregar seus dados.</strong>
-                <p>{error}</p>
-              </div>
+          <nav className="nav-sections" aria-label="Navegação principal">
+            <div className="nav-section">
+              <div className="nav-label">PRINCIPAL</div>
+              {mainMenu.map(navItem)}
+            </div>
+            <div className="nav-section extra-section">
               <Button
                 type="button"
-                className="btn btn-subtle"
-                onClick={() => refresh(true)}
+                className="more-toggle"
+                onClick={() => setMore((x) => !x)}
+                aria-expanded={more}
+                aria-controls="additional-navigation"
               >
-                Tentar novamente
+                Outras ferramentas{" "}
+                <ChevronDown size={17} className={more ? "rotated" : ""} />
               </Button>
+              <div
+                id="additional-navigation"
+                className="ux-extra-links"
+                hidden={!more}
+              >
+                {extraMenu.map(navItem)}
+              </div>
             </div>
-          )}
-          <div className="page-header">
-            <h1>{labels[page]}</h1>
-          </div>
-          {loading ? (
-            <div className="skeleton-layout">
-              <div />
-              <div />
-              <div />
+          </nav>
+          <Typography
+            variant="caption"
+            sx={{ display: "block", px: 3, py: 2, color: "#bed6cc" }}
+          >
+            Nimbo v{appVersion}
+          </Typography>
+        </aside>
+        <Box
+          sx={{
+            minWidth: 0,
+            flex: 1,
+            ml: 0,
+            "@media (min-width:761px)": { ml: "204px" },
+            "@media (min-width:1021px)": { ml: "220px" },
+            "@media (min-width:1261px)": { ml: "244px" },
+          }}
+        >
+          <header className="topbar">
+            <div className="topbar-left">
+              <Button
+                type="button"
+                className="mobile-menu icon-button"
+                onClick={() => setMobileNav(true)}
+                aria-label="Abrir menu"
+              >
+                <Menu size={22} />
+              </Button>
+              <span className="topbar-path">
+                Nimbo <span>/</span> {labels[page]}
+              </span>
             </div>
-          ) : (
-            <Screen
-              data={data}
+            <div className="topbar-right">
+              <Button
+                type="button"
+                sx={{
+                  width: { xs: 160, sm: 260 },
+                  justifyContent: "flex-start",
+                  px: 2,
+                  gap: 1,
+                  minHeight: 44,
+                  "& kbd": { ml: "auto" },
+                }}
+                onClick={() => {
+                  setQuickSearch("");
+                  setQuickOpen(true);
+                }}
+                aria-label="Encontrar uma página"
+              >
+                <Search size={18} /> <span>Ir para...</span>
+                <kbd>Ctrl K</kbd>
+              </Button>
+              <span className="edition-chip" title="Concurso atual">
+                {data.plan?.name || "Concurso de TI"}
+              </span>
+            </div>
+          </header>
+          <Box
+            component="main"
+            id="conteudo"
+            sx={{
+              width: "100%",
+              minWidth: 0,
+              p: { xs: 2, sm: 3, lg: 4 },
+              pb: 12,
+            }}
+          >
+            {error && (
+              <div className="api-error" role="alert">
+                <AlertCircle size={20} />
+                <div>
+                  <strong>Não foi possível carregar seus dados.</strong>
+                  <p>{error}</p>
+                </div>
+                <Button
+                  type="button"
+                  className="btn btn-subtle"
+                  onClick={() => refresh(true)}
+                >
+                  Tentar novamente
+                </Button>
+              </div>
+            )}
+            <div className="page-header">
+              <h1>{labels[page]}</h1>
+            </div>
+            {loading ? (
+              <div className="skeleton-layout">
+                <div />
+                <div />
+                <div />
+              </div>
+            ) : (
+              <Screen
+                data={data}
+                action={action}
+                working={working}
+                navigate={navigate}
+                focusTopicId={focusTopicId}
+                focusDisciplineId={focusDisciplineId}
+              />
+            )}
+          </Box>
+        </Box>
+        {!loading && (
+          <HideDuringFocus>
+            <PetCompanion
+              pet={data.pet}
+              navigate={navigate}
+              reaction={petReaction}
               action={action}
               working={working}
-              navigate={navigate}
-              focusTopicId={focusTopicId}
             />
-          )}
-        </Box>
-      </Box>
-      {!loading && (
-        <PetCompanion
-          pet={data.pet}
-          navigate={navigate}
-          reaction={petReaction}
-          action={action}
-          working={working}
-        />
-      )}
-      {quickOpen && (
-        <div
-          className="ux-command-backdrop"
-          onMouseDown={(e) => {
-            if (e.target === e.currentTarget) setQuickOpen(false);
-          }}
-          role="presentation"
-        >
+          </HideDuringFocus>
+        )}
+        {quickOpen && (
           <div
-            className="ux-command-dialog"
-            role="dialog"
-            aria-modal="true"
-            aria-label="Ir para uma página"
+            className="ux-command-backdrop"
+            onMouseDown={(e) => {
+              if (e.target === e.currentTarget) setQuickOpen(false);
+            }}
+            role="presentation"
           >
-            <div className="ux-command-input">
-              <Search size={20} />
-              <Input
-                autoFocus
-                type="search"
-                aria-label="Buscar página"
-                placeholder="Qual página você quer abrir?"
-                value={quickSearch}
-                onChange={(e) => setQuickSearch(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && quickResults[0])
-                    navigate(quickResults[0].key);
-                }}
-              />
-              <Button
-                type="button"
-                className="icon-button"
-                onClick={() => setQuickOpen(false)}
-                aria-label="Fechar"
-              >
-                <X size={19} />
-              </Button>
-            </div>
-            <div className="ux-command-results">
-              {quickResults.length ? (
-                quickResults.map((item) => (
-                  <Button
-                    type="button"
-                    key={item.key}
-                    onClick={() => navigate(item.key)}
-                  >
-                    <item.icon size={19} />
-                    <span>{item.label}</span>
-                    <ArrowRight size={16} />
-                  </Button>
-                ))
-              ) : (
-                <p>Nenhuma página encontrada.</p>
-              )}
-            </div>
-            <div className="ux-command-hint">
-              Enter para abrir o primeiro resultado · Esc para fechar
+            <div
+              className="ux-command-dialog"
+              role="dialog"
+              aria-modal="true"
+              aria-label="Ir para uma página"
+            >
+              <div className="ux-command-input">
+                <Search size={20} />
+                <Input
+                  autoFocus
+                  type="search"
+                  aria-label="Buscar página"
+                  placeholder="Qual página você quer abrir?"
+                  value={quickSearch}
+                  onChange={(e) => setQuickSearch(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && quickResults[0])
+                      navigate(quickResults[0].key);
+                  }}
+                />
+                <Button
+                  type="button"
+                  className="icon-button"
+                  onClick={() => setQuickOpen(false)}
+                  aria-label="Fechar"
+                >
+                  <X size={19} />
+                </Button>
+              </div>
+              <div className="ux-command-results">
+                {quickResults.length ? (
+                  quickResults.map((item) => (
+                    <Button
+                      type="button"
+                      key={item.key}
+                      onClick={() => navigate(item.key)}
+                    >
+                      <item.icon size={19} />
+                      <span>{item.label}</span>
+                      <ArrowRight size={16} />
+                    </Button>
+                  ))
+                ) : (
+                  <p>Nenhuma página encontrada.</p>
+                )}
+              </div>
+              <div className="ux-command-hint">
+                Enter para abrir o primeiro resultado · Esc para fechar
+              </div>
             </div>
           </div>
-        </div>
-      )}
-      {toast && (
-        <div
-          className={`toast ${toast.success ? "toast-ok" : "toast-error"}`}
-          role="status"
-        >
-          {toast.success ? (
-            <CheckCircle2 size={18} />
-          ) : (
-            <AlertCircle size={18} />
-          )}
-          <span>{toast.message}</span>
-          <Button
-            type="button"
-            aria-label="Fechar aviso"
-            onClick={() => setToast(null)}
+        )}
+        {toast && (
+          <div
+            className={`toast ${toast.success ? "toast-ok" : "toast-error"}`}
+            role="status"
           >
-            <X size={16} />
-          </Button>
-        </div>
-      )}
-    </Box>
+            {toast.success ? (
+              <CheckCircle2 size={18} />
+            ) : (
+              <AlertCircle size={18} />
+            )}
+            <span>{toast.message}</span>
+            <Button
+              type="button"
+              aria-label="Fechar aviso"
+              onClick={() => setToast(null)}
+            >
+              <X size={16} />
+            </Button>
+          </div>
+        )}
+        <FocusTimerOverlay
+          page={page}
+          navigate={navigate}
+          working={working}
+          action={action}
+        />
+      </Box>
+    </FocusTimerProvider>
   );
 }

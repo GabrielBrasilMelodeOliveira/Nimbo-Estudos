@@ -8,6 +8,7 @@ import br.com.concursoti.exams.repositories.MockExamRepository;
 import br.com.concursoti.materials.entities.Material;
 import br.com.concursoti.materials.repositories.MaterialRepository;
 import br.com.concursoti.planning.repositories.AgendaItemRepository;
+import br.com.concursoti.planning.repositories.DailyStudyPlanRepository;
 import br.com.concursoti.planning.repositories.PeriodGoalRepository;
 import br.com.concursoti.questions.repositories.QuestionRecordRepository;
 import br.com.concursoti.reviews.repositories.ReviewTaskRepository;
@@ -48,6 +49,7 @@ public class MaintenanceController {
   private final AgendaItemRepository agenda;
   private final EditalImportRepository imports;
   private final PeriodGoalRepository goals;
+  private final DailyStudyPlanRepository dailyPlans;
 
   public MaintenanceController(
     DisciplineRepository disciplines,
@@ -60,7 +62,8 @@ public class MaintenanceController {
     ErrorNoteRepository errors,
     AgendaItemRepository agenda,
     EditalImportRepository imports,
-    PeriodGoalRepository goals
+    PeriodGoalRepository goals,
+    DailyStudyPlanRepository dailyPlans
   ) {
     this.disciplines = disciplines;
     this.topics = topics;
@@ -73,6 +76,7 @@ public class MaintenanceController {
     this.agenda = agenda;
     this.imports = imports;
     this.goals = goals;
+    this.dailyPlans = dailyPlans;
   }
 
   public record ClearRequest(String scope, String confirmation) {}
@@ -102,6 +106,7 @@ public class MaintenanceController {
       case "exams" -> exams.deleteAllInBatch();
       case "materials" -> materials.deleteAllInBatch();
       case "agenda" -> {
+        dailyPlans.deleteAllInBatch();
         agenda.deleteAllInBatch();
         goals.deleteAllInBatch();
       }
@@ -113,6 +118,7 @@ public class MaintenanceController {
         materials.deleteAllInBatch();
         clearEdital();
         exams.deleteAllInBatch();
+        dailyPlans.deleteAllInBatch();
         agenda.deleteAllInBatch();
         goals.deleteAllInBatch();
       }
@@ -151,6 +157,7 @@ public class MaintenanceController {
 
   private void clearEdital() {
     clearTopics();
+    dailyPlans.deleteAllInBatch();
     disciplines.deleteAllInBatch();
     imports.deleteAllInBatch();
   }

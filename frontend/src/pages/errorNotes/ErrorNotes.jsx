@@ -285,24 +285,6 @@ export default function ErrorNotes({ data, action, working, navigate }) {
                         ))}
                     </div>
                   )}
-                  <Button
-                    variant="outlined"
-                    disabled={working}
-                    onClick={() =>
-                      n.flashcardEnabled
-                        ? navigate("flashcards")
-                        : action(
-                            `flashcards/${n.id}/link`,
-                            "PATCH",
-                            { enabled: true },
-                            "Erro vinculado aos flashcards.",
-                          )
-                    }
-                  >
-                    {n.flashcardEnabled
-                      ? "Abrir nos flashcards"
-                      : "Vincular aos flashcards"}
-                  </Button>
                   <div className="note-block">
                     <span>POR QUE ERREI?</span>
                     <p>{n.trap}</p>
@@ -328,7 +310,7 @@ export default function ErrorNotes({ data, action, working, navigate }) {
       {open && (
         <Modal
           title="Registrar erro"
-          subtitle="Você pode enviar dois prints diferentes: enunciado e gabarito."
+          subtitle="O erro será incluído automaticamente nos flashcards. Você também pode anexar prints do enunciado e da resposta."
           wide
           onClose={() => setOpen(false)}
         >

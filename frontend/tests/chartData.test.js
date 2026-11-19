@@ -58,7 +58,7 @@ test("no questions means unknown accuracy", () => {
   assert.equal(result.comparisons[0].accuracy, null);
 });
 
-test("compares all subjects and excludes completed or cancelled reviews from forecast", () => {
+test("compares all subjects independently", () => {
   const result = buildChartData(
     {
       ...data,
@@ -77,7 +77,4 @@ test("compares all subjects and excludes completed or cancelled reviews from for
     100,
   );
   assert.equal(result.comparisons.find((group) => group.id === 3).accuracy, 0);
-  assert.equal(result.reviewForecast[0].count, 1);
-  assert.equal(result.reviewForecast[1].count, 1);
-  assert.equal(result.reviewForecast[2].count, 0);
 });

@@ -12,17 +12,18 @@ export default function Flashcards({ data, action, working, navigate }) {
         sx={{ justifyContent: "space-between", gap: 2 }}
       >
         <Typography color="text.secondary">
-          Revise os erros que você vinculou usando repetição espaçada.
+          Seus erros registrados entram automaticamente aqui para revisão
+          espaçada.
         </Typography>
         <Button variant="outlined" onClick={() => navigate("errors")}>
-          Vincular erros do caderno
+          Abrir caderno de erros
         </Button>
       </Stack>
       <FlashcardDeck key={linkedNotes.map((note) => note.id).join(",")} />
       {linkedNotes.length > 0 && (
         <Paper variant="outlined" sx={{ p: 3 }}>
           <Typography variant="h6" sx={{ mb: 1 }}>
-            Erros vinculados
+            Erros para revisão
           </Typography>
           <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
             Desvincular retira o cartão da fila e preserva a anotação e o

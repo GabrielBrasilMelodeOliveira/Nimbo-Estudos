@@ -1,3 +1,5 @@
+import { unplannedStudies } from "../../shared/utils/plannerMetrics.js";
+import { Stack, Typography, Chip } from "@mui/material";
 import StudySummary from "./sections/StudySummary.jsx";
 import { Checkbox, IconButton } from "@mui/material";
 import { isAgendaCompleted } from "../../shared/utils/plannerMetrics.js";
@@ -19,11 +21,11 @@ export default function Dashboard({ data, action, working, navigate }) {
   const {
     overview,
     today,
-    allTasks,
     todayTasks,
-    pendingTasks,
     due,
     focus,
+    plannedDisciplines,
+    plannedDiscipline,
     weekly,
     goalSeconds,
     daily,
@@ -55,35 +57,49 @@ export default function Dashboard({ data, action, working, navigate }) {
         <div className="ux-home-focus-top">
           <span className="ux-kicker">{greet} · Seu próximo passo</span>
           <span className="ux-focus-reason">
-            {focus ? priorityLabel(focus.priority) : "Organize seus estudos"}
+            {plannedDiscipline
+              ? "Planejado para hoje"
+              : focus
+                ? priorityLabel(focus.priority)
+                : "Organize seus estudos"}
           </span>
         </div>
-        <h2>{focus?.title || "Pronto para começar?"}</h2>
+        <h2>
+          {plannedDiscipline?.name || focus?.title || "Pronto para começar?"}
+        </h2>
         <p>
-          {focus
-            ? `${focus.discipline} · ${focus.dueReviews ? `${focus.dueReviews} revisão(ões) pendente(s)` : focus.total ? `${focus.total} questões já registradas` : "Assunto ainda sem questões"}`
-            : "Adicione disciplinas ou importe um edital para receber uma sugestão de estudo."}
+          {plannedDiscipline
+            ? "Siga as disciplinas escolhidas na sua agenda para hoje."
+            : focus
+              ? `${focus.discipline} · ${focus.dueReviews ? `${focus.dueReviews} revisão(ões) pendente(s)` : focus.total ? `${focus.total} questões já registradas` : "Assunto ainda sem questões"}`
+              : "Adicione disciplinas ou importe um edital para receber uma sugestão de estudo."}
         </p>
         <div className="ux-home-focus-actions">
           <Button
             className="btn btn-primary"
             onClick={() =>
               navigate(
-                focus ? "cycle" : "edital",
-                focus
-                  ? {
-                      topicId: focus.id,
-                    }
-                  : {},
+                plannedDiscipline || focus ? "cycle" : "edital",
+                plannedDiscipline
+                  ? { disciplineId: plannedDiscipline.id }
+                  : focus
+                    ? {
+                        topicId: focus.id,
+                      }
+                    : {},
               )
             }
             type="button"
           >
             <Timer size={18} />
-            {focus ? "Estudar este assunto" : "Abrir meu edital"}
+            {plannedDiscipline
+              ? "Estudar esta disciplina"
+              : focus
+                ? "Estudar este assunto"
+                : "Abrir meu edital"}
             <ArrowRight size={16} />
           </Button>
-          {focus && (
+          {focus && !plannedDiscipline && (
             <Button
               className="btn btn-subtle"
               onClick={() =>
@@ -97,6 +113,21 @@ export default function Dashboard({ data, action, working, navigate }) {
             </Button>
           )}
         </div>
+        {plannedDisciplines.length > 0 && (
+          <Stack direction="row" sx={{ gap: 1, flexWrap: "wrap", mt: 2 }}>
+            {plannedDisciplines.map((discipline) => (
+              <Button
+                key={discipline.id}
+                variant="outlined"
+                onClick={() =>
+                  navigate("cycle", { disciplineId: discipline.id })
+                }
+              >
+                {discipline.name}
+              </Button>
+            ))}
+          </Stack>
+        )}
       </section>
       <section className="ux-home-summary" aria-label="Resumo dos seus estudos">
         <Button
@@ -161,7 +192,7 @@ export default function Dashboard({ data, action, working, navigate }) {
           </div>
           {todayTasks.length ? (
             <div className="ux-today-list">
-              {todayTasks.slice(0, 5).map((task) => (
+              {todayTasks.map((task) => (
                 <div
                   className={`ux-today-task ${isAgendaCompleted(data, task) ? "is-complete" : ""}`}
                   key={task.id}
@@ -212,13 +243,36 @@ export default function Dashboard({ data, action, working, navigate }) {
               ))}
             </div>
           ) : (
-            <p className="ux-quiet-empty">Sem atividades para hoje.</p>
+            <p className="ux-quiet-empty">
+              Sem compromissos avulsos para hoje.
+            </p>
           )}
-          {todayTasks.length > 5 && (
-            <span className="ux-inline-note">
-              +{todayTasks.length - 5} atividades na agenda
-            </span>
-          )}
+          <Stack spacing={1} sx={{ mt: 1 }}>
+            {plannedDisciplines.map((discipline) => (
+              <Button
+                key={discipline.id}
+                variant="outlined"
+                onClick={() =>
+                  navigate("cycle", { disciplineId: discipline.id })
+                }
+              >
+                Estudo planejado · {discipline.name}
+              </Button>
+            ))}
+            {unplannedStudies(data, today).map((record) => (
+              <Stack
+                key={record.key}
+                direction="row"
+                sx={{ gap: 1, alignItems: "center", py: 1 }}
+              >
+                <Chip size="small" color="success" label="Registrado" />
+                <Typography variant="body2">
+                  {record.topic.title} · {fmtHours(record.seconds)}
+                  {record.questions ? ` · ${record.questions} questões` : ""}
+                </Typography>
+              </Stack>
+            ))}
+          </Stack>
         </section>
         <section className="ux-home-panel">
           <div className="ux-home-panel-head">
@@ -259,6 +313,7 @@ export default function Dashboard({ data, action, working, navigate }) {
       </div>
       <StudySummary
         daily={daily}
+        questions={data.questions || []}
         weekly={weekly}
         goalSeconds={goalSeconds}
         navigate={navigate}
