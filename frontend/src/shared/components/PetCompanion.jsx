@@ -1,3 +1,4 @@
+import { useDraggableCompanion } from "../hooks/useDraggableCompanion.js";
 import { useEffect, useState } from "react";
 import {
   Box,
@@ -11,7 +12,6 @@ import {
   Typography,
 } from "@mui/material";
 import {
-  ChevronUp,
   ChevronDown,
   Moon,
   SmilePlus,
@@ -61,6 +61,11 @@ export default function PetCompanion({ pet, navigate, action, working }) {
     localStorage.setItem("nimbo:open", String(!open));
     setOpen(!open);
   };
+  const floating = useDraggableCompanion(toggle);
+  const expandedTop = Math.max(
+    8,
+    Math.min(floating.position.y, floating.viewport.height - 650),
+  );
   useEffect(() => {
     if (!feedback) return;
     const timeout = setTimeout(() => setFeedback(""), 6000);
@@ -114,8 +119,20 @@ export default function PetCompanion({ pet, navigate, action, working }) {
     <Box
       sx={{
         position: "fixed",
-        bottom: { xs: 8, sm: 16 },
-        right: { xs: 8, sm: 16 },
+        ...(pet
+          ? {
+              left: open
+                ? Math.max(
+                    8,
+                    Math.min(
+                      floating.position.x,
+                      floating.viewport.width - 348,
+                    ),
+                  )
+                : floating.position.x,
+              top: open ? expandedTop : floating.position.y,
+            }
+          : { bottom: 16, right: 16 }),
         zIndex: 1100,
         maxWidth: "calc(100vw - 16px)",
       }}
@@ -130,34 +147,35 @@ export default function PetCompanion({ pet, navigate, action, working }) {
           Conhecer Nimbo
         </Button>
       ) : !open ? (
-        <Button
-          onClick={toggle}
-          variant="outlined"
+        <IconButton
+          {...floating.bindings}
           aria-label="Abrir companheiro Nimbo"
-          sx={{ bgcolor: "background.paper", textAlign: "left", px: 1, gap: 1 }}
+          aria-expanded={false}
+          title="Arraste para mover; clique para expandir. Use as setas para mover pelo teclado."
+          sx={{
+            width: 60,
+            height: 60,
+            minWidth: 60,
+            borderRadius: "50%",
+            bgcolor: "background.paper",
+            color: "primary.main",
+            border: "2px solid",
+            borderColor: "primary.light",
+            boxShadow: 4,
+            p: 0.5,
+            touchAction: "none",
+            userSelect: "none",
+            cursor: floating.dragging ? "grabbing" : "grab",
+            "&:hover": { bgcolor: "background.paper", boxShadow: 6 },
+            "& svg.nimbo-art": {
+              width: "100%",
+              height: "100%",
+              pointerEvents: "none",
+            },
+          }}
         >
-          <Box
-            sx={{
-              width: 56,
-              height: 54,
-              "& svg.nimbo-art": { width: "100%", height: "100%" },
-            }}
-          >
-            <PetArt species={pet.species} stage={pet.stage} mood={mood} />
-          </Box>
-          <Box>
-            <Typography variant="body2" fontWeight={700}>
-              {speciesInfo(pet.species).short} ·{" "}
-              {pet.care?.moodLabel || "Neutro"}
-            </Typography>
-            <Typography variant="caption">
-              {dead
-                ? "Esta vida terminou"
-                : `${pet.care?.streak || 0} dias de metas · Nível ${pet.level}`}
-            </Typography>
-          </Box>
-          <ChevronUp size={17} />
-        </Button>
+          <PetArt species={pet.species} stage={pet.stage} mood={mood} />
+        </IconButton>
       ) : (
         <Paper
           component="section"
@@ -166,7 +184,7 @@ export default function PetCompanion({ pet, navigate, action, working }) {
           sx={{
             width: 340,
             maxWidth: "calc(100vw - 16px)",
-            maxHeight: "calc(100dvh - 32px)",
+            maxHeight: `calc(100dvh - ${expandedTop + 8}px)`,
             overflowY: "auto",
             borderRadius: 3,
           }}

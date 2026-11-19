@@ -1,6 +1,7 @@
 package br.com.concursoti.errornotes.controllers;
 
 import br.com.concursoti.errornotes.services.FlashcardService;
+import br.com.concursoti.flashcards.dto.FlashcardView;
 import java.util.List;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +16,7 @@ public class FlashcardController {
   }
 
   @GetMapping
-  public List<FlashcardService.FlashcardView> list() {
+  public List<FlashcardView> list() {
     return flashcardService.list();
   }
 
@@ -29,7 +30,7 @@ public class FlashcardController {
   }
 
   @PostMapping("/{id}/undo")
-  public FlashcardService.FlashcardView undo(
+  public FlashcardView undo(
     @PathVariable Long id,
     @RequestBody FlashcardService.UndoInput request
   ) {
@@ -37,7 +38,7 @@ public class FlashcardController {
   }
 
   @PostMapping("/{id}/review")
-  public FlashcardService.FlashcardView review(
+  public FlashcardView review(
     @PathVariable Long id,
     @RequestBody FlashcardService.ReviewInput request
   ) {

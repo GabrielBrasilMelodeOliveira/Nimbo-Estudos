@@ -1,3 +1,4 @@
+import { designColors } from "../../../shared/theme/designColors.js";
 import { useState } from "react";
 import {
   Box,
@@ -77,8 +78,8 @@ export function WeekBoard({
                 dragOverDay === day
                   ? "action.selected"
                   : day === TODAY()
-                    ? "#edf5ef"
-                    : "#f7f9f7",
+                    ? designColors.selected
+                    : designColors.background,
               borderColor: dragOverDay === day ? "primary.main" : "divider",
             }}
           >

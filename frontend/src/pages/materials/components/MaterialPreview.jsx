@@ -1,3 +1,4 @@
+import { designColors } from "../../../shared/theme/designColors.js";
 import { Alert, Box, Stack, Typography } from "@mui/material";
 import { fileUrl } from "../../../shared/services/api.js";
 import { youtubeVideo } from "../utils/youtube.js";
@@ -24,7 +25,7 @@ export default function MaterialPreview({ material, expanded = false }) {
             minHeight: 240,
             border: 0,
             borderRadius: 2,
-            bgcolor: "#111827",
+            bgcolor: designColors.dark,
           }}
         />
         <Typography variant="caption" color="text.secondary">

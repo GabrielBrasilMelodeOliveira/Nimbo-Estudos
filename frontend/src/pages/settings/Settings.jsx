@@ -171,7 +171,7 @@ export default function Settings({ data, action, working }) {
                 scope: "all",
                 title: "Zerar estudos e agenda",
                 description:
-                  "Exclui edital, questões, erros, revisões, sessões, simulados, materiais e agenda. Conserva preferências, mascote e blobs de arquivos no PostgreSQL. Faça backup primeiro.",
+                  "Exclui edital, questões, erros, flashcards, revisões, sessões, simulados, materiais e agenda. Conserva preferências, mascote e blobs de arquivos no PostgreSQL. Faça backup primeiro.",
                 count:
                   data.disciplines.length +
                   data.topics.length +

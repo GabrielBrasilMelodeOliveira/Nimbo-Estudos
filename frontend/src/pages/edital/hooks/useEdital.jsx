@@ -1,3 +1,4 @@
+import { designColors } from "../../../shared/theme/designColors.js";
 import { useMemo, useState } from "react";
 import { buildTopicMetrics } from "../../../shared/utils/editalMetrics.js";
 import { emptyTopic } from "../utils/pageDefinitions.jsx";
@@ -7,7 +8,7 @@ export function useEdital({ data, action, working, navigate }) {
   const [form, setForm] = useState(emptyTopic);
   const [disciplineForm, setDisciplineForm] = useState({
     name: "",
-    color: "#4e9370",
+    color: designColors.accent,
   });
   const [filter, setFilter] = useState("all"),
     [search, setSearch] = useState(""),

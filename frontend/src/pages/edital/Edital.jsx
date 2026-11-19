@@ -1,3 +1,4 @@
+import { designColors } from "../../shared/theme/designColors.js";
 import {
   Input,
   SearchableSelect,
@@ -133,7 +134,7 @@ export default function Edital({ data, action, working, navigate }) {
           </small>
           <ProgressBar
             value={rows.length ? (completed / rows.length) * 100 : 0}
-            color="#439475"
+            color={designColors.primary}
             height={7}
           />
         </div>
@@ -448,7 +449,7 @@ export default function Edital({ data, action, working, navigate }) {
                           <strong>{row.stepsDone}/4</strong>
                           <ProgressBar
                             value={(100 * row.stepsDone) / 4}
-                            color="#47977b"
+                            color={designColors.primary}
                             height={6}
                           />
                         </div>
@@ -801,7 +802,7 @@ export default function Edital({ data, action, working, navigate }) {
                 setModal(null);
                 setDisciplineForm({
                   name: "",
-                  color: "#4e9370",
+                  color: designColors.accent,
                 });
               }
             }}

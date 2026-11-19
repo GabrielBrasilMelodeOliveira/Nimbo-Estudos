@@ -1,3 +1,4 @@
+import { designColors } from "../../../shared/theme/designColors.js";
 import { useEffect, useState } from "react";
 import { Alert, Box, CircularProgress, Stack, Typography } from "@mui/material";
 import { renderDocumentPreview } from "../services/documentPreview.js";
@@ -44,7 +45,7 @@ export default function DocxPreview({ source, title, height }) {
         width: "100%",
         height,
         border: 0,
-        bgcolor: "#eef2ee",
+        bgcolor: designColors.surface,
         borderRadius: 2,
       }}
     />

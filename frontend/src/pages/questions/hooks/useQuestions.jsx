@@ -1,3 +1,4 @@
+import { useHistoryPeriod } from "../../../shared/hooks/useHistoryPeriod.js";
 import { useEffect, useMemo, useState } from "react";
 import { TODAY, percentage } from "../../../shared/utils/utils.js";
 import { blank, matchesAccuracy } from "../utils/pageDefinitions.jsx";
@@ -8,9 +9,9 @@ export function useQuestions({ data, action, working, focusTopicId }) {
     [discipline, setDiscipline] = useState("all"),
     [topic, setTopic] = useState("all");
   const [result, setResult] = useState("all"),
-    [from, setFrom] = useState(""),
-    [to, setTo] = useState(""),
     [order, setOrder] = useState("recent");
+  const historyPeriod = useHistoryPeriod();
+  const { from, to, setFrom, setTo } = historyPeriod;
   useEffect(() => {
     const selected = data.topics.find(
       (topic) => String(topic.id) === String(focusTopicId),
@@ -110,11 +111,11 @@ export function useQuestions({ data, action, working, focusTopicId }) {
     setDiscipline("all");
     setTopic("all");
     setResult("all");
-    setFrom("");
-    setTo("");
+    historyPeriod.reset();
     setOrder("recent");
   };
   return {
+    historyPeriod,
     open,
     setOpen,
     form,

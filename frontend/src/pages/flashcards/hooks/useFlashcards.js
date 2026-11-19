@@ -1,3 +1,4 @@
+import { cardIdentity } from "../utils/cardIdentity.js";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   loadFlashcards,
@@ -26,6 +27,7 @@ export function useFlashcards() {
     setLoading(true);
     try {
       setCards(await loadFlashcards());
+      setLastReview(null);
       setError("");
       setNow(Date.now());
     } catch (exception) {
@@ -54,14 +56,17 @@ export function useFlashcards() {
     .filter((card) => new Date(card.due).getTime() <= now)
     .sort(
       (first, second) =>
-        new Date(first.due) - new Date(second.due) || first.id - second.id,
+        new Date(first.due) - new Date(second.due) ||
+        cardIdentity(first).localeCompare(cardIdentity(second)),
     );
   const card = dueCards[0] || null;
-  useEffect(() => setRevealed(false), [card?.id, disciplineId]);
+  useEffect(() => setRevealed(false), [cardIdentity(card), disciplineId]);
 
   const replaceCard = (updated) => {
     setCards((current) =>
-      current.map((item) => (item.id === updated.id ? updated : item)),
+      current.map((item) =>
+        cardIdentity(item) === cardIdentity(updated) ? updated : item,
+      ),
     );
     setRevealed(false);
     setError("");
@@ -117,6 +122,7 @@ export function useFlashcards() {
       )
     : null;
   return {
+    cards,
     card,
     dueCount: dueCards.length,
     total: filteredCards.length,

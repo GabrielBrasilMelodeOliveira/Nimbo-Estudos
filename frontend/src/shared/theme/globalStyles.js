@@ -1,18 +1,20 @@
+import { designColors, statusColors, withOpacity } from "./designColors.js";
+
 export const globalStyles = [
   {
     ":root": {
       fontFamily: '"Inter Variable", sans-serif',
-      color: "#202941",
-      background: "#f6f8fb",
+      color: designColors.dark,
+      background: designColors.surface,
       fontSynthesis: "none",
       textRendering: "optimizeLegibility",
       WebkitFontSmoothing: "antialiased",
-      "--accent": "#5175f6",
-      "--dark": "#18243c",
-      "--muted": "#8993a5",
-      "--border": "#e9edf4",
-      "--success": "#26b696",
-      "--sidebar": "#111b2f",
+      "--accent": designColors.accent,
+      "--dark": designColors.dark,
+      "--muted": designColors.muted,
+      "--border": designColors.border,
+      "--success": designColors.primary,
+      "--sidebar": designColors.dark,
     },
   },
   {
@@ -74,14 +76,14 @@ export const globalStyles = [
   },
   {
     "input:not(.MuiInputBase-input)::placeholder,textarea::placeholder": {
-      color: "#a5afbd",
+      color: designColors.muted,
     },
   },
   {
     "input:not(.MuiInputBase-input):focus,textarea:focus,select:not(.MuiInputBase-input):focus":
       {
-        borderColor: "#8da5ff !important",
-        boxShadow: "0 0 0 3px #e8eeff",
+        borderColor: `${designColors.border} !important`,
+        boxShadow: `0 0 0 3px ${designColors.surface}`,
       },
   },
   {
@@ -100,13 +102,13 @@ export const globalStyles = [
       inset: "0 auto 0 0",
       width: "264px",
       background: "var(--sidebar)",
-      color: "#c4cee1",
+      color: designColors.light,
       zIndex: "40",
       display: "flex",
       flexDirection: "column",
       overflowY: "auto",
       scrollbarWidth: "thin",
-      scrollbarColor: "#344258 transparent",
+      scrollbarColor: `${designColors.primary} transparent`,
     },
   },
   {
@@ -125,9 +127,9 @@ export const globalStyles = [
       borderRadius: "14px",
       display: "grid",
       placeItems: "center",
-      background: "#5578f9",
-      color: "#fff",
-      boxShadow: "0 9px 23px #486cfa44",
+      background: designColors.accent,
+      color: designColors.background,
+      boxShadow: `0 9px 23px ${withOpacity(designColors.accent, 0.267)}`,
     },
   },
   {
@@ -141,14 +143,14 @@ export const globalStyles = [
     ".brand-wordmark strong": {
       fontFamily: '"Inter Variable", sans-serif',
       fontSize: "27px",
-      color: "#fff",
+      color: designColors.background,
       lineHeight: "1.08",
       letterSpacing: "-1.8px",
     },
   },
   {
     ".brand-wordmark strong span": {
-      color: "#5af3c0",
+      color: designColors.light,
     },
   },
   {
@@ -156,7 +158,7 @@ export const globalStyles = [
       fontSize: "9px",
       fontWeight: "700",
       letterSpacing: "1.55px",
-      color: "#8594ae",
+      color: designColors.muted,
       marginTop: "6px",
     },
   },
@@ -164,9 +166,9 @@ export const globalStyles = [
     ".sidebar-overline": {
       margin: "7px 26px 24px",
       padding: "9px 12px",
-      border: "1px solid #2e3a51",
+      border: `1px solid ${designColors.accent}`,
       borderRadius: "8px",
-      color: "#8d9db7",
+      color: designColors.light,
       fontSize: "10px",
       letterSpacing: ".84px",
       fontWeight: "700",
@@ -188,7 +190,7 @@ export const globalStyles = [
       fontSize: "10px",
       fontWeight: "800",
       letterSpacing: "1.5px",
-      color: "#73819d",
+      color: designColors.muted,
       padding: "0 14px",
       marginBottom: "10px",
     },
@@ -198,7 +200,7 @@ export const globalStyles = [
       appearance: "none",
       border: "0",
       background: "transparent",
-      color: "#9caac3",
+      color: designColors.light,
       width: "100%",
       height: "44px",
       display: "flex",
@@ -227,20 +229,20 @@ export const globalStyles = [
   },
   {
     ".nav-item:hover": {
-      background: "#202e49",
-      color: "#f0f5ff",
+      background: designColors.dark,
+      color: designColors.light,
     },
   },
   {
     ".nav-item.selected": {
-      background: "#304577",
-      color: "#f6f8ff",
-      boxShadow: "inset 3px 0 #6386ff",
+      background: designColors.primary,
+      color: designColors.light,
+      boxShadow: `inset 3px 0 ${designColors.accent}`,
     },
   },
   {
     ".nav-item.selected svg": {
-      color: "#b3c4ff",
+      color: designColors.light,
       opacity: "1",
     },
   },
@@ -250,8 +252,8 @@ export const globalStyles = [
       height: "22px",
       padding: "0 5px",
       borderRadius: "7px",
-      background: "#fa935c",
-      color: "#fff",
+      background: statusColors.warningSoft,
+      color: statusColors.warning,
       fontSize: "11px",
       fontWeight: "800",
       display: "grid",
@@ -267,9 +269,9 @@ export const globalStyles = [
   {
     ".next-up-card": {
       margin: "2px 7px 22px",
-      border: "1px solid #354667",
+      border: `1px solid ${designColors.accent}`,
       borderRadius: "13px",
-      background: "linear-gradient(145deg,#25385b,#1a2b48)",
+      background: `linear-gradient(145deg,${designColors.primary},${designColors.dark})`,
       padding: "19px 16px 17px",
       position: "relative",
       overflow: "hidden",
@@ -281,7 +283,7 @@ export const globalStyles = [
       position: "absolute",
       right: "-42px",
       top: "-44px",
-      background: "#597efd22",
+      background: withOpacity(designColors.accent, 0.133),
       width: "130px",
       height: "130px",
       borderRadius: "50%",
@@ -294,8 +296,8 @@ export const globalStyles = [
       borderRadius: "9px",
       display: "grid",
       placeItems: "center",
-      background: "#425e9b",
-      color: "#c2d0ff",
+      background: designColors.primary,
+      color: designColors.light,
       marginBottom: "12px",
     },
   },
@@ -304,7 +306,7 @@ export const globalStyles = [
       display: "block",
       fontSize: "10px",
       letterSpacing: "1px",
-      color: "#9eafd0",
+      color: designColors.light,
       fontWeight: "800",
       marginBottom: "8px",
     },
@@ -314,7 +316,7 @@ export const globalStyles = [
       fontSize: "13px",
       lineHeight: "1.4",
       display: "block",
-      color: "#fff",
+      color: designColors.background,
       marginBottom: "18px",
     },
   },
@@ -326,7 +328,7 @@ export const globalStyles = [
       background: "transparent",
       border: "0",
       padding: "0",
-      color: "#8fbcff",
+      color: designColors.light,
       fontSize: "12px",
       fontWeight: "700",
     },
@@ -339,7 +341,7 @@ export const globalStyles = [
   {
     ".sidebar-signature": {
       padding: "17px 10px 0",
-      borderTop: "1px solid #29354d",
+      borderTop: `1px solid ${designColors.accent}`,
       display: "flex",
       alignItems: "center",
       gap: "10px",
@@ -352,29 +354,29 @@ export const globalStyles = [
       borderRadius: "11px",
       display: "grid",
       placeItems: "center",
-      background: "#e5edff",
-      color: "#5171bb",
+      background: designColors.surface,
+      color: designColors.primary,
       fontSize: "12px",
       fontWeight: "800",
     },
   },
   {
     ".avatar-small": {
-      background: "#2c416c",
-      color: "#dce7ff",
+      background: designColors.primary,
+      color: designColors.primary,
     },
   },
   {
     ".sidebar-signature strong": {
       display: "block",
-      color: "#dce3ee",
+      color: designColors.light,
       fontSize: "11px",
     },
   },
   {
     ".sidebar-signature small": {
       display: "block",
-      color: "#7587a4",
+      color: designColors.muted,
       fontSize: "10px",
       marginTop: "4px",
     },
@@ -397,7 +399,7 @@ export const globalStyles = [
       alignItems: "center",
       justifyContent: "space-between",
       padding: "0 42px",
-      background: "#fff",
+      background: designColors.background,
       borderBottom: "1px solid var(--border)",
       position: "sticky",
       top: "0",
@@ -419,17 +421,17 @@ export const globalStyles = [
   },
   {
     ".breadcrumb-root": {
-      color: "#9aa4b4",
+      color: designColors.muted,
     },
   },
   {
     ".breadcrumb-arrow": {
-      color: "#b7c2d0",
+      color: designColors.border,
     },
   },
   {
     ".breadcrumb-current": {
-      color: "#4c5a73",
+      color: designColors.muted,
     },
   },
   {
@@ -442,7 +444,7 @@ export const globalStyles = [
       display: "flex",
       alignItems: "center",
       gap: "8px",
-      color: "#8a96a9",
+      color: designColors.muted,
       fontSize: "12px",
       fontWeight: "600",
     },
@@ -455,7 +457,7 @@ export const globalStyles = [
       background: "transparent",
       display: "grid",
       placeItems: "center",
-      color: "#586780",
+      color: designColors.muted,
       position: "relative",
     },
   },
@@ -465,8 +467,8 @@ export const globalStyles = [
       width: "8px",
       height: "8px",
       borderRadius: "100%",
-      background: "#fb8e60",
-      border: "2px solid #fff",
+      background: statusColors.warning,
+      border: `2px solid ${designColors.background}`,
       right: "4px",
       top: "3px",
     },
@@ -507,18 +509,18 @@ export const globalStyles = [
       fontSize: "10px",
       letterSpacing: "1.1px",
       fontWeight: "800",
-      color: "#697d9a",
+      color: designColors.muted,
       marginBottom: "13px",
     },
   },
   {
     ".live-dot,.small-live-dot": {
-      background: "#2dc89c",
+      background: designColors.primary,
       width: "6px",
       height: "6px",
       borderRadius: "50%",
       display: "inline-block",
-      boxShadow: "0 0 0 3px #2dc89c22",
+      boxShadow: `0 0 0 3px ${withOpacity(designColors.primary, 0.133)}`,
     },
   },
   {
@@ -526,7 +528,7 @@ export const globalStyles = [
       fontSize: "28px",
       lineHeight: "1.25",
       letterSpacing: "-1.15px",
-      color: "#19253d",
+      color: designColors.dark,
       marginBottom: "8px",
       fontWeight: "800",
     },
@@ -534,7 +536,7 @@ export const globalStyles = [
   {
     ".page-header p": {
       fontSize: "13px",
-      color: "#8a95a8",
+      color: designColors.muted,
       margin: "0",
     },
   },
@@ -542,16 +544,16 @@ export const globalStyles = [
     ".edition-chip": {
       borderRadius: "30px",
       padding: "10px 15px",
-      background: "#fff",
-      border: "1px solid #e6eaf1",
+      background: designColors.background,
+      border: `1px solid ${designColors.border}`,
       fontSize: "11px",
       maxWidth: "240px",
       whiteSpace: "nowrap",
       textOverflow: "ellipsis",
       overflow: "hidden",
       fontWeight: "700",
-      color: "#53627d",
-      boxShadow: "0 3px 10px #19253d04",
+      color: designColors.muted,
+      boxShadow: `0 3px 10px ${withOpacity(designColors.dark, 0.016)}`,
       display: "block",
     },
   },
@@ -560,7 +562,7 @@ export const globalStyles = [
       display: "inline-block",
       width: "8px",
       height: "8px",
-      background: "#587cff",
+      background: designColors.accent,
       borderRadius: "100%",
       marginRight: "7px",
     },
@@ -574,10 +576,10 @@ export const globalStyles = [
   },
   {
     ".panel": {
-      background: "#fff",
+      background: designColors.background,
       border: "1px solid var(--border)",
       borderRadius: "14px",
-      boxShadow: "0 5px 25px #1a2f5907",
+      boxShadow: `0 5px 25px ${withOpacity(designColors.dark, 0.027)}`,
       padding: "23px 25px",
       minWidth: "0",
     },
@@ -593,7 +595,7 @@ export const globalStyles = [
   },
   {
     ".panel-heading h3": {
-      color: "#1d2a43",
+      color: designColors.dark,
       fontSize: "15px",
       fontWeight: "800",
       margin: "0 0 6px",
@@ -602,7 +604,7 @@ export const globalStyles = [
   {
     ".panel-heading p": {
       fontSize: "11px",
-      color: "#9ca6b6",
+      color: designColors.muted,
       lineHeight: "1.5",
       margin: "0",
     },
@@ -614,14 +616,14 @@ export const globalStyles = [
   },
   {
     ".small-chip": {
-      border: "1px solid #e9eef6",
-      background: "#f8faff",
+      border: `1px solid ${designColors.border}`,
+      background: designColors.surface,
       padding: "7px 11px",
       borderRadius: "8px",
       display: "inline-flex",
       alignItems: "center",
       gap: "8px",
-      color: "#71809a",
+      color: designColors.muted,
       fontSize: "10px",
       fontWeight: "800",
       whiteSpace: "nowrap",
@@ -635,7 +637,7 @@ export const globalStyles = [
   },
   {
     ".muted-icon": {
-      color: "#9aa9c0",
+      color: designColors.primary,
     },
   },
   {
@@ -661,45 +663,45 @@ export const globalStyles = [
   },
   {
     ".btn-primary": {
-      background: "#5778f7",
-      color: "#fff",
-      boxShadow: "0 5px 13px #4169ea25",
+      background: designColors.accent,
+      color: designColors.background,
+      boxShadow: `0 5px 13px ${withOpacity(designColors.accent, 0.145)}`,
     },
   },
   {
     ".btn-primary:hover": {
-      background: "#4168ed",
-      boxShadow: "0 7px 15px #4169ea36",
+      background: designColors.accent,
+      boxShadow: `0 7px 15px ${withOpacity(designColors.accent, 0.212)}`,
     },
   },
   {
     ".btn-subtle": {
-      background: "#f4f6fa",
-      color: "#52627e",
-      border: "1px solid #e8edf5",
+      background: designColors.surface,
+      color: designColors.muted,
+      border: `1px solid ${designColors.border}`,
     },
   },
   {
     ".btn-subtle:hover": {
-      background: "#e9effa",
+      background: designColors.surface,
     },
   },
   {
     ".btn-success": {
-      background: "#e5f8f1",
-      color: "#189778",
-      border: "1px solid #caeddf",
+      background: statusColors.successSoft,
+      color: statusColors.success,
+      border: `1px solid ${statusColors.successSoft}`,
     },
   },
   {
     ".btn-success:hover": {
-      background: "#d7f4e8",
+      background: statusColors.successSoft,
     },
   },
   {
     ".btn-warning": {
-      background: "#fff0d8",
-      color: "#ba7825",
+      background: statusColors.warningSoft,
+      color: statusColors.warning,
     },
   },
   {
@@ -712,18 +714,18 @@ export const globalStyles = [
       borderRadius: "8px",
       width: "32px",
       height: "32px",
-      color: "#8793a7",
+      color: designColors.muted,
     },
   },
   {
     ".icon-button:hover": {
-      background: "#f3f6fb",
+      background: designColors.surface,
     },
   },
   {
     ".danger-hover:hover": {
-      background: "#ffe9ed",
-      color: "#d74b62",
+      background: statusColors.errorSoft,
+      color: statusColors.error,
     },
   },
   {
@@ -733,7 +735,7 @@ export const globalStyles = [
       gap: "7px",
       background: "transparent",
       border: "0",
-      color: "#5a7aed",
+      color: designColors.primary,
       fontSize: "11px",
       fontWeight: "800",
       padding: "0",
@@ -747,8 +749,8 @@ export const globalStyles = [
   {
     ".row-link": {
       border: "0",
-      background: "#f1f4ff",
-      color: "#5272e4",
+      background: designColors.surface,
+      color: designColors.primary,
       fontSize: "11px",
       fontWeight: "800",
       padding: "8px 12px",
@@ -757,14 +759,14 @@ export const globalStyles = [
   },
   {
     ".row-link:hover": {
-      background: "#e3eaff",
+      background: designColors.surface,
     },
   },
   {
     ".wide-soft-button": {
       border: "0",
-      background: "#f2f5ff",
-      color: "#5776d9",
+      background: designColors.surface,
+      color: designColors.primary,
       fontSize: "11px",
       fontWeight: "800",
       padding: "12px 14px",
@@ -779,13 +781,13 @@ export const globalStyles = [
   },
   {
     ".wide-soft-button:hover": {
-      background: "#e6edff",
+      background: designColors.surface,
     },
   },
   {
     ".progress-track": {
       width: "100%",
-      background: "#eaf0f6",
+      background: designColors.surface,
       borderRadius: "50px",
       overflow: "hidden",
     },
@@ -803,8 +805,8 @@ export const globalStyles = [
       justifyContent: "space-between",
       gap: "10px",
       fontSize: "10px",
-      color: "#9ca7b7",
-      borderTop: "1px solid #e8ebf0",
+      color: designColors.muted,
+      borderTop: `1px solid ${designColors.border}`,
       padding: "23px 3px",
       marginTop: "40px",
     },
@@ -816,7 +818,7 @@ export const globalStyles = [
   },
   {
     ".footer-dot": {
-      color: "#3bbd9e",
+      color: designColors.primary,
     },
   },
   {
@@ -825,9 +827,9 @@ export const globalStyles = [
       overflow: "hidden",
       minHeight: "226px",
       borderRadius: "16px",
-      background: "linear-gradient(107deg,#243b70 0%,#213965 49%,#315c88 100%)",
+      background: `linear-gradient(107deg,${designColors.primary} 0%,${designColors.primary} 49%,${designColors.primary} 100%)`,
       padding: "31px 38px",
-      color: "#fff",
+      color: designColors.background,
       display: "flex",
       alignItems: "center",
     },
@@ -835,7 +837,7 @@ export const globalStyles = [
   {
     ".welcome-banner:after": {
       content: "''",
-      background: "radial-gradient(circle,#99d5f515,transparent 70%)",
+      background: `radial-gradient(circle,${withOpacity(designColors.light, 0.082)},transparent 70%)`,
       position: "absolute",
       width: "490px",
       height: "490px",
@@ -857,13 +859,13 @@ export const globalStyles = [
       fontSize: "10px",
       letterSpacing: "1.2px",
       fontWeight: "800",
-      color: "#9ed9d8",
+      color: designColors.primary,
       marginBottom: "12px",
     },
   },
   {
     ".welcome-copy h2": {
-      color: "#fff",
+      color: designColors.background,
       fontSize: "26px",
       lineHeight: "1.27",
       letterSpacing: "-1.2px",
@@ -873,13 +875,13 @@ export const globalStyles = [
   },
   {
     ".welcome-copy h2 span": {
-      color: "#a9ddeb",
+      color: designColors.light,
     },
   },
   {
     ".welcome-copy p": {
       fontSize: "11px",
-      color: "#b6c9df",
+      color: designColors.light,
       marginBottom: "19px",
       maxWidth: "440px",
       lineHeight: "1.55",
@@ -890,19 +892,19 @@ export const globalStyles = [
       display: "inline-flex",
       alignItems: "center",
       gap: "11px",
-      background: "#fff",
-      color: "#315a93",
+      background: designColors.background,
+      color: designColors.primary,
       border: "0",
       borderRadius: "8px",
       padding: "11px 17px",
       fontSize: "11px",
       fontWeight: "800",
-      boxShadow: "0 8px 20px #00000013",
+      boxShadow: `0 8px 20px ${withOpacity(designColors.dark, 0.075)}`,
     },
   },
   {
     ".banner-button:hover": {
-      background: "#f0f6ff",
+      background: designColors.surface,
     },
   },
   {
@@ -920,7 +922,7 @@ export const globalStyles = [
     ".art-glow": {
       width: "250px",
       height: "250px",
-      background: "#62b1e82b",
+      background: withOpacity(designColors.accent, 0.169),
       filter: "blur(40px)",
       borderRadius: "100%",
       position: "absolute",
@@ -931,7 +933,7 @@ export const globalStyles = [
   {
     ".art-orbit": {
       position: "absolute",
-      border: "1px solid #bfe0fc32",
+      border: `1px solid ${withOpacity(designColors.border, 0.196)}`,
       transform: "rotate(-26deg)",
       borderRadius: "100%",
     },
@@ -961,10 +963,10 @@ export const globalStyles = [
       right: "66px",
       transform: "rotate(-7deg)",
       padding: "20px",
-      background: "linear-gradient(134deg,#f3f7ff,#e0eaff)",
-      color: "#1f345a",
+      background: `linear-gradient(134deg,${designColors.surface},${designColors.surface})`,
+      color: designColors.dark,
       borderRadius: "14px",
-      boxShadow: "15px 19px 30px #0b24444a",
+      boxShadow: `15px 19px 30px ${withOpacity(designColors.dark, 0.29)}`,
       display: "flex",
       flexDirection: "column",
       alignItems: "flex-start",
@@ -977,15 +979,15 @@ export const globalStyles = [
       borderRadius: "12px",
       display: "grid",
       placeItems: "center",
-      background: "#dbf9ef",
-      color: "#2ab28f",
+      background: designColors.surface,
+      color: designColors.primary,
       marginBottom: "9px",
     },
   },
   {
     ".art-main-card>span": {
       fontSize: "9px",
-      color: "#8393ad",
+      color: designColors.muted,
       fontWeight: "800",
       letterSpacing: ".65px",
     },
@@ -1003,7 +1005,7 @@ export const globalStyles = [
   {
     ".art-line": {
       height: "6px",
-      background: "#c9d9f1",
+      background: designColors.light,
       width: "100%",
       borderRadius: "20px",
     },
@@ -1011,7 +1013,7 @@ export const globalStyles = [
   {
     ".art-line div": {
       width: "70%",
-      background: "#55c6ad",
+      background: designColors.accent,
       height: "100%",
       borderRadius: "20px",
     },
@@ -1021,17 +1023,17 @@ export const globalStyles = [
       position: "absolute",
       right: "16px",
       top: "18px",
-      color: "#9eb5d9",
+      color: designColors.light,
       fontSize: "14px",
     },
   },
   {
     ".art-float": {
       position: "absolute",
-      background: "#ffffffeb",
-      boxShadow: "0 8px 30px #11294e3b",
+      background: withOpacity(designColors.background, 0.922),
+      boxShadow: `0 8px 30px ${withOpacity(designColors.dark, 0.231)}`,
       borderRadius: "10px",
-      color: "#217f71",
+      color: designColors.text,
       fontWeight: "800",
     },
   },
@@ -1048,7 +1050,7 @@ export const globalStyles = [
     ".art-float-a span": {
       display: "block",
       fontSize: "9px",
-      color: "#7a92a7",
+      color: designColors.muted,
     },
   },
   {
@@ -1057,7 +1059,7 @@ export const globalStyles = [
       top: "24px",
       fontSize: "28px",
       padding: "1px 12px",
-      color: "#f2b657",
+      color: statusColors.warning,
       transform: "rotate(18deg)",
     },
   },
@@ -1070,11 +1072,11 @@ export const globalStyles = [
   },
   {
     ".metric-card": {
-      background: "#fff",
+      background: designColors.background,
       border: "1px solid var(--border)",
       borderRadius: "13px",
       padding: "21px 21px 19px",
-      boxShadow: "0 4px 19px #1a2f5906",
+      boxShadow: `0 4px 19px ${withOpacity(designColors.dark, 0.024)}`,
       minWidth: "0",
     },
   },
@@ -1090,7 +1092,7 @@ export const globalStyles = [
     ".metric-top>span": {
       fontSize: "11px",
       fontWeight: "700",
-      color: "#8290a4",
+      color: designColors.muted,
       paddingTop: "4px",
     },
   },
@@ -1106,31 +1108,31 @@ export const globalStyles = [
   },
   {
     ".metric-icon.blue,.mini-icon.blue": {
-      background: "#eaf0ff",
-      color: "#5677ed",
+      background: designColors.surface,
+      color: designColors.primary,
     },
   },
   {
     ".metric-icon.teal,.mini-icon.teal": {
-      background: "#e4f9f2",
-      color: "#23ac8c",
+      background: designColors.surface,
+      color: designColors.primary,
     },
   },
   {
     ".metric-icon.purple,.mini-icon.purple": {
-      background: "#f1ecff",
-      color: "#9065e9",
+      background: designColors.surface,
+      color: designColors.primary,
     },
   },
   {
     ".metric-icon.orange,.mini-icon.orange": {
-      background: "#fff1e4",
-      color: "#f09a4c",
+      background: statusColors.warningSoft,
+      color: statusColors.warning,
     },
   },
   {
     ".metric-value": {
-      color: "#202c46",
+      color: designColors.dark,
       fontFamily: '"Inter Variable", sans-serif',
       fontSize: "26px",
       fontWeight: "800",
@@ -1142,7 +1144,7 @@ export const globalStyles = [
   {
     ".metric-foot": {
       fontSize: "10px",
-      color: "#9ba5b4",
+      color: designColors.muted,
       minHeight: "29px",
       lineHeight: "1.5",
     },
@@ -1176,13 +1178,13 @@ export const globalStyles = [
   {
     ".chart-sum strong": {
       font: '800 23px "Inter Variable"',
-      color: "#21314e",
+      color: designColors.dark,
       letterSpacing: "-1px",
     },
   },
   {
     ".chart-sum span": {
-      color: "#98a6b7",
+      color: designColors.muted,
       fontSize: "10px",
     },
   },
@@ -1211,7 +1213,7 @@ export const globalStyles = [
   {
     ".bar-number": {
       fontSize: "9px",
-      color: "#71819a",
+      color: designColors.muted,
       fontWeight: "800",
       height: "12px",
       whiteSpace: "nowrap",
@@ -1226,13 +1228,13 @@ export const globalStyles = [
       alignItems: "flex-end",
       background: "transparent",
       borderRadius: "6px 6px 0 0",
-      borderBottom: "1px solid #e7eaf0",
+      borderBottom: `1px solid ${designColors.border}`,
     },
   },
   {
     ".bar-fill": {
       width: "100%",
-      background: "#dce5ff",
+      background: designColors.surface,
       borderRadius: "5px 5px 0 0",
       minHeight: "0",
       transition: "height .3s",
@@ -1240,30 +1242,30 @@ export const globalStyles = [
   },
   {
     ".bar-highlight": {
-      background: "#5278f5",
+      background: designColors.accent,
     },
   },
   {
     ".bar-label": {
-      color: "#9aa5b6",
+      color: designColors.muted,
       fontSize: "10px",
       fontWeight: "700",
     },
   },
   {
     ".bar-label-active": {
-      color: "#5278f5",
+      color: designColors.primary,
     },
   },
   {
     ".chart-bottom": {
-      borderTop: "1px solid #edf0f5",
+      borderTop: `1px solid ${designColors.border}`,
       marginTop: "14px",
       paddingTop: "16px",
       display: "flex",
       alignItems: "center",
       justifyContent: "space-between",
-      color: "#91a0b0",
+      color: designColors.muted,
       fontSize: "10px",
     },
   },
@@ -1278,7 +1280,7 @@ export const globalStyles = [
     ".legend-dot": {
       width: "8px",
       height: "8px",
-      background: "#5b7cf5",
+      background: designColors.accent,
       borderRadius: "3px",
     },
   },
@@ -1295,15 +1297,14 @@ export const globalStyles = [
       width: "112px",
       height: "112px",
       borderRadius: "100%",
-      background:
-        "conic-gradient(#5279f4 var(--progress),#eaf0f8 var(--progress))",
+      background: `conic-gradient(${designColors.accent} var(--progress),${designColors.surface} var(--progress))`,
       padding: "10px",
       flexShrink: "0",
     },
   },
   {
     ".target-ring>div": {
-      background: "white",
+      background: designColors.paper,
       borderRadius: "100%",
       width: "100%",
       height: "100%",
@@ -1315,7 +1316,7 @@ export const globalStyles = [
   },
   {
     ".target-ring strong": {
-      color: "#253450",
+      color: designColors.dark,
       fontSize: "22px",
       letterSpacing: "-1px",
       fontFamily: '"Inter Variable", sans-serif',
@@ -1324,7 +1325,7 @@ export const globalStyles = [
   {
     ".target-ring span": {
       fontSize: "9px",
-      color: "#9ca8b7",
+      color: designColors.muted,
       fontWeight: "650",
     },
   },
@@ -1336,7 +1337,7 @@ export const globalStyles = [
   {
     ".target-hint": {
       fontSize: "10px",
-      color: "#9da8b8",
+      color: designColors.muted,
       display: "block",
       marginBottom: "8px",
     },
@@ -1345,20 +1346,20 @@ export const globalStyles = [
     ".weekly-target>div:last-child>strong": {
       fontSize: "15px",
       whiteSpace: "nowrap",
-      color: "#26334d",
+      color: designColors.dark,
       fontFamily: '"Inter Variable", sans-serif',
     },
   },
   {
     ".weekly-target>div:last-child>strong span": {
       fontSize: "12px",
-      color: "#a4afbf",
+      color: designColors.muted,
     },
   },
   {
     ".weekly-target p": {
       fontSize: "10px",
-      color: "#a2adba",
+      color: designColors.muted,
       lineHeight: "1.5",
       margin: "8px 0 0",
     },
@@ -1366,7 +1367,7 @@ export const globalStyles = [
   {
     ".target-divider": {
       height: "1px",
-      background: "#ebeff5",
+      background: designColors.surface,
       margin: "22px 0",
     },
   },
@@ -1383,7 +1384,7 @@ export const globalStyles = [
     ".target-line>span": {
       fontSize: "11px",
       fontWeight: "700",
-      color: "#63738e",
+      color: designColors.muted,
       display: "flex",
       alignItems: "center",
       gap: "10px",
@@ -1392,13 +1393,13 @@ export const globalStyles = [
   {
     ".target-line strong": {
       fontSize: "14px",
-      color: "#20314d",
+      color: designColors.dark,
     },
   },
   {
     ".target-line small": {
       fontSize: "11px",
-      color: "#a7b0bc",
+      color: designColors.muted,
     },
   },
   {
@@ -1408,8 +1409,8 @@ export const globalStyles = [
       display: "grid",
       placeItems: "center",
       borderRadius: "8px",
-      background: "#e9f8f3",
-      color: "#26b896",
+      background: designColors.surface,
+      color: designColors.primary,
     },
   },
   {
@@ -1426,7 +1427,7 @@ export const globalStyles = [
       gap: "10px",
       marginBottom: "9px",
       fontSize: "11px",
-      color: "#61718c",
+      color: designColors.muted,
     },
   },
   {
@@ -1447,14 +1448,14 @@ export const globalStyles = [
   },
   {
     ".discipline-progress-head>span": {
-      color: "#9ca8b8",
+      color: designColors.muted,
       fontSize: "10px",
       whiteSpace: "nowrap",
     },
   },
   {
     ".discipline-progress-head strong": {
-      color: "#4a5973",
+      color: designColors.muted,
       marginLeft: "9px",
     },
   },
@@ -1465,8 +1466,8 @@ export const globalStyles = [
   },
   {
     ".due-pill": {
-      background: "#edf8f4",
-      color: "#299b82",
+      background: designColors.surface,
+      color: designColors.primary,
       borderRadius: "20px",
       padding: "7px 10px",
       fontSize: "10px",
@@ -1475,8 +1476,8 @@ export const globalStyles = [
   },
   {
     ".due-active": {
-      background: "#fff0e9",
-      color: "#db8b53",
+      background: statusColors.warningSoft,
+      color: statusColors.warning,
     },
   },
   {
@@ -1490,7 +1491,7 @@ export const globalStyles = [
       display: "flex",
       alignItems: "center",
       gap: "10px",
-      borderBottom: "1px solid #eff2f5",
+      borderBottom: `1px solid ${designColors.border}`,
       padding: "13px 0",
     },
   },
@@ -1506,8 +1507,8 @@ export const globalStyles = [
       width: "37px",
       height: "37px",
       borderRadius: "10px",
-      background: "#fff0e8",
-      color: "#e9a071",
+      background: statusColors.warningSoft,
+      color: statusColors.warning,
       flexShrink: "0",
     },
   },
@@ -1522,7 +1523,7 @@ export const globalStyles = [
       display: "block",
       fontSize: "11px",
       fontWeight: "800",
-      color: "#31405a",
+      color: designColors.text,
       whiteSpace: "nowrap",
       textOverflow: "ellipsis",
       overflow: "hidden",
@@ -1531,15 +1532,15 @@ export const globalStyles = [
   {
     ".due-item span": {
       display: "block",
-      color: "#a1aab8",
+      color: designColors.muted,
       fontSize: "10px",
       marginTop: "5px",
     },
   },
   {
     ".due-now": {
-      background: "#fff1e7",
-      color: "#dd9e62",
+      background: statusColors.warningSoft,
+      color: statusColors.warning,
       padding: "5px 8px",
       fontSize: "9px !important",
       fontWeight: "800",
@@ -1560,8 +1561,8 @@ export const globalStyles = [
   },
   {
     ".good-circle": {
-      background: "#e1f8ef",
-      color: "#1fbc92",
+      background: designColors.surface,
+      color: designColors.primary,
       borderRadius: "50%",
       width: "49px",
       height: "49px",
@@ -1573,13 +1574,13 @@ export const globalStyles = [
     ".no-reviews h4": {
       fontSize: "12px",
       margin: "12px 0 7px",
-      color: "#3b4860",
+      color: designColors.text,
     },
   },
   {
     ".no-reviews p": {
       fontSize: "10px",
-      color: "#9caab9",
+      color: designColors.muted,
       lineHeight: "1.6",
       maxWidth: "250px",
       marginBottom: "0",
@@ -1591,7 +1592,7 @@ export const globalStyles = [
       alignItems: "center",
       gap: "14px",
       padding: "12px 0",
-      borderBottom: "1px solid #edf1f6",
+      borderBottom: `1px solid ${designColors.border}`,
     },
   },
   {
@@ -1602,7 +1603,7 @@ export const globalStyles = [
   {
     ".weak-number": {
       fontSize: "11px",
-      color: "#bac3cf",
+      color: designColors.border,
       fontWeight: "800",
     },
   },
@@ -1614,14 +1615,14 @@ export const globalStyles = [
   {
     ".weak-row strong": {
       display: "block",
-      color: "#303b50",
+      color: designColors.text,
       fontSize: "12px",
     },
   },
   {
     ".weak-row span:not(.weak-number)": {
       display: "block",
-      color: "#98a5b7",
+      color: designColors.muted,
       fontSize: "10px",
       marginTop: "5px",
     },
@@ -1647,26 +1648,26 @@ export const globalStyles = [
       display: "inline-flex",
       alignItems: "center",
       gap: "9px",
-      color: "#667791",
+      color: designColors.muted,
       fontSize: "12px",
       fontWeight: "750",
     },
   },
   {
     ".toolbar-info svg": {
-      color: "#5c7cf0",
+      color: designColors.primary,
     },
   },
   {
     ".edital-progress-panel": {
       borderRadius: "13px",
-      background: "linear-gradient(112deg,#263e6d,#244d7c)",
+      background: `linear-gradient(112deg,${designColors.primary},${designColors.primary})`,
       padding: "24px 30px",
       display: "flex",
       justifyContent: "space-between",
       alignItems: "center",
       gap: "25px",
-      color: "#fff",
+      color: designColors.background,
     },
   },
   {
@@ -1674,7 +1675,7 @@ export const globalStyles = [
       fontSize: "10px",
       letterSpacing: "1.15px",
       fontWeight: "800",
-      color: "#8db7c9",
+      color: designColors.primary,
     },
   },
   {
@@ -1688,14 +1689,14 @@ export const globalStyles = [
   {
     ".edital-progress-main strong": {
       font: '800 32px "Inter Variable"',
-      color: "#fff",
+      color: designColors.background,
       letterSpacing: "-1px",
     },
   },
   {
     ".edital-progress-main span": {
       fontSize: "11px",
-      color: "#b8cbe2",
+      color: designColors.primary,
     },
   },
   {
@@ -1708,14 +1709,14 @@ export const globalStyles = [
       display: "flex",
       justifyContent: "space-between",
       gap: "8px",
-      color: "#c6d6e5",
+      color: designColors.primary,
       fontSize: "11px",
       marginBottom: "10px",
     },
   },
   {
     ".edital-progress-right strong": {
-      color: "#fff",
+      color: designColors.background,
     },
   },
   {
@@ -1733,8 +1734,8 @@ export const globalStyles = [
       display: "flex",
       alignItems: "center",
       gap: "10px",
-      border: "1px solid #e8edf4",
-      background: "#fbfcff",
+      border: `1px solid ${designColors.border}`,
+      background: designColors.surface,
       borderRadius: "8px",
       padding: "0 13px",
       flex: "1",
@@ -1743,7 +1744,7 @@ export const globalStyles = [
   },
   {
     ".search-wrap svg": {
-      color: "#a0afc0",
+      color: designColors.muted,
       flexShrink: "0",
     },
   },
@@ -1753,7 +1754,7 @@ export const globalStyles = [
       border: "0",
       background: "transparent",
       padding: "0",
-      color: "#4a5c79",
+      color: designColors.primary,
       fontSize: "11px",
       minWidth: "0",
       outline: "none",
@@ -1765,11 +1766,11 @@ export const globalStyles = [
       height: "39px",
       minWidth: "150px",
       maxWidth: "240px",
-      border: "1px solid #e8edf4",
-      background: "#fbfcff",
+      border: `1px solid ${designColors.border}`,
+      background: designColors.surface,
       borderRadius: "8px",
       padding: "0 12px",
-      color: "#687991",
+      color: designColors.muted,
       fontWeight: "650",
       fontSize: "11px",
     },
@@ -1789,22 +1790,22 @@ export const globalStyles = [
   },
   {
     ".data-table th": {
-      color: "#9ba8b8",
+      color: designColors.muted,
       fontSize: "9px",
       letterSpacing: "1px",
       fontWeight: "800",
-      borderBottom: "1px solid #edf0f6",
+      borderBottom: `1px solid ${designColors.border}`,
       padding: "14px 12px",
       whiteSpace: "nowrap",
-      background: "#fafcff",
+      background: designColors.surface,
     },
   },
   {
     ".data-table td": {
       fontSize: "11px",
-      color: "#596880",
+      color: designColors.muted,
       padding: "15px 12px",
-      borderBottom: "1px solid #f0f2f6",
+      borderBottom: `1px solid ${designColors.border}`,
       verticalAlign: "middle",
     },
   },
@@ -1815,12 +1816,12 @@ export const globalStyles = [
   },
   {
     ".data-table tbody tr:hover": {
-      background: "#fbfcff",
+      background: designColors.surface,
     },
   },
   {
     ".data-table strong": {
-      color: "#30405a",
+      color: designColors.text,
       fontWeight: "800",
     },
   },
@@ -1868,7 +1869,7 @@ export const globalStyles = [
     ".table-topic span:not(.topic-symbol),.table-cell-main small": {
       display: "block",
       fontSize: "10px",
-      color: "#9ca8b9",
+      color: designColors.muted,
       marginTop: "5px",
     },
   },
@@ -1889,20 +1890,20 @@ export const globalStyles = [
   },
   {
     ".status-not_started": {
-      background: "#f2f4f8",
-      color: "#8b96a8",
+      background: designColors.surface,
+      color: designColors.muted,
     },
   },
   {
     ".status-in_progress": {
-      background: "#fff4df",
-      color: "#d2a04b",
+      background: statusColors.warningSoft,
+      color: statusColors.warning,
     },
   },
   {
     ".status-completed": {
-      background: "#e6f7ef",
-      color: "#29a783",
+      background: statusColors.successSoft,
+      color: statusColors.success,
     },
   },
   {
@@ -1927,28 +1928,28 @@ export const globalStyles = [
   },
   {
     ".mastery-weak": {
-      background: "#fff0f1",
-      color: "#e3737a",
+      background: statusColors.errorSoft,
+      color: statusColors.error,
     },
   },
   {
     ".mastery-medium": {
-      background: "#fff5df",
-      color: "#d9a347",
+      background: statusColors.warningSoft,
+      color: statusColors.warning,
     },
   },
   {
     ".mastery-strong": {
-      background: "#e4f8ee",
-      color: "#21a985",
+      background: designColors.surface,
+      color: designColors.primary,
     },
   },
   {
     ".table-checkbox": {
       width: "20px",
       height: "20px",
-      border: "1.5px solid #cbd5e2",
-      background: "#fff",
+      border: `1.5px solid ${designColors.border}`,
+      background: designColors.background,
       color: "transparent",
       display: "grid",
       placeItems: "center",
@@ -1959,14 +1960,14 @@ export const globalStyles = [
   },
   {
     ".table-checkbox.checked": {
-      background: "#34b998",
-      color: "#fff",
-      borderColor: "#34b998",
+      background: designColors.primary,
+      color: designColors.background,
+      borderColor: designColors.accent,
     },
   },
   {
     ".table-checkbox:hover": {
-      borderColor: "#6282f4",
+      borderColor: designColors.border,
     },
   },
   {
@@ -1979,7 +1980,7 @@ export const globalStyles = [
   },
   {
     ".table-muted": {
-      color: "#9aa7b8 !important",
+      color: `${designColors.muted} !important`,
     },
   },
   {
@@ -1994,20 +1995,20 @@ export const globalStyles = [
   },
   {
     ".accuracy-tag.good": {
-      color: "#189e7e",
-      background: "#e4f8ee",
+      color: designColors.primary,
+      background: designColors.surface,
     },
   },
   {
     ".accuracy-tag.medium": {
-      color: "#b98a29",
-      background: "#fff5e1",
+      color: statusColors.warning,
+      background: statusColors.warningSoft,
     },
   },
   {
     ".accuracy-tag.low": {
-      color: "#d75c71",
-      background: "#fff0f2",
+      color: statusColors.error,
+      background: statusColors.errorSoft,
     },
   },
   {
@@ -2016,9 +2017,9 @@ export const globalStyles = [
       alignItems: "center",
       gap: "9px",
       padding: "13px 16px",
-      background: "#eaf0ff",
-      border: "1px solid #e0e9ff",
-      color: "#5f79ad",
+      background: designColors.surface,
+      border: `1px solid ${designColors.border}`,
+      color: designColors.primary,
       borderRadius: "9px",
       fontSize: "11px",
       lineHeight: "1.55",
@@ -2027,13 +2028,13 @@ export const globalStyles = [
   {
     ".tip svg": {
       flexShrink: "0",
-      color: "#5c7fdf",
+      color: designColors.primary,
     },
   },
   {
     ".tip strong": {
       fontWeight: "800",
-      color: "#4e70b2",
+      color: designColors.primary,
     },
   },
   {
@@ -2051,8 +2052,8 @@ export const globalStyles = [
     ".empty-icon": {
       width: "52px",
       height: "52px",
-      background: "#eff4fe",
-      color: "#6785e1",
+      background: designColors.surface,
+      color: designColors.primary,
       borderRadius: "14px",
       display: "grid",
       placeItems: "center",
@@ -2061,14 +2062,14 @@ export const globalStyles = [
   },
   {
     ".empty h4": {
-      color: "#41506d",
+      color: designColors.primary,
       marginBottom: "7px",
       fontSize: "13px",
     },
   },
   {
     ".empty p": {
-      color: "#9da9b8",
+      color: designColors.muted,
       maxWidth: "350px",
       lineHeight: "1.65",
       fontSize: "11px",
@@ -2089,7 +2090,7 @@ export const globalStyles = [
   },
   {
     ".mini-metric": {
-      background: "#fff",
+      background: designColors.background,
       border: "1px solid var(--border)",
       borderRadius: "13px",
       padding: "21px 22px",
@@ -2097,7 +2098,7 @@ export const globalStyles = [
       gridTemplateColumns: "48px 1fr",
       gridTemplateRows: "auto auto auto",
       alignItems: "center",
-      boxShadow: "0 3px 17px #182a5006",
+      boxShadow: `0 3px 17px ${withOpacity(designColors.dark, 0.024)}`,
     },
   },
   {
@@ -2112,7 +2113,7 @@ export const globalStyles = [
     ".mini-metric>span": {
       fontSize: "10px",
       fontWeight: "800",
-      color: "#98a5b4",
+      color: designColors.muted,
       letterSpacing: ".8px",
     },
   },
@@ -2120,14 +2121,14 @@ export const globalStyles = [
     ".mini-metric>strong": {
       font: '800 26px "Inter Variable"',
       letterSpacing: "-1.1px",
-      color: "#23314d",
+      color: designColors.dark,
       marginTop: "5px",
     },
   },
   {
     ".mini-metric>small": {
       fontSize: "10px",
-      color: "#a7b1bd",
+      color: designColors.muted,
       marginTop: "2px",
     },
   },
@@ -2142,7 +2143,7 @@ export const globalStyles = [
       display: "flex",
       alignItems: "center",
       gap: "24px",
-      borderBottom: "1px solid #eef1f5",
+      borderBottom: `1px solid ${designColors.border}`,
       padding: "14px 4px",
     },
   },
@@ -2177,7 +2178,7 @@ export const globalStyles = [
   },
   {
     ".performance-info strong": {
-      color: "#35435d",
+      color: designColors.text,
       fontSize: "11px",
       display: "block",
       whiteSpace: "nowrap",
@@ -2187,7 +2188,7 @@ export const globalStyles = [
   },
   {
     ".performance-info span": {
-      color: "#9fabbb",
+      color: designColors.muted,
       fontSize: "10px",
       marginTop: "4px",
       display: "block",
@@ -2210,18 +2211,18 @@ export const globalStyles = [
       display: "flex",
       alignItems: "center",
       justifyContent: "space-between",
-      background: "#f3f7ff",
-      border: "1px solid #e8edfe",
+      background: designColors.surface,
+      border: `1px solid ${designColors.border}`,
       borderRadius: "8px",
       padding: "13px 15px",
       fontSize: "12px",
-      color: "#6780ae",
+      color: designColors.primary,
     },
   },
   {
     ".inline-result strong": {
       font: '800 16px "Inter Variable"',
-      color: "#3d66d6",
+      color: designColors.primary,
     },
   },
   {
@@ -2238,8 +2239,8 @@ export const globalStyles = [
       flex: "1",
       maxWidth: "200px",
       minHeight: "112px",
-      background: "#f9fbfe",
-      border: "1px solid #e9eff5",
+      background: designColors.surface,
+      border: `1px solid ${designColors.border}`,
       borderRadius: "10px",
       textAlign: "left",
       padding: "13px",
@@ -2253,19 +2254,19 @@ export const globalStyles = [
   },
   {
     ".cycle-card:hover": {
-      background: "#f2f6fe",
+      background: designColors.surface,
     },
   },
   {
     ".cycle-card.active": {
-      border: "1.5px solid #6b8bf5",
-      background: "#edf3ff",
-      boxShadow: "0 0 0 2px #e6edff inset",
+      border: `1.5px solid ${designColors.border}`,
+      background: designColors.surface,
+      boxShadow: `0 0 0 2px ${designColors.surface} inset`,
     },
   },
   {
     ".cycle-card-index": {
-      color: "#b4c0d0",
+      color: designColors.primary,
       fontSize: "10px",
       fontWeight: "800",
     },
@@ -2281,7 +2282,7 @@ export const globalStyles = [
     ".cycle-card strong": {
       fontSize: "11px",
       lineHeight: "1.3",
-      color: "#45536c",
+      color: designColors.primary,
       maxWidth: "125px",
     },
   },
@@ -2291,7 +2292,7 @@ export const globalStyles = [
       right: "8px",
       top: "9px",
       fontSize: "8px",
-      color: "#4b76f0",
+      color: designColors.primary,
       fontWeight: "850",
       letterSpacing: ".5px",
     },
@@ -2313,8 +2314,8 @@ export const globalStyles = [
       display: "flex",
       alignItems: "center",
       gap: "6px",
-      background: "#f4f6f9",
-      color: "#7e90a7",
+      background: designColors.surface,
+      color: designColors.muted,
       padding: "7px 10px",
       borderRadius: "20px",
       fontSize: "10px",
@@ -2325,20 +2326,20 @@ export const globalStyles = [
     ".timer-state>span": {
       width: "6px",
       height: "6px",
-      background: "#9ca9b9",
+      background: designColors.muted,
       borderRadius: "50%",
     },
   },
   {
     ".timer-state.is-running": {
-      background: "#e3f9ee",
-      color: "#209b78",
+      background: designColors.surface,
+      color: designColors.primary,
     },
   },
   {
     ".timer-state.is-running>span": {
-      background: "#2cba8d",
-      boxShadow: "0 0 0 3px #29b88b24",
+      background: designColors.primary,
+      boxShadow: `0 0 0 3px ${withOpacity(designColors.primary, 0.141)}`,
     },
   },
   {
@@ -2356,8 +2357,8 @@ export const globalStyles = [
   },
   {
     ".timer-icon": {
-      color: "#5c7df4",
-      background: "#eef3ff",
+      color: designColors.primary,
+      background: designColors.surface,
       display: "grid",
       placeItems: "center",
       width: "48px",
@@ -2370,13 +2371,13 @@ export const globalStyles = [
     ".timer-digits": {
       font: '800 clamp(35px,4.6vw,58px) "Inter Variable"',
       letterSpacing: "0",
-      color: "#22324e",
+      color: designColors.dark,
       fontVariantNumeric: "tabular-nums",
     },
   },
   {
     ".timer-caption": {
-      color: "#b2bdca",
+      color: designColors.border,
       letterSpacing: "2px",
       fontSize: "9px",
       fontWeight: "800",
@@ -2406,9 +2407,9 @@ export const globalStyles = [
   },
   {
     ".timer-save": {
-      background: "#e5f9f0",
-      color: "#149e79",
-      border: "1px solid #bdebd9",
+      background: designColors.surface,
+      color: designColors.primary,
+      border: `1px solid ${designColors.border}`,
       borderRadius: "9px",
       padding: "11px 14px",
       display: "flex",
@@ -2424,7 +2425,7 @@ export const globalStyles = [
   {
     ".timer-note": {
       fontSize: "10px",
-      color: "#aab6c4",
+      color: designColors.muted,
       textAlign: "center",
       margin: "19px 0 0",
       lineHeight: "1.5",
@@ -2433,7 +2434,7 @@ export const globalStyles = [
   {
     ".hours-summary": {
       textAlign: "center",
-      background: "#f8faff",
+      background: designColors.surface,
       borderRadius: "11px",
       padding: "24px 15px 21px",
       marginBottom: "17px",
@@ -2443,7 +2444,7 @@ export const globalStyles = [
     ".hours-summary span": {
       fontSize: "10px",
       letterSpacing: "1px",
-      color: "#9aa9bc",
+      color: designColors.muted,
       fontWeight: "800",
     },
   },
@@ -2451,14 +2452,14 @@ export const globalStyles = [
     ".hours-summary strong": {
       display: "block",
       font: '800 33px "Inter Variable"',
-      color: "#253c69",
+      color: designColors.text,
       margin: "10px 0 4px",
     },
   },
   {
     ".hours-summary p": {
       fontSize: "11px",
-      color: "#9aa8b9",
+      color: designColors.muted,
       margin: "0",
     },
   },
@@ -2481,7 +2482,7 @@ export const globalStyles = [
   },
   {
     ".daily-mini>span": {
-      color: "#92a0b6",
+      color: designColors.muted,
       fontSize: "10px",
     },
   },
@@ -2489,7 +2490,7 @@ export const globalStyles = [
     ".daily-mini>div": {
       height: "55px",
       width: "19px",
-      background: "#ecf1fc",
+      background: designColors.surface,
       borderRadius: "4px",
       display: "flex",
       alignItems: "flex-end",
@@ -2498,14 +2499,14 @@ export const globalStyles = [
   },
   {
     ".daily-mini>div>div": {
-      background: "#7290f7",
+      background: designColors.accent,
       width: "100%",
       borderRadius: "4px",
     },
   },
   {
     ".daily-mini small": {
-      color: "#8998af",
+      color: designColors.muted,
       fontSize: "9px",
     },
   },
@@ -2514,8 +2515,8 @@ export const globalStyles = [
       display: "flex",
       alignItems: "flex-start",
       gap: "10px",
-      background: "#f0f5ff",
-      border: "1px solid #e7eefe",
+      background: designColors.surface,
+      border: `1px solid ${designColors.border}`,
       borderRadius: "9px",
       padding: "12px 13px",
     },
@@ -2523,13 +2524,13 @@ export const globalStyles = [
   {
     ".study-advice svg": {
       flex: "0 0 auto",
-      color: "#5681de",
+      color: designColors.primary,
     },
   },
   {
     ".study-advice p": {
       fontSize: "10px",
-      color: "#7185a9",
+      color: designColors.primary,
       lineHeight: "1.7",
       margin: "0",
     },
@@ -2537,14 +2538,14 @@ export const globalStyles = [
   {
     ".study-advice strong": {
       display: "block",
-      color: "#4e6fb0",
+      color: designColors.primary,
     },
   },
   {
     ".time-tag": {
       display: "inline-block",
-      color: "#4166d3",
-      background: "#ecf1ff",
+      color: designColors.primary,
+      background: designColors.surface,
       padding: "7px 10px",
       borderRadius: "7px",
       fontWeight: "800",
@@ -2553,8 +2554,8 @@ export const globalStyles = [
   },
   {
     ".review-hero": {
-      background: "linear-gradient(104deg,#e7f6f0,#edf7ff)",
-      border: "1px solid #dcefe9",
+      background: `linear-gradient(104deg,${designColors.surface},${designColors.surface})`,
+      border: `1px solid ${designColors.border}`,
       borderRadius: "13px",
       padding: "25px 28px",
       display: "flex",
@@ -2569,26 +2570,26 @@ export const globalStyles = [
       display: "grid",
       placeItems: "center",
       borderRadius: "17px",
-      background: "#cfefe3",
-      color: "#2aac88",
+      background: designColors.light,
+      color: designColors.primary,
       flexShrink: "0",
     },
   },
   {
     ".review-hero .eyebrow": {
-      color: "#289d8a",
+      color: designColors.primary,
     },
   },
   {
     ".review-hero h2": {
       fontSize: "18px",
-      color: "#22534f",
+      color: designColors.dark,
       margin: "7px 0 6px",
     },
   },
   {
     ".review-hero p": {
-      color: "#718e93",
+      color: designColors.muted,
       fontSize: "11px",
       lineHeight: "1.5",
       margin: "0",
@@ -2598,7 +2599,7 @@ export const globalStyles = [
     ".tabs": {
       display: "flex",
       gap: "18px",
-      borderBottom: "1px solid #eaf0f5",
+      borderBottom: `1px solid ${designColors.border}`,
       marginBottom: "11px",
       overflowX: "auto",
     },
@@ -2608,7 +2609,7 @@ export const globalStyles = [
       border: "0",
       borderBottom: "2px solid transparent",
       background: "transparent",
-      color: "#8f9db1",
+      color: designColors.muted,
       fontSize: "11px",
       fontWeight: "800",
       padding: "0 5px 14px",
@@ -2620,23 +2621,23 @@ export const globalStyles = [
   },
   {
     ".tabs button.active": {
-      color: "#5073e8",
-      borderColor: "#5776f4",
+      color: designColors.primary,
+      borderColor: designColors.accent,
     },
   },
   {
     ".tabs button span": {
       fontSize: "9px",
       borderRadius: "15px",
-      background: "#f0f3f7",
+      background: designColors.surface,
       padding: "3px 6px",
-      color: "#8190a3",
+      color: designColors.muted,
     },
   },
   {
     ".tabs button.active span": {
-      color: "#5675e9",
-      background: "#e9eeff",
+      color: designColors.primary,
+      background: designColors.surface,
     },
   },
   {
@@ -2651,7 +2652,7 @@ export const globalStyles = [
       alignItems: "center",
       gap: "15px",
       padding: "16px 0",
-      borderBottom: "1px solid #edf1f5",
+      borderBottom: `1px solid ${designColors.border}`,
     },
   },
   {
@@ -2661,8 +2662,8 @@ export const globalStyles = [
   },
   {
     ".review-item-badge": {
-      background: "#f0edff",
-      color: "#8267d6",
+      background: designColors.surface,
+      color: designColors.primary,
       width: "42px",
       height: "42px",
       display: "grid",
@@ -2673,8 +2674,8 @@ export const globalStyles = [
   },
   {
     ".review-item-badge.is-done": {
-      background: "#e8faf2",
-      color: "#1ead87",
+      background: designColors.surface,
+      color: designColors.primary,
     },
   },
   {
@@ -2687,7 +2688,7 @@ export const globalStyles = [
     ".review-item-main strong": {
       display: "block",
       fontSize: "12px",
-      color: "#35455f",
+      color: designColors.text,
       whiteSpace: "nowrap",
       overflow: "hidden",
       textOverflow: "ellipsis",
@@ -2697,7 +2698,7 @@ export const globalStyles = [
     ".review-item-main span": {
       display: "block",
       fontSize: "10px",
-      color: "#9daabb",
+      color: designColors.muted,
       marginTop: "6px",
     },
   },
@@ -2717,24 +2718,24 @@ export const globalStyles = [
       gap: "5px",
       fontSize: "10px",
       fontWeight: "700",
-      color: "#8393a9",
+      color: designColors.muted,
     },
   },
   {
     ".review-meta .review-overdue": {
-      color: "#e67878",
+      color: statusColors.error,
     },
   },
   {
     ".review-meta small": {
-      color: "#99b0a1",
+      color: designColors.muted,
       fontSize: "9px",
     },
   },
   {
     ".upcoming-pill": {
-      color: "#6688b4",
-      background: "#edf4ff",
+      color: designColors.primary,
+      background: designColors.surface,
       padding: "7px 10px",
       borderRadius: "7px",
       fontSize: "10px",
@@ -2752,7 +2753,7 @@ export const globalStyles = [
       display: "flex",
       gap: "18px",
       alignItems: "center",
-      borderBottom: "1px solid #edf1f5",
+      borderBottom: `1px solid ${designColors.border}`,
       padding: "17px 0",
     },
   },
@@ -2775,8 +2776,8 @@ export const globalStyles = [
       width: "43px",
       height: "43px",
       borderRadius: "11px",
-      background: "#edf1ff",
-      color: "#5878ea",
+      background: designColors.surface,
+      color: designColors.primary,
       display: "grid",
       placeItems: "center",
       flexShrink: "0",
@@ -2785,7 +2786,7 @@ export const globalStyles = [
   {
     ".mock-main strong": {
       display: "block",
-      color: "#35445d",
+      color: designColors.text,
       fontSize: "12px",
     },
   },
@@ -2793,7 +2794,7 @@ export const globalStyles = [
     ".mock-main span,.mock-main small": {
       display: "block",
       fontSize: "10px",
-      color: "#9daaba",
+      color: designColors.muted,
       marginTop: "6px",
     },
   },
@@ -2808,7 +2809,7 @@ export const globalStyles = [
   {
     ".mock-grade span,.mock-cutoff span": {
       fontSize: "9px",
-      color: "#abb5c2",
+      color: designColors.muted,
       letterSpacing: ".7px",
       fontWeight: "800",
     },
@@ -2816,12 +2817,12 @@ export const globalStyles = [
   {
     ".mock-grade strong,.mock-cutoff strong": {
       font: '800 16px "Inter Variable"',
-      color: "#354968",
+      color: designColors.text,
     },
   },
   {
     ".mock-cutoff strong": {
-      color: "#8997aa",
+      color: designColors.muted,
     },
   },
   {
@@ -2837,14 +2838,14 @@ export const globalStyles = [
   },
   {
     ".mock-status.passed": {
-      background: "#e4f8ef",
-      color: "#1caa81",
+      background: designColors.surface,
+      color: designColors.primary,
     },
   },
   {
     ".mock-status.failed": {
-      background: "#fff0eb",
-      color: "#e08466",
+      background: statusColors.errorSoft,
+      color: statusColors.error,
     },
   },
   {
@@ -2856,19 +2857,19 @@ export const globalStyles = [
   },
   {
     ".material-card": {
-      border: "1px solid #e9eef6",
+      border: `1px solid ${designColors.border}`,
       borderRadius: "11px",
       padding: "18px",
       minHeight: "199px",
       display: "flex",
       flexDirection: "column",
-      background: "#fdfefe",
+      background: designColors.surface,
     },
   },
   {
     ".material-card:hover": {
-      borderColor: "#bdccf4",
-      boxShadow: "0 5px 15px #1f33600a",
+      borderColor: designColors.border,
+      boxShadow: `0 5px 15px ${withOpacity(designColors.primary, 0.039)}`,
     },
   },
   {
@@ -2885,15 +2886,15 @@ export const globalStyles = [
       width: "42px",
       height: "42px",
       borderRadius: "11px",
-      background: "#edf2ff",
-      color: "#637eee",
+      background: designColors.surface,
+      color: designColors.primary,
     },
   },
   {
     ".material-type": {
       fontSize: "9px",
       letterSpacing: ".7px",
-      color: "#94a2b4",
+      color: designColors.muted,
       fontWeight: "800",
       marginTop: "14px",
       textTransform: "uppercase",
@@ -2902,14 +2903,14 @@ export const globalStyles = [
   {
     ".material-card h4": {
       fontSize: "13px",
-      color: "#31405b",
+      color: designColors.text,
       margin: "6px 0 7px",
     },
   },
   {
     ".material-card p": {
       fontSize: "10px",
-      color: "#9ba7b6",
+      color: designColors.muted,
       lineHeight: "1.5",
       flex: "1",
       marginBottom: "16px",
@@ -2917,7 +2918,7 @@ export const globalStyles = [
   },
   {
     ".material-card-foot": {
-      borderTop: "1px solid #edf0f5",
+      borderTop: `1px solid ${designColors.border}`,
       paddingTop: "13px",
       display: "flex",
       justifyContent: "space-between",
@@ -2928,7 +2929,7 @@ export const globalStyles = [
   {
     ".material-card-foot span": {
       fontSize: "9px",
-      color: "#94a3b7",
+      color: designColors.muted,
       whiteSpace: "nowrap",
       textOverflow: "ellipsis",
       overflow: "hidden",
@@ -2938,7 +2939,7 @@ export const globalStyles = [
   {
     ".material-card-foot a": {
       fontSize: "10px",
-      color: "#5778eb",
+      color: designColors.primary,
       fontWeight: "800",
       display: "flex",
       alignItems: "center",
@@ -2956,8 +2957,8 @@ export const globalStyles = [
       display: "flex",
       alignItems: "center",
       gap: "14px",
-      background: "#fff8e9",
-      border: "1px solid #f9ecd1",
+      background: statusColors.warningSoft,
+      border: `1px solid ${statusColors.warningSoft}`,
       padding: "17px 19px",
       borderRadius: "12px",
     },
@@ -2968,8 +2969,8 @@ export const globalStyles = [
       placeItems: "center",
       width: "41px",
       height: "41px",
-      background: "#fff0ce",
-      color: "#d9a24b",
+      background: statusColors.warningSoft,
+      color: statusColors.warning,
       borderRadius: "10px",
       flexShrink: "0",
     },
@@ -2978,13 +2979,13 @@ export const globalStyles = [
     ".errors-callout p": {
       fontSize: "11px",
       lineHeight: "1.65",
-      color: "#a08b69",
+      color: designColors.primary,
       margin: "0",
     },
   },
   {
     ".errors-callout strong": {
-      color: "#897047",
+      color: statusColors.warning,
     },
   },
   {
@@ -2997,8 +2998,8 @@ export const globalStyles = [
   {
     ".note-card": {
       borderRadius: "11px",
-      border: "1px solid #ebeff5",
-      background: "#fff",
+      border: `1px solid ${designColors.border}`,
+      background: designColors.background,
       padding: "18px",
       minWidth: "0",
     },
@@ -3017,7 +3018,7 @@ export const globalStyles = [
       alignItems: "center",
       gap: "6px",
       fontSize: "10px",
-      color: "#5875cf",
+      color: designColors.primary,
       fontWeight: "800",
     },
   },
@@ -3033,13 +3034,13 @@ export const globalStyles = [
     ".note-source span": {
       fontSize: "12px",
       fontWeight: "800",
-      color: "#364863",
+      color: designColors.text,
     },
   },
   {
     ".note-source small": {
       fontSize: "10px",
-      color: "#a6b0bf",
+      color: designColors.muted,
     },
   },
   {
@@ -3047,8 +3048,8 @@ export const globalStyles = [
       display: "inline-flex",
       alignItems: "center",
       gap: "5px",
-      background: "#fff0e5",
-      color: "#d98b4d",
+      background: statusColors.warningSoft,
+      color: statusColors.warning,
       borderRadius: "6px",
       padding: "6px 8px",
       fontSize: "10px",
@@ -3059,8 +3060,8 @@ export const globalStyles = [
   {
     ".note-block": {
       padding: "14px 15px",
-      background: "#fff4f3",
-      border: "1px solid #ffebe9",
+      background: statusColors.errorSoft,
+      border: `1px solid ${statusColors.errorSoft}`,
       borderRadius: "9px",
       marginTop: "10px",
     },
@@ -3070,7 +3071,7 @@ export const globalStyles = [
       display: "flex",
       alignItems: "center",
       gap: "6px",
-      color: "#cc7c75",
+      color: statusColors.error,
       fontSize: "9px",
       fontWeight: "800",
       letterSpacing: ".8px",
@@ -3081,25 +3082,25 @@ export const globalStyles = [
       fontSize: "11px",
       whiteSpace: "pre-wrap",
       lineHeight: "1.6",
-      color: "#6b5c5c",
+      color: designColors.muted,
       margin: "9px 0 0",
       overflowWrap: "anywhere",
     },
   },
   {
     ".note-block.correct-block": {
-      background: "#ecf9f3",
-      borderColor: "#d8f4e7",
+      background: statusColors.successSoft,
+      borderColor: statusColors.successSoft,
     },
   },
   {
     ".note-block.correct-block>span": {
-      color: "#249b7c",
+      color: statusColors.success,
     },
   },
   {
     ".note-block.correct-block p": {
-      color: "#436c60",
+      color: statusColors.success,
     },
   },
   {
@@ -3117,7 +3118,7 @@ export const globalStyles = [
     ".settings-group": {
       padding: "9px 0 29px",
       marginBottom: "25px",
-      borderBottom: "1px solid #ecf0f5",
+      borderBottom: `1px solid ${designColors.border}`,
     },
   },
   {
@@ -3140,27 +3141,27 @@ export const globalStyles = [
   },
   {
     ".settings-icon.blue": {
-      background: "#e9efff",
-      color: "#5175ee",
+      background: designColors.surface,
+      color: designColors.primary,
     },
   },
   {
     ".settings-icon.teal": {
-      background: "#e5f8f2",
-      color: "#22ad8b",
+      background: designColors.surface,
+      color: designColors.primary,
     },
   },
   {
     ".settings-group-head h4": {
       margin: "0 0 5px",
       fontSize: "13px",
-      color: "#35435c",
+      color: designColors.text,
     },
   },
   {
     ".settings-group-head p": {
       fontSize: "11px",
-      color: "#a1acbb",
+      color: designColors.muted,
       margin: "0",
     },
   },
@@ -3175,11 +3176,11 @@ export const globalStyles = [
       display: "flex",
       alignItems: "flex-start",
       gap: "14px",
-      border: "1px solid #f2e5c9",
-      background: "#fffaf0",
+      border: `1px solid ${statusColors.warningSoft}`,
+      background: statusColors.warningSoft,
       padding: "19px",
       borderRadius: "12px",
-      color: "#bd914d",
+      color: statusColors.warning,
     },
   },
   {
@@ -3189,14 +3190,14 @@ export const globalStyles = [
   },
   {
     ".settings-security strong": {
-      color: "#917143",
+      color: statusColors.warning,
       fontSize: "12px",
     },
   },
   {
     ".settings-security p": {
       fontSize: "11px",
-      color: "#a28c6c",
+      color: designColors.primary,
       lineHeight: "1.6",
       margin: "6px 0 0",
     },
@@ -3205,7 +3206,7 @@ export const globalStyles = [
     ".modal-overlay": {
       position: "fixed",
       inset: "0",
-      background: "#0b1a30a6",
+      background: withOpacity(designColors.dark, 0.651),
       backdropFilter: "blur(3px)",
       zIndex: "80",
       display: "grid",
@@ -3219,9 +3220,9 @@ export const globalStyles = [
       width: "min(100%,480px)",
       maxHeight: "min(92vh,950px)",
       overflowY: "auto",
-      background: "#fff",
+      background: designColors.background,
       borderRadius: "17px",
-      boxShadow: "0 25px 90px #07132455",
+      boxShadow: `0 25px 90px ${withOpacity(designColors.dark, 0.333)}`,
     },
   },
   {
@@ -3232,7 +3233,7 @@ export const globalStyles = [
   {
     ".modal-top": {
       padding: "23px 26px 20px",
-      borderBottom: "1px solid #eef1f5",
+      borderBottom: `1px solid ${designColors.border}`,
       display: "flex",
       alignItems: "flex-start",
       justifyContent: "space-between",
@@ -3241,7 +3242,7 @@ export const globalStyles = [
   },
   {
     ".modal-top h2": {
-      color: "#22314d",
+      color: designColors.dark,
       fontSize: "18px",
       fontWeight: "800",
       margin: "0 0 5px",
@@ -3249,7 +3250,7 @@ export const globalStyles = [
   },
   {
     ".modal-top p": {
-      color: "#99a5b6",
+      color: designColors.muted,
       fontSize: "11px",
       lineHeight: "1.5",
       margin: "0",
@@ -3277,7 +3278,7 @@ export const globalStyles = [
   },
   {
     ".field-label": {
-      color: "#596982",
+      color: designColors.muted,
       fontSize: "11px",
       fontWeight: "800",
     },
@@ -3286,8 +3287,8 @@ export const globalStyles = [
     ".field input:not(.MuiInputBase-input),.field select:not(.MuiInputBase-input),.field textarea":
       {
         width: "100%",
-        border: "1px solid #e3e9f2",
-        background: "#fcfdff",
+        border: `1px solid ${designColors.border}`,
+        background: designColors.surface,
         borderRadius: "8px",
         padding: "11px 12px",
         fontSize: "12px",
@@ -3304,7 +3305,7 @@ export const globalStyles = [
   {
     ".field-hint": {
       fontSize: "10px",
-      color: "#9ca8ba",
+      color: designColors.muted,
     },
   },
   {
@@ -3320,8 +3321,8 @@ export const globalStyles = [
       alignItems: "center",
       gap: "19px",
       flexWrap: "wrap",
-      border: "1px solid #eaf0f7",
-      background: "#f9fbff",
+      border: `1px solid ${designColors.border}`,
+      background: designColors.surface,
       padding: "13px",
       borderRadius: "9px",
     },
@@ -3330,7 +3331,7 @@ export const globalStyles = [
     ".form-check-row label,.checkbox-label": {
       fontSize: "12px",
       fontWeight: "650",
-      color: "#5c6b86",
+      color: designColors.muted,
       display: "flex",
       alignItems: "center",
       gap: "8px",
@@ -3349,7 +3350,7 @@ export const globalStyles = [
       display: "flex",
       justifyContent: "flex-end",
       gap: "9px",
-      borderTop: "1px solid #edf0f5",
+      borderTop: `1px solid ${designColors.border}`,
       paddingTop: "19px",
       marginTop: "3px",
     },
@@ -3359,7 +3360,7 @@ export const globalStyles = [
       display: "flex",
       alignItems: "center",
       gap: "12px",
-      color: "#7988a2",
+      color: designColors.muted,
       fontSize: "12px",
     },
   },
@@ -3383,9 +3384,9 @@ export const globalStyles = [
       minWidth: "260px",
       maxWidth: "min(470px,calc(100vw - 35px))",
       padding: "15px 17px",
-      background: "#25364e",
-      color: "#fff",
-      boxShadow: "0 15px 45px #19233935",
+      background: designColors.dark,
+      color: designColors.background,
+      boxShadow: `0 15px 45px ${withOpacity(designColors.dark, 0.208)}`,
       borderRadius: "10px",
       fontSize: "12px",
       fontWeight: "650",
@@ -3393,12 +3394,12 @@ export const globalStyles = [
   },
   {
     ".toast-ok svg": {
-      color: "#6ee8bb",
+      color: designColors.primary,
     },
   },
   {
     ".toast-error svg": {
-      color: "#ffa3a9",
+      color: statusColors.errorSoft,
     },
   },
   {
@@ -3413,7 +3414,7 @@ export const globalStyles = [
       placeItems: "center",
       border: "0",
       background: "transparent",
-      color: "#c0c8d5",
+      color: designColors.border,
       padding: "0",
     },
   },
@@ -3422,9 +3423,9 @@ export const globalStyles = [
       display: "flex",
       alignItems: "center",
       gap: "14px",
-      background: "#fff4f2",
-      border: "1px solid #ffd8d0",
-      color: "#cc6763",
+      background: statusColors.errorSoft,
+      border: `1px solid ${statusColors.errorSoft}`,
+      color: statusColors.error,
       borderRadius: "12px",
       padding: "16px",
       marginBottom: "24px",
@@ -3449,7 +3450,7 @@ export const globalStyles = [
   },
   {
     ".api-error code": {
-      background: "#ffe3da",
+      background: statusColors.errorSoft,
       padding: "2px 4px",
     },
   },
@@ -3465,7 +3466,7 @@ export const globalStyles = [
     ".skeleton-layout div": {
       height: "145px",
       borderRadius: "12px",
-      background: "linear-gradient(90deg,#e9edf5,#f8fbff,#e9edf5)",
+      background: `linear-gradient(90deg,${designColors.surface},${designColors.surface},${designColors.surface})`,
       backgroundSize: "200% 100%",
       animation: "skeleton 1.5s linear infinite",
     },
@@ -3575,7 +3576,7 @@ export const globalStyles = [
         transform: "translateX(-102%)",
         transition: "transform .2s",
         width: "264px",
-        boxShadow: "10px 0 35px #0c172f32",
+        boxShadow: `10px 0 35px ${withOpacity(designColors.dark, 0.196)}`,
       },
       ".sidebar.nav-visible": {
         transform: "translateX(0)",
@@ -3583,7 +3584,7 @@ export const globalStyles = [
       ".mobile-dim": {
         position: "fixed",
         inset: "0",
-        background: "#0c172e7a",
+        background: withOpacity(designColors.dark, 0.478),
         zIndex: "35",
       },
       ".nav-close": {
@@ -3591,7 +3592,7 @@ export const globalStyles = [
         placeItems: "center",
         border: "0",
         background: "transparent",
-        color: "#a8b7ce",
+        color: designColors.light,
         marginLeft: "auto",
       },
       ".app-main": {
@@ -3913,8 +3914,8 @@ export const globalStyles = [
       display: "flex",
       alignItems: "center",
       gap: "11px",
-      border: "1px solid #e7edf5",
-      background: "#fafcff",
+      border: `1px solid ${designColors.border}`,
+      background: designColors.surface,
       padding: "9px 12px",
       borderRadius: "9px",
     },
@@ -3922,7 +3923,7 @@ export const globalStyles = [
   {
     ".reorder-number": {
       fontSize: "11px",
-      color: "#a1aec0",
+      color: designColors.muted,
       fontWeight: "800",
       width: "14px",
     },
@@ -3930,7 +3931,7 @@ export const globalStyles = [
   {
     ".reorder-item>strong": {
       fontSize: "12px",
-      color: "#53637e",
+      color: designColors.muted,
       flex: "1",
     },
   },
@@ -3948,62 +3949,62 @@ export const globalStyles = [
   },
   {
     ":root": {
-      "--accent": "#286f60",
-      "--dark": "#223d39",
-      "--muted": "#7b9089",
-      "--border": "#e2ebe5",
-      "--success": "#4eaa89",
-      "--sidebar": "#183b34",
-      "--soft": "#f4f8f5",
+      "--accent": designColors.primary,
+      "--dark": designColors.dark,
+      "--muted": designColors.muted,
+      "--border": designColors.border,
+      "--success": designColors.primary,
+      "--sidebar": designColors.dark,
+      "--soft": designColors.surface,
       fontFamily: '"Inter Variable", sans-serif',
-      background: "#f5f8f4",
-      color: "#243e38",
+      background: designColors.surface,
+      color: designColors.dark,
     },
   },
   {
     body: {
-      background: "#f5f8f4",
-      color: "#243e38",
+      background: designColors.surface,
+      color: designColors.dark,
     },
   },
   {
     a: {
-      color: "#267663",
+      color: designColors.text,
     },
   },
   {
     "input:not(.MuiInputBase-input)[type=checkbox]": {
-      accentColor: "#327c6c",
+      accentColor: designColors.primary,
     },
   },
   {
     "input:not(.MuiInputBase-input):focus,textarea:focus,select:not(.MuiInputBase-input):focus":
       {
-        borderColor: "#62a48c !important",
-        boxShadow: "0 0 0 3px #75b49b28 !important",
+        borderColor: `${designColors.accent} !important`,
+        boxShadow: `0 0 0 3px ${withOpacity(designColors.accent, 0.157)} !important`,
       },
   },
   {
     "button:focus-visible,a:focus-visible": {
-      outline: "3px solid #e6b569",
+      outline: `3px solid ${statusColors.warning}`,
       outlineOffset: "2px",
     },
   },
   {
     ".sidebar": {
-      background: "linear-gradient(171deg,#1c443b 0%,#17372f 72%,#14342e 100%)",
+      background: `linear-gradient(171deg,${designColors.dark} 0%,${designColors.dark} 72%,${designColors.dark} 100%)`,
       width: "246px",
-      borderRight: "1px solid #234a3d",
-      color: "#c7dbd2",
-      boxShadow: "4px 0 24px #234d3614",
+      borderRight: `1px solid ${designColors.accent}`,
+      color: designColors.border,
+      boxShadow: `4px 0 24px ${withOpacity(designColors.dark, 0.078)}`,
     },
   },
   {
     ".sidebar-overline": {
       margin: "0 18px 25px",
-      border: "1px solid #42645b",
-      background: "#ffffff08",
-      color: "#b7ccc2",
+      border: `1px solid ${designColors.accent}`,
+      background: withOpacity(designColors.background, 0.031),
+      color: designColors.border,
       letterSpacing: "1.06px",
       fontSize: "9px",
       borderRadius: "11px",
@@ -4019,9 +4020,9 @@ export const globalStyles = [
       width: "44px",
       height: "44px",
       borderRadius: "15px",
-      background: "#e9ba72",
-      color: "#204738",
-      boxShadow: "0 7px 22px #0e2f2a45",
+      background: statusColors.warning,
+      color: designColors.dark,
+      boxShadow: `0 7px 22px ${withOpacity(designColors.dark, 0.271)}`,
     },
   },
   {
@@ -4029,19 +4030,19 @@ export const globalStyles = [
       fontSize: "28px",
       fontWeight: "800",
       letterSpacing: "-1.35px",
-      color: "#f6fcf9",
+      color: designColors.light,
     },
   },
   {
     ".brand-wordmark strong span": {
-      color: "#efc67e",
+      color: statusColors.warning,
     },
   },
   {
     ".brand-wordmark small": {
       fontSize: "8px",
       letterSpacing: "1.6px",
-      color: "#b4cabc",
+      color: designColors.border,
     },
   },
   {
@@ -4056,14 +4057,14 @@ export const globalStyles = [
   },
   {
     ".nav-label": {
-      color: "#88b4a1",
+      color: designColors.light,
       fontSize: "9px",
       letterSpacing: "1.55px",
     },
   },
   {
     ".nav-item": {
-      color: "#d0e0d6",
+      color: designColors.border,
       fontSize: "12px",
       minHeight: "43px",
       borderRadius: "11px",
@@ -4073,26 +4074,26 @@ export const globalStyles = [
   },
   {
     ".nav-item:hover": {
-      background: "#ffffff13",
-      color: "white",
+      background: withOpacity(designColors.background, 0.075),
+      color: designColors.paper,
     },
   },
   {
     ".nav-item.selected": {
-      background: "#f1f8ee",
-      color: "#235448",
-      boxShadow: "0 4px 15px #0c2a2422",
+      background: designColors.surface,
+      color: designColors.dark,
+      boxShadow: `0 4px 15px ${withOpacity(designColors.dark, 0.133)}`,
     },
   },
   {
     ".nav-item.selected svg": {
-      color: "#2d806d",
+      color: designColors.text,
     },
   },
   {
     ".nav-count": {
-      background: "#e1a45f",
-      color: "#213e36",
+      background: statusColors.warningSoft,
+      color: statusColors.warning,
     },
   },
   {
@@ -4102,10 +4103,10 @@ export const globalStyles = [
       alignItems: "center",
       justifyContent: "space-between",
       padding: "11px 15px",
-      border: "1px solid #456b5e55",
+      border: `1px solid ${withOpacity(designColors.accent, 0.333)}`,
       borderRadius: "11px",
-      color: "#b7d5c7",
-      background: "#ffffff08",
+      color: designColors.light,
+      background: withOpacity(designColors.background, 0.031),
       fontSize: "12px",
       fontWeight: "750",
     },
@@ -4131,15 +4132,15 @@ export const globalStyles = [
       display: "flex",
       flexDirection: "column",
       gap: "7px",
-      border: "1px solid #63887855",
+      border: `1px solid ${withOpacity(designColors.accent, 0.333)}`,
       borderRadius: "16px",
-      background: "linear-gradient(145deg,#35625388,#274c4199)",
-      color: "#e9f8ee",
+      background: `linear-gradient(145deg,${withOpacity(designColors.primary, 0.533)},${withOpacity(designColors.dark, 0.6)})`,
+      color: designColors.light,
     },
   },
   {
     ".sidebar-hint svg": {
-      color: "#f1bf7f",
+      color: statusColors.warning,
     },
   },
   {
@@ -4150,7 +4151,7 @@ export const globalStyles = [
   {
     ".sidebar-hint span": {
       fontSize: "10px",
-      color: "#bfd7cb",
+      color: designColors.light,
       lineHeight: "1.6",
     },
   },
@@ -4167,21 +4168,21 @@ export const globalStyles = [
   {
     ".topbar": {
       height: "70px",
-      background: "#ffffffdd",
+      background: withOpacity(designColors.background, 0.867),
       backdropFilter: "blur(20px)",
       padding: "0 38px",
-      borderBottom: "1px solid #e1eae3",
+      borderBottom: `1px solid ${designColors.border}`,
     },
   },
   {
     ".topbar-path": {
-      color: "#3a5449",
+      color: designColors.text,
       fontWeight: "750",
     },
   },
   {
     ".topbar-path span": {
-      color: "#9cb4a5",
+      color: designColors.muted,
       margin: "0 6px",
     },
   },
@@ -4191,9 +4192,9 @@ export const globalStyles = [
       alignItems: "center",
       gap: "9px",
       padding: "9px 14px",
-      background: "#e9f4ee",
-      border: "1px solid #d9e9db",
-      color: "#286f60",
+      background: designColors.surface,
+      border: `1px solid ${designColors.border}`,
+      color: designColors.text,
       fontSize: "11px",
       fontWeight: "800",
       borderRadius: "10px",
@@ -4201,15 +4202,15 @@ export const globalStyles = [
   },
   {
     ".topbar-quick:hover": {
-      background: "#def0e6",
+      background: designColors.surface,
     },
   },
   {
     ".edition-chip": {
-      background: "#fff",
-      border: "1px solid #e0e9e2",
+      background: designColors.background,
+      border: `1px solid ${designColors.border}`,
       boxShadow: "none",
-      color: "#708377",
+      color: designColors.muted,
     },
   },
   {
@@ -4225,7 +4226,7 @@ export const globalStyles = [
   },
   {
     ".page-breadcrumb": {
-      color: "#4f957c",
+      color: designColors.primary,
       letterSpacing: "1.7px",
       fontSize: "9px",
       marginBottom: "12px",
@@ -4233,46 +4234,46 @@ export const globalStyles = [
   },
   {
     ".live-dot": {
-      background: "#76bfa2",
-      boxShadow: "0 0 0 4px #a3d8bd3d",
+      background: designColors.accent,
+      boxShadow: `0 0 0 4px ${withOpacity(designColors.light, 0.239)}`,
     },
   },
   {
     ".page-header h1": {
       fontSize: "29px",
-      color: "#1e4036",
+      color: designColors.dark,
       marginBottom: "7px",
     },
   },
   {
     ".page-header p": {
-      color: "#7a8f84",
+      color: designColors.muted,
       fontSize: "12px",
       lineHeight: "1.6",
     },
   },
   {
     ".footer": {
-      color: "#91a497",
-      borderColor: "#e1eae3",
+      color: designColors.muted,
+      borderColor: designColors.border,
     },
   },
   {
     ".panel,.simple-card,.home-metric,.note-card,.material-card,.metric-card": {
-      border: "1px solid #e1eae2",
-      background: "#fff",
+      border: `1px solid ${designColors.border}`,
+      background: designColors.background,
       borderRadius: "17px",
-      boxShadow: "0 8px 25px #32534408",
+      boxShadow: `0 8px 25px ${withOpacity(designColors.primary, 0.031)}`,
     },
   },
   {
     ".panel-heading h3,.simple-card h3": {
-      color: "#2a4b40",
+      color: designColors.dark,
     },
   },
   {
     ".panel-heading p": {
-      color: "#84998d",
+      color: designColors.muted,
     },
   },
   {
@@ -4283,68 +4284,68 @@ export const globalStyles = [
   },
   {
     ".btn-primary": {
-      background: "#276e5d",
-      color: "#fff",
-      boxShadow: "0 5px 15px #276e5d29",
+      background: designColors.primary,
+      color: designColors.background,
+      boxShadow: `0 5px 15px ${withOpacity(designColors.primary, 0.161)}`,
     },
   },
   {
     ".btn-primary:hover": {
-      background: "#1e5e50",
-      boxShadow: "0 7px 18px #276e5d31",
+      background: designColors.primary,
+      boxShadow: `0 7px 18px ${withOpacity(designColors.primary, 0.192)}`,
     },
   },
   {
     ".btn-subtle": {
-      background: "#f3f8f4",
-      borderColor: "#dce9df",
-      color: "#416c5b",
+      background: designColors.surface,
+      borderColor: designColors.border,
+      color: designColors.text,
     },
   },
   {
     ".btn-subtle:hover": {
-      background: "#e7f2e9",
+      background: designColors.surface,
     },
   },
   {
     ".text-link,.metric-link,.plain-action": {
-      color: "#287866",
+      color: designColors.text,
     },
   },
   {
     ".small-chip": {
-      color: "#557469",
-      background: "#f3f8f4",
-      borderColor: "#e0eae1",
+      color: designColors.muted,
+      background: designColors.surface,
+      borderColor: designColors.border,
     },
   },
   {
     ".row-link": {
-      color: "#277a65",
-      background: "#e9f6ee",
+      color: designColors.text,
+      background: designColors.surface,
     },
   },
   {
     ".row-link:hover": {
-      background: "#dbf0e3",
+      background: designColors.surface,
     },
   },
   {
     ".progress-track,.home-bar": {
-      background: "#e9f1e9",
+      background: designColors.surface,
     },
   },
   {
     ".field-label": {
-      color: "#546f60",
+      color: designColors.muted,
     },
   },
   {
     ".field input:not(.MuiInputBase-input),.field select:not(.MuiInputBase-input),.field textarea":
       {
-        border: "1px solid #dce8dd",
-        background: "#fcfefc",
-        color: "#2c493d",
+        border: `1px solid ${designColors.border}`,
+        background: designColors.surface,
+        color: designColors.dark,
       },
   },
   {
@@ -4354,17 +4355,17 @@ export const globalStyles = [
   },
   {
     ".modal-overlay": {
-      background: "#132d29b8",
+      background: withOpacity(designColors.dark, 0.722),
     },
   },
   {
     ".modal-top h2": {
-      color: "#214d3d",
+      color: designColors.dark,
     },
   },
   {
     ".toast": {
-      background: "#1c493c",
+      background: designColors.dark,
     },
   },
   {
@@ -4383,17 +4384,17 @@ export const globalStyles = [
       position: "relative",
       overflow: "hidden",
       borderRadius: "23px",
-      background: "linear-gradient(116deg,#244e40 0%,#347963 76%,#48947b 100%)",
+      background: `linear-gradient(116deg,${designColors.dark} 0%,${designColors.primary} 76%,${designColors.primary} 100%)`,
       padding: "35px 37px",
-      color: "#fff",
-      boxShadow: "0 18px 35px #2e655137",
+      color: designColors.background,
+      boxShadow: `0 18px 35px ${withOpacity(designColors.primary, 0.216)}`,
     },
   },
   {
     ".welcome-orbit": {
       position: "absolute",
       borderRadius: "50%",
-      border: "1px solid #ffffff20",
+      border: `1px solid ${withOpacity(designColors.background, 0.125)}`,
       pointerEvents: "none",
     },
   },
@@ -4421,7 +4422,7 @@ export const globalStyles = [
   },
   {
     ".welcome-content .eyebrow": {
-      color: "#a8e3bf",
+      color: designColors.primary,
       fontSize: "10px",
       letterSpacing: "1.6px",
     },
@@ -4431,21 +4432,21 @@ export const globalStyles = [
       fontSize: "30px",
       lineHeight: "1.27",
       letterSpacing: "-1.3px",
-      color: "#fff",
+      color: designColors.background,
       margin: "12px 0 11px",
     },
   },
   {
     ".welcome-content h2 span": {
       fontWeight: "600",
-      color: "#e2f3e7",
+      color: designColors.primary,
     },
   },
   {
     ".welcome-content p": {
       fontSize: "12px",
       lineHeight: "1.75",
-      color: "#d4e8de",
+      color: designColors.primary,
       maxWidth: "430px",
       margin: "0 0 19px",
     },
@@ -4459,14 +4460,14 @@ export const globalStyles = [
   },
   {
     ".welcome-actions .btn-primary": {
-      background: "#f2c47e",
-      color: "#24483a",
-      boxShadow: "0 7px 14px #102d271e",
+      background: statusColors.warning,
+      color: designColors.dark,
+      boxShadow: `0 7px 14px ${withOpacity(designColors.dark, 0.118)}`,
     },
   },
   {
     ".welcome-actions .btn-primary:hover": {
-      background: "#ffe1a9",
+      background: statusColors.warningSoft,
     },
   },
   {
@@ -4474,9 +4475,9 @@ export const globalStyles = [
       display: "flex",
       alignItems: "center",
       gap: "8px",
-      border: "1px solid #d9f1df70",
-      background: "#ffffff19",
-      color: "#ecfff2",
+      border: `1px solid ${withOpacity(designColors.border, 0.439)}`,
+      background: withOpacity(designColors.background, 0.098),
+      color: designColors.light,
       padding: "11px 17px",
       borderRadius: "11px",
       fontWeight: "750",
@@ -4488,21 +4489,21 @@ export const globalStyles = [
       width: "209px",
       minWidth: "196px",
       padding: "22px 21px 16px",
-      border: "1px solid #ffffff46",
+      border: `1px solid ${withOpacity(designColors.background, 0.275)}`,
       borderRadius: "19px",
-      background: "#ffffffeb",
-      color: "#254f40",
+      background: withOpacity(designColors.background, 0.922),
+      color: designColors.dark,
       zIndex: "1",
       marginLeft: "20px",
-      boxShadow: "0 13px 35px #214d3d27",
+      boxShadow: `0 13px 35px ${withOpacity(designColors.dark, 0.153)}`,
     },
   },
   {
     ".welcome-calendar-icon": {
       display: "grid",
       placeItems: "center",
-      background: "#e8f3e7",
-      color: "#3b8165",
+      background: designColors.surface,
+      color: designColors.primary,
       width: "41px",
       height: "41px",
       borderRadius: "13px",
@@ -4514,7 +4515,7 @@ export const globalStyles = [
       fontSize: "9px",
       letterSpacing: "1.4px",
       fontWeight: "800",
-      color: "#749788",
+      color: designColors.muted,
     },
   },
   {
@@ -4528,14 +4529,14 @@ export const globalStyles = [
   {
     ".welcome-today strong small": {
       fontSize: "12px",
-      color: "#739184",
+      color: designColors.muted,
       fontWeight: "600",
     },
   },
   {
     ".welcome-today p": {
       fontSize: "10px",
-      color: "#749082",
+      color: designColors.muted,
       lineHeight: "1.45",
       margin: "6px 0 12px",
     },
@@ -4549,7 +4550,7 @@ export const globalStyles = [
       gap: "8px",
       alignItems: "center",
       fontWeight: "800",
-      color: "#2f8166",
+      color: designColors.primary,
       fontSize: "11px",
     },
   },
@@ -4563,7 +4564,7 @@ export const globalStyles = [
   },
   {
     ".home-section-head .eyebrow": {
-      color: "#6da18a",
+      color: designColors.muted,
       fontSize: "9px",
       letterSpacing: "1.4px",
     },
@@ -4571,7 +4572,7 @@ export const globalStyles = [
   {
     ".home-section-head h2": {
       fontSize: "20px",
-      color: "#294b3c",
+      color: designColors.dark,
       margin: "7px 0 0",
     },
   },
@@ -4595,15 +4596,15 @@ export const globalStyles = [
   },
   {
     ".home-metric:hover": {
-      borderColor: "#a3c7b4",
+      borderColor: designColors.border,
       transform: "translateY(-2px)",
-      boxShadow: "0 10px 24px #376b5120",
+      boxShadow: `0 10px 24px ${withOpacity(designColors.primary, 0.125)}`,
     },
   },
   {
     ".home-metric>span": {
       fontSize: "11px",
-      color: "#729081",
+      color: designColors.muted,
       fontWeight: "700",
     },
   },
@@ -4612,14 +4613,14 @@ export const globalStyles = [
       fontSize: "29px",
       lineHeight: "1.12",
       letterSpacing: "-.8px",
-      color: "#203e33",
+      color: designColors.dark,
       whiteSpace: "nowrap",
     },
   },
   {
     ".home-metric small": {
       fontSize: "9px",
-      color: "#8b9d91",
+      color: designColors.muted,
       lineHeight: "1.5",
     },
   },
@@ -4635,7 +4636,7 @@ export const globalStyles = [
     ".home-bar>i": {
       display: "block",
       height: "100%",
-      background: "#5caa8a",
+      background: designColors.accent,
       borderRadius: "10px",
     },
   },
@@ -4650,26 +4651,26 @@ export const globalStyles = [
   },
   {
     ".metric-symbol.mint": {
-      background: "#e5f3e8",
-      color: "#369a72",
+      background: designColors.surface,
+      color: designColors.primary,
     },
   },
   {
     ".metric-symbol.yellow": {
-      background: "#fff0d9",
-      color: "#b98c42",
+      background: statusColors.warningSoft,
+      color: statusColors.warning,
     },
   },
   {
     ".metric-symbol.blue": {
-      background: "#e8f0f9",
-      color: "#5385a9",
+      background: designColors.surface,
+      color: designColors.primary,
     },
   },
   {
     ".metric-symbol.pink": {
-      background: "#f9e8eb",
-      color: "#b77083",
+      background: statusColors.errorSoft,
+      color: statusColors.error,
     },
   },
   {
@@ -4703,7 +4704,7 @@ export const globalStyles = [
     ".simple-card>p": {
       fontSize: "11px",
       lineHeight: "1.6",
-      color: "#829488",
+      color: designColors.muted,
       margin: "0 0 14px",
     },
   },
@@ -4724,14 +4725,14 @@ export const globalStyles = [
     ".next-subject": {
       fontSize: "15px",
       fontWeight: "800",
-      color: "#2c5947",
+      color: designColors.text,
       lineHeight: "1.35",
     },
   },
   {
     ".focus-subtext": {
       display: "block",
-      color: "#829588",
+      color: designColors.muted,
       marginTop: "5px",
       fontSize: "10px",
     },
@@ -4739,8 +4740,8 @@ export const globalStyles = [
   {
     ".pill-counter": {
       borderRadius: "15px",
-      background: "#e6f2e8",
-      color: "#2e8662",
+      background: designColors.surface,
+      color: designColors.primary,
       fontSize: "10px",
       fontWeight: "800",
       padding: "4px 8px",
@@ -4759,8 +4760,8 @@ export const globalStyles = [
       textAlign: "left",
       alignItems: "center",
       gap: "10px",
-      background: "#f7faf6",
-      border: "1px solid #e8efe8",
+      background: designColors.surface,
+      border: `1px solid ${designColors.border}`,
       borderRadius: "10px",
       padding: "9px",
       width: "100%",
@@ -4781,9 +4782,9 @@ export const globalStyles = [
       width: "21px",
       height: "21px",
       flex: "0 0 21px",
-      border: "1px solid #9ebbad",
+      border: `1px solid ${designColors.border}`,
       borderRadius: "7px",
-      color: "#2b7c60",
+      color: designColors.text,
       display: "grid",
       placeItems: "center",
     },
@@ -4798,13 +4799,13 @@ export const globalStyles = [
   },
   {
     ".today-tasks strong": {
-      color: "#375446",
+      color: designColors.text,
       fontSize: "11px",
     },
   },
   {
     ".today-tasks small": {
-      color: "#87988e",
+      color: designColors.muted,
       fontSize: "9px",
     },
   },
@@ -4833,7 +4834,7 @@ export const globalStyles = [
       display: "flex",
       alignItems: "end",
       borderRadius: "15px",
-      background: "#ebf2ed",
+      background: designColors.surface,
       overflow: "hidden",
     },
   },
@@ -4841,22 +4842,22 @@ export const globalStyles = [
     ".week-mini-track span": {
       display: "block",
       width: "100%",
-      background: "linear-gradient(#85c8a7,#3b8d72)",
+      background: `linear-gradient(${designColors.accent},${designColors.primary})`,
       borderRadius: "8px",
     },
   },
   {
     ".week-mini-chart small": {
       fontSize: "9px",
-      color: "#829a8a",
+      color: designColors.muted,
     },
   },
   {
     ".exam-reminder": {
       borderRadius: "14px",
-      border: "1px solid #d9ebdc",
-      color: "#5a816a",
-      background: "#f1f7ef",
+      border: `1px solid ${designColors.border}`,
+      color: designColors.muted,
+      background: designColors.surface,
       padding: "14px 16px",
       display: "flex",
       alignItems: "center",
@@ -4873,7 +4874,7 @@ export const globalStyles = [
     ".exam-reminder button": {
       border: "0",
       background: "transparent",
-      color: "#337b61",
+      color: designColors.primary,
       fontSize: "11px",
       fontWeight: "800",
     },
@@ -4883,8 +4884,8 @@ export const globalStyles = [
       display: "flex",
       alignItems: "center",
       gap: "20px",
-      background: "linear-gradient(110deg,#e9f5e9,#f8fbf0)",
-      border: "1px solid #d4e7d7",
+      background: `linear-gradient(110deg,${designColors.surface},${designColors.surface})`,
+      border: `1px solid ${designColors.border}`,
       borderRadius: "19px",
       padding: "23px",
     },
@@ -4897,8 +4898,8 @@ export const globalStyles = [
       borderRadius: "18px",
       display: "grid",
       placeItems: "center",
-      background: "#d8eee0",
-      color: "#397b5f",
+      background: designColors.surface,
+      color: designColors.primary,
     },
   },
   {
@@ -4910,14 +4911,14 @@ export const globalStyles = [
   {
     ".edital-upload-banner h3": {
       fontSize: "17px",
-      color: "#244d3d",
+      color: designColors.dark,
       margin: "5px 0 6px",
     },
   },
   {
     ".edital-upload-banner .eyebrow": {
       fontSize: "9px",
-      color: "#478d70",
+      color: designColors.primary,
       letterSpacing: "1.2px",
     },
   },
@@ -4925,7 +4926,7 @@ export const globalStyles = [
     ".edital-upload-banner p": {
       fontSize: "11px",
       lineHeight: "1.65",
-      color: "#698574",
+      color: designColors.muted,
       maxWidth: "680px",
       margin: "0",
     },
@@ -4937,7 +4938,7 @@ export const globalStyles = [
       gap: "6px",
       flexWrap: "wrap",
       fontSize: "10px",
-      color: "#738a79",
+      color: designColors.muted,
       padding: "0 6px",
     },
   },
@@ -4962,7 +4963,7 @@ export const globalStyles = [
   },
   {
     ".edital-dropzone": {
-      border: "2px dashed #a5cbb4",
+      border: `2px dashed ${designColors.border}`,
       borderRadius: "17px",
       display: "flex",
       alignItems: "center",
@@ -4970,8 +4971,8 @@ export const globalStyles = [
       flexDirection: "column",
       gap: "10px",
       padding: "42px 22px",
-      color: "#3d8064",
-      background: "#f6fbf7",
+      color: designColors.primary,
+      background: designColors.surface,
       textAlign: "center",
       cursor: "pointer",
       position: "relative",
@@ -4985,7 +4986,7 @@ export const globalStyles = [
   {
     ".edital-dropzone span": {
       maxWidth: "440px",
-      color: "#809787",
+      color: designColors.muted,
       fontSize: "11px",
       lineHeight: "1.7",
     },
@@ -5004,11 +5005,11 @@ export const globalStyles = [
       display: "flex",
       alignItems: "center",
       gap: "12px",
-      border: "1px solid #dcece1",
+      border: `1px solid ${designColors.border}`,
       borderRadius: "12px",
       padding: "12px 15px",
-      background: "#f8fbf8",
-      color: "#408568",
+      background: designColors.surface,
+      color: designColors.primary,
     },
   },
   {
@@ -5029,7 +5030,7 @@ export const globalStyles = [
   {
     ".edital-preview-file small": {
       fontSize: "10px",
-      color: "#8a9d91",
+      color: designColors.muted,
     },
   },
   {
@@ -5037,11 +5038,11 @@ export const globalStyles = [
       display: "flex",
       gap: "9px",
       alignItems: "flex-start",
-      background: "#fff8e9",
-      border: "1px solid #f0e3c2",
+      background: statusColors.warningSoft,
+      border: `1px solid ${statusColors.warningSoft}`,
       borderRadius: "10px",
       padding: "11px",
-      color: "#927143",
+      color: statusColors.warning,
       fontSize: "11px",
       lineHeight: "1.6",
     },
@@ -5070,12 +5071,12 @@ export const globalStyles = [
       margin: "0",
       fontSize: "11px",
       lineHeight: "1.5",
-      color: "#83958a",
+      color: designColors.muted,
     },
   },
   {
     ".edital-preview-top strong": {
-      color: "#468c6c",
+      color: designColors.primary,
       fontSize: "11px",
       whiteSpace: "nowrap",
     },
@@ -5095,8 +5096,8 @@ export const globalStyles = [
       display: "flex",
       flexDirection: "column",
       gap: "12px",
-      border: "1px solid #e1ebe4",
-      background: "#fbfdfb",
+      border: `1px solid ${designColors.border}`,
+      background: designColors.surface,
       padding: "17px",
       borderRadius: "13px",
     },
@@ -5108,7 +5109,7 @@ export const globalStyles = [
       justifyContent: "space-between",
       fontSize: "11px",
       fontWeight: "800",
-      color: "#668473",
+      color: designColors.muted,
     },
   },
   {
@@ -5134,8 +5135,8 @@ export const globalStyles = [
       alignItems: "center",
       justifyContent: "space-between",
       gap: "16px",
-      border: "1px solid #dfe9df",
-      background: "#fff",
+      border: `1px solid ${designColors.border}`,
+      background: designColors.background,
       borderRadius: "19px",
       padding: "25px 26px",
     },
@@ -5143,14 +5144,14 @@ export const globalStyles = [
   {
     ".weekly-hero h2": {
       fontSize: "19px",
-      color: "#28503e",
+      color: designColors.dark,
       margin: "6px 0 8px",
     },
   },
   {
     ".weekly-hero p": {
       fontSize: "11px",
-      color: "#799282",
+      color: designColors.muted,
       maxWidth: "690px",
       lineHeight: "1.7",
       margin: "0",
@@ -5158,7 +5159,7 @@ export const globalStyles = [
   },
   {
     ".weekly-hero .eyebrow": {
-      color: "#5a9b75",
+      color: designColors.primary,
       fontSize: "9px",
       letterSpacing: "1.2px",
     },
@@ -5179,8 +5180,8 @@ export const globalStyles = [
     ".week-summary>div": {
       borderRadius: "14px",
       padding: "16px 19px",
-      border: "1px solid #dfeadf",
-      background: "#fff",
+      border: `1px solid ${designColors.border}`,
+      background: designColors.background,
       display: "flex",
       flexDirection: "column",
       gap: "7px",
@@ -5189,14 +5190,14 @@ export const globalStyles = [
   {
     ".week-summary span": {
       fontSize: "10px",
-      color: "#7d9486",
+      color: designColors.muted,
     },
   },
   {
     ".week-summary strong": {
       fontSize: "24px",
       lineHeight: "1",
-      color: "#305b45",
+      color: designColors.text,
     },
   },
   {
@@ -5226,13 +5227,13 @@ export const globalStyles = [
   {
     ".week-nav strong": {
       fontSize: "12px",
-      color: "#3e6552",
+      color: designColors.text,
     },
   },
   {
     ".week-nav small": {
       fontSize: "9px",
-      color: "#9cae9f",
+      color: designColors.muted,
     },
   },
   {
@@ -5247,10 +5248,10 @@ export const globalStyles = [
       height: "37px",
       borderRadius: "9px",
       padding: "0 12px",
-      background: "#fff",
-      border: "1px solid #dce6dc",
+      background: designColors.background,
+      border: `1px solid ${designColors.border}`,
       fontSize: "11px",
-      color: "#567562",
+      color: designColors.muted,
     },
   },
   {
@@ -5262,8 +5263,8 @@ export const globalStyles = [
   },
   {
     ".week-day": {
-      border: "1px solid #e1ebe2",
-      background: "#fff",
+      border: `1px solid ${designColors.border}`,
+      background: designColors.background,
       borderRadius: "15px",
       minHeight: "245px",
       minWidth: "0",
@@ -5272,8 +5273,8 @@ export const globalStyles = [
   },
   {
     ".week-day.today": {
-      borderColor: "#69ad8d",
-      boxShadow: "0 0 0 2px #77b79b1b",
+      borderColor: designColors.accent,
+      boxShadow: `0 0 0 2px ${withOpacity(designColors.accent, 0.106)}`,
     },
   },
   {
@@ -5281,7 +5282,7 @@ export const globalStyles = [
       display: "flex",
       justifyContent: "space-between",
       alignItems: "center",
-      borderBottom: "1px solid #edf2ed",
+      borderBottom: `1px solid ${designColors.border}`,
       padding: "13px 9px 10px",
     },
   },
@@ -5295,19 +5296,19 @@ export const globalStyles = [
   {
     ".week-day-top span": {
       fontSize: "10px",
-      color: "#8ba193",
+      color: designColors.muted,
       fontWeight: "750",
     },
   },
   {
     ".week-day-top strong": {
       fontSize: "17px",
-      color: "#335b47",
+      color: designColors.text,
     },
   },
   {
     ".week-day.today .week-day-top": {
-      background: "#eaf7ed",
+      background: designColors.surface,
     },
   },
   {
@@ -5315,8 +5316,8 @@ export const globalStyles = [
       width: "24px",
       height: "24px",
       border: "0",
-      background: "#f0f7f1",
-      color: "#5a956c",
+      background: designColors.surface,
+      color: designColors.primary,
       borderRadius: "7px",
       display: "grid",
       placeItems: "center",
@@ -5324,7 +5325,7 @@ export const globalStyles = [
   },
   {
     ".week-add:hover": {
-      background: "#d8eadc",
+      background: designColors.surface,
     },
   },
   {
@@ -5338,7 +5339,7 @@ export const globalStyles = [
   {
     ".week-empty": {
       fontSize: "10px",
-      color: "#b4c2b7",
+      color: designColors.border,
       textAlign: "center",
       padding: "16px 0",
     },
@@ -5347,7 +5348,7 @@ export const globalStyles = [
     ".week-event": {
       borderLeft: "3px solid var(--event-color)",
       borderRadius: "9px",
-      background: "#f7f9f6",
+      background: designColors.surface,
       padding: "10px 8px",
       display: "flex",
       flexDirection: "column",
@@ -5375,28 +5376,28 @@ export const globalStyles = [
   },
   {
     ".week-check": {
-      border: "1px solid #b0c6b4",
-      background: "white",
+      border: `1px solid ${designColors.border}`,
+      background: designColors.paper,
       width: "17px",
       height: "17px",
       flex: "0 0 17px",
       borderRadius: "5px",
       display: "grid",
       placeItems: "center",
-      color: "#fff",
+      color: designColors.background,
       padding: "0",
     },
   },
   {
     ".week-check.checked": {
-      background: "#56a582",
-      borderColor: "#56a582",
+      background: designColors.primary,
+      borderColor: designColors.accent,
     },
   },
   {
     ".week-event-cat": {
       fontSize: "9px",
-      color: "#809688",
+      color: designColors.muted,
       overflow: "hidden",
       textOverflow: "ellipsis",
       whiteSpace: "nowrap",
@@ -5411,7 +5412,7 @@ export const globalStyles = [
     ".week-event-tools button": {
       background: "transparent",
       border: "0",
-      color: "#84a18d",
+      color: designColors.muted,
       padding: "0",
       display: "grid",
       placeItems: "center",
@@ -5421,14 +5422,14 @@ export const globalStyles = [
     ".week-event>strong": {
       fontSize: "11px",
       lineHeight: "1.36",
-      color: "#385646",
+      color: designColors.text,
       overflowWrap: "anywhere",
     },
   },
   {
     ".week-event>small": {
       fontSize: "9px",
-      color: "#8da295",
+      color: designColors.muted,
       display: "flex",
       alignItems: "center",
       gap: "4px",
@@ -5439,7 +5440,7 @@ export const globalStyles = [
     ".week-high-priority": {
       fontSize: "8px",
       fontWeight: "800",
-      color: "#bb754e",
+      color: statusColors.warning,
     },
   },
   {
@@ -5466,9 +5467,9 @@ export const globalStyles = [
       alignItems: "center",
       gap: "9px",
       padding: "12px",
-      background: "#f3f9f3",
+      background: designColors.surface,
       borderRadius: "10px",
-      color: "#4c775d",
+      color: designColors.primary,
       fontSize: "12px",
       fontWeight: "700",
     },
@@ -5479,7 +5480,7 @@ export const globalStyles = [
       height: "auto",
       display: "block",
       overflow: "visible",
-      filter: "drop-shadow(0 4px 7px #224c3720)",
+      filter: `drop-shadow(0 4px 7px ${withOpacity(designColors.dark, 0.125)})`,
     },
   },
   {
@@ -5618,12 +5619,12 @@ export const globalStyles = [
       justifyContent: "space-between",
       gap: "9px",
       width: "100%",
-      background: "#f7fbf6",
-      border: "1px solid #d3e8d8",
+      background: designColors.surface,
+      border: `1px solid ${designColors.border}`,
       padding: "8px 13px 8px 8px",
       borderRadius: "18px",
-      boxShadow: "0 10px 35px #284e3d33",
-      color: "#2f674e",
+      boxShadow: `0 10px 35px ${withOpacity(designColors.dark, 0.2)}`,
+      color: designColors.text,
     },
   },
   {
@@ -5642,7 +5643,7 @@ export const globalStyles = [
   {
     ".nimbo-tab small": {
       fontSize: "9px",
-      color: "#7b9a85",
+      color: designColors.muted,
     },
   },
   {
@@ -5652,7 +5653,7 @@ export const globalStyles = [
       height: "48px",
       overflow: "hidden",
       borderRadius: "13px",
-      background: "linear-gradient(#d8efe1,#f1e8d1)",
+      background: `linear-gradient(${designColors.surface},${statusColors.warningSoft})`,
     },
   },
   {
@@ -5663,11 +5664,11 @@ export const globalStyles = [
   },
   {
     ".nimbo-panel": {
-      background: "#fff",
+      background: designColors.background,
       borderRadius: "21px",
-      border: "1px solid #d6e8da",
+      border: `1px solid ${designColors.border}`,
       overflow: "hidden",
-      boxShadow: "0 18px 68px #1a41383f",
+      boxShadow: `0 18px 68px ${withOpacity(designColors.dark, 0.247)}`,
       animation: "nimbo-open .25s ease-out",
     },
   },
@@ -5690,8 +5691,8 @@ export const globalStyles = [
       justifyContent: "space-between",
       alignItems: "center",
       padding: "0 15px",
-      background: "#edf5eb",
-      borderBottom: "1px solid #dce8dc",
+      background: designColors.surface,
+      borderBottom: `1px solid ${designColors.border}`,
     },
   },
   {
@@ -5699,7 +5700,7 @@ export const globalStyles = [
       fontSize: "9px",
       letterSpacing: "1.4px",
       fontWeight: "850",
-      color: "#448269",
+      color: designColors.primary,
       display: "flex",
       alignItems: "center",
       gap: "7px",
@@ -5709,9 +5710,9 @@ export const globalStyles = [
     ".nimbo-live i": {
       width: "7px",
       height: "7px",
-      background: "#65b88d",
+      background: designColors.accent,
       borderRadius: "50%",
-      boxShadow: "0 0 0 3px #65b88d22",
+      boxShadow: `0 0 0 3px ${withOpacity(designColors.accent, 0.133)}`,
     },
   },
   {
@@ -5727,14 +5728,14 @@ export const globalStyles = [
       border: "0",
       borderRadius: "8px",
       background: "transparent",
-      color: "#69917a",
+      color: designColors.muted,
       display: "grid",
       placeItems: "center",
     },
   },
   {
     ".nimbo-tool:hover": {
-      background: "#dfeee2",
+      background: designColors.surface,
     },
   },
   {
@@ -5742,8 +5743,7 @@ export const globalStyles = [
       height: "175px",
       position: "relative",
       overflow: "hidden",
-      background:
-        "radial-gradient(ellipse at 50% 98%,#bad3ad 0%,#e3f0e1 40%,#cbe3d6 78%,#eaf4e8 100%)",
+      background: `radial-gradient(ellipse at 50% 98%,${designColors.light} 0%,${designColors.surface} 40%,${designColors.light} 78%,${designColors.surface} 100%)`,
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
@@ -5753,8 +5753,7 @@ export const globalStyles = [
     ".nimbo-light": {
       position: "absolute",
       inset: "0",
-      background:
-        "radial-gradient(circle at 20% 10%,#ffffffc7,transparent 35%)",
+      background: `radial-gradient(circle at 20% 10%,${withOpacity(designColors.background, 0.78)},transparent 35%)`,
     },
   },
   {
@@ -5764,7 +5763,7 @@ export const globalStyles = [
       width: "180px",
       height: "21px",
       bottom: "12px",
-      background: "#2e775d38",
+      background: withOpacity(designColors.primary, 0.22),
       borderRadius: "50%",
       filter: "blur(8px)",
     },
@@ -5789,13 +5788,13 @@ export const globalStyles = [
   {
     ".nimbo-art-button .nimbo-art": {
       maxHeight: "187px",
-      filter: "drop-shadow(0 8px 8px #244f3a40)",
+      filter: `drop-shadow(0 8px 8px ${withOpacity(designColors.dark, 0.251)})`,
     },
   },
   {
     ".nimbo-star": {
       position: "absolute",
-      color: "#fff6ca",
+      color: statusColors.warningSoft,
       fontSize: "24px",
       opacity: ".75",
       animation: "nimbo-twinkle 2.5s infinite alternate",
@@ -5843,24 +5842,24 @@ export const globalStyles = [
   {
     ".nimbo-title h3": {
       fontSize: "13px",
-      color: "#2c5d49",
+      color: designColors.text,
       margin: "0 0 2px",
     },
   },
   {
     ".nimbo-title small": {
       fontSize: "9px",
-      color: "#91a698",
+      color: designColors.muted,
     },
   },
   {
     ".nimbo-mood": {
-      border: "1px solid #dcebdd",
+      border: `1px solid ${designColors.border}`,
       borderRadius: "50px",
       padding: "5px 8px",
-      color: "#598773",
+      color: designColors.muted,
       fontSize: "9px",
-      background: "#f3f9f2",
+      background: designColors.surface,
       whiteSpace: "nowrap",
     },
   },
@@ -5870,7 +5869,7 @@ export const globalStyles = [
       justifyContent: "space-between",
       alignItems: "center",
       fontSize: "9px",
-      color: "#729080",
+      color: designColors.muted,
       margin: "7px 0 4px",
     },
   },
@@ -5883,14 +5882,14 @@ export const globalStyles = [
   },
   {
     ".nimbo-meter-label b": {
-      color: "#547766",
+      color: designColors.muted,
     },
   },
   {
     ".nimbo-meter": {
       height: "6px",
       width: "100%",
-      background: "#e7f0e9",
+      background: designColors.surface,
       borderRadius: "20px",
       overflow: "hidden",
     },
@@ -5899,13 +5898,13 @@ export const globalStyles = [
     ".nimbo-meter i": {
       display: "block",
       height: "100%",
-      background: "linear-gradient(90deg,#84c7a1,#49a27f)",
+      background: `linear-gradient(90deg,${designColors.accent},${designColors.primary})`,
       borderRadius: "20px",
     },
   },
   {
     ".nimbo-meter.xp i": {
-      background: "linear-gradient(90deg,#f1cc85,#e9a96e)",
+      background: `linear-gradient(90deg,${statusColors.warning},${statusColors.warning})`,
     },
   },
   {
@@ -5914,19 +5913,19 @@ export const globalStyles = [
       display: "flex",
       gap: "9px",
       alignItems: "flex-start",
-      background: "#f5f8f2",
-      border: "1px solid #e5eee1",
+      background: designColors.surface,
+      border: `1px solid ${designColors.border}`,
       padding: "10px",
       marginTop: "13px",
       fontSize: "10px",
       lineHeight: "1.6",
-      color: "#557264",
+      color: designColors.muted,
     },
   },
   {
     ".nimbo-bubble svg": {
       flexShrink: "0",
-      color: "#74a180",
+      color: designColors.muted,
     },
   },
   {
@@ -5939,10 +5938,10 @@ export const globalStyles = [
   },
   {
     ".nimbo-actions button": {
-      background: "#f4faf4",
-      border: "1px solid #deecdf",
+      background: designColors.surface,
+      border: `1px solid ${designColors.border}`,
       borderRadius: "9px",
-      color: "#567b68",
+      color: designColors.muted,
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
@@ -5955,7 +5954,7 @@ export const globalStyles = [
   },
   {
     ".nimbo-actions button:hover": {
-      background: "#e5f3e7",
+      background: designColors.surface,
     },
   },
   {
@@ -5969,7 +5968,7 @@ export const globalStyles = [
   {
     ".nimbo-chat input:not(.MuiInputBase-input)": {
       width: "100%",
-      border: "1px solid #dce8dc",
+      border: `1px solid ${designColors.border}`,
       borderRadius: "9px",
       padding: "9px",
       fontSize: "10px",
@@ -5977,8 +5976,8 @@ export const globalStyles = [
   },
   {
     ".nimbo-chat button": {
-      background: "#3a856d",
-      color: "white",
+      background: designColors.primary,
+      color: designColors.paper,
       border: "0",
       borderRadius: "9px",
       padding: "9px",
@@ -5996,7 +5995,7 @@ export const globalStyles = [
       width: "100%",
       fontSize: "10px",
       fontWeight: "800",
-      color: "#42816b",
+      color: designColors.primary,
       marginTop: "10px",
       padding: "5px 0 0",
     },
@@ -6012,20 +6011,20 @@ export const globalStyles = [
   },
   {
     ".nimbo-first": {
-      background: "#fff",
-      border: "1px solid #d6e4d8",
+      background: designColors.background,
+      border: `1px solid ${designColors.border}`,
       borderRadius: "12px",
       marginTop: "8px",
       padding: "13px",
       fontSize: "11px",
       lineHeight: "1.6",
-      color: "#657e6f",
+      color: designColors.muted,
     },
   },
   {
     ".nimbo-picker": {
-      background: "#fff",
-      border: "1px solid #dceadd",
+      background: designColors.background,
+      border: `1px solid ${designColors.border}`,
       borderRadius: "17px",
       padding: "25px",
       display: "flex",
@@ -6036,14 +6035,14 @@ export const globalStyles = [
   {
     ".nimbo-picker h2": {
       fontSize: "20px",
-      color: "#295340",
+      color: designColors.text,
       margin: "6px 0",
     },
   },
   {
     ".nimbo-picker p": {
       fontSize: "12px",
-      color: "#82998a",
+      color: designColors.muted,
       lineHeight: "1.7",
       margin: "0",
     },
@@ -6057,8 +6056,8 @@ export const globalStyles = [
   },
   {
     ".nimbo-choice": {
-      border: "1px solid #e1ebe1",
-      background: "#f9fbf8",
+      border: `1px solid ${designColors.border}`,
+      background: designColors.surface,
       borderRadius: "13px",
       padding: "7px",
       display: "flex",
@@ -6070,9 +6069,9 @@ export const globalStyles = [
   },
   {
     ".nimbo-choice.active": {
-      borderColor: "#65ab87",
-      background: "#ebf7eb",
-      boxShadow: "0 0 0 2px #70bb9336",
+      borderColor: designColors.accent,
+      background: designColors.surface,
+      boxShadow: `0 0 0 2px ${withOpacity(designColors.accent, 0.212)}`,
     },
   },
   {
@@ -6084,13 +6083,13 @@ export const globalStyles = [
   {
     ".nimbo-choice strong": {
       fontSize: "11px",
-      color: "#32634d",
+      color: designColors.text,
     },
   },
   {
     ".nimbo-choice small": {
       fontSize: "9px",
-      color: "#869e8c",
+      color: designColors.muted,
     },
   },
   {
@@ -6103,7 +6102,7 @@ export const globalStyles = [
       display: "flex",
       alignItems: "center",
       gap: "20px",
-      background: "#eaf6e8",
+      background: designColors.surface,
       borderRadius: "16px",
       padding: "20px",
     },
@@ -6116,19 +6115,19 @@ export const globalStyles = [
   {
     ".nimbo-hero-card h2": {
       fontSize: "18px",
-      color: "#27523c",
+      color: designColors.dark,
     },
   },
   {
     ".nimbo-hero-card p": {
       fontSize: "12px",
-      color: "#708a75",
+      color: designColors.muted,
     },
   },
   {
     ".nimbo-collection-banner": {
-      background: "linear-gradient(120deg,#f1f8e9,#dff0e3)",
-      border: "1px solid #d6e9d6",
+      background: `linear-gradient(120deg,${designColors.surface},${designColors.surface})`,
+      border: `1px solid ${designColors.border}`,
       borderRadius: "17px",
       padding: "23px 26px",
       display: "flex",
@@ -6145,14 +6144,14 @@ export const globalStyles = [
   },
   {
     ".nimbo-collection-banner h2": {
-      color: "#305340",
+      color: designColors.text,
       fontSize: "21px",
       margin: "9px 0",
     },
   },
   {
     ".nimbo-collection-banner p": {
-      color: "#708d7d",
+      color: designColors.muted,
       fontSize: "12px",
       lineHeight: "1.6",
     },
@@ -6171,11 +6170,11 @@ export const globalStyles = [
   {
     ".collection-hero-tags span": {
       fontSize: "10px",
-      background: "#fff9",
-      border: "1px solid #dfebdd",
+      background: withOpacity(designColors.background, 0.6),
+      border: `1px solid ${designColors.border}`,
       borderRadius: "12px",
       padding: "7px 10px",
-      color: "#6d906f",
+      color: designColors.muted,
       fontWeight: "800",
     },
   },
@@ -6188,15 +6187,15 @@ export const globalStyles = [
   },
   {
     ".nimbo-collection-card": {
-      background: "#fff",
-      border: "1px solid #e0eadf",
+      background: designColors.background,
+      border: `1px solid ${designColors.border}`,
       borderRadius: "15px",
       overflow: "hidden",
     },
   },
   {
     ".nimbo-collection-card.active": {
-      borderColor: "#65ac8a",
+      borderColor: designColors.accent,
     },
   },
   {
@@ -6229,7 +6228,7 @@ export const globalStyles = [
   {
     ".nimbo-collection-name strong": {
       fontSize: "12px",
-      color: "#2c5540",
+      color: designColors.text,
     },
   },
   {
@@ -6238,13 +6237,13 @@ export const globalStyles = [
       alignItems: "center",
       gap: "3px",
       fontSize: "9px",
-      color: "#41916b",
+      color: designColors.primary,
     },
   },
   {
     ".nimbo-collection-info p": {
       fontSize: "10px",
-      color: "#8a9d8e",
+      color: designColors.muted,
       margin: "7px 0 9px",
     },
   },
@@ -6259,9 +6258,9 @@ export const globalStyles = [
       display: "flex",
       alignItems: "center",
       gap: "10px",
-      color: "#8b946f",
-      background: "#f8f8ea",
-      border: "1px solid #efedd6",
+      color: designColors.muted,
+      background: statusColors.warningSoft,
+      border: `1px solid ${statusColors.warningSoft}`,
       padding: "14px",
       borderRadius: "12px",
       fontSize: "11px",
@@ -6270,18 +6269,18 @@ export const globalStyles = [
   {
     ".section-intro h2,.section-toolbar,.edital-progress-main strong,.timer-digits,.review-hero h2,.settings-group-head h4":
       {
-        color: "#2c5c45",
+        color: designColors.text,
       },
   },
   {
     ".edital-progress-panel": {
-      background: "linear-gradient(117deg,#ecf8ed,#e2f3e7)",
-      borderColor: "#d9eadb",
+      background: `linear-gradient(117deg,${designColors.surface},${designColors.surface})`,
+      borderColor: designColors.border,
     },
   },
   {
     ".edital-progress-panel .progress-fill": {
-      background: "#4b9d76 !important",
+      background: `${designColors.primary} !important`,
     },
   },
   {
@@ -6296,75 +6295,75 @@ export const globalStyles = [
   },
   {
     ".table-checkbox.checked": {
-      background: "#3a9777",
-      borderColor: "#3a9777",
+      background: designColors.primary,
+      borderColor: designColors.accent,
     },
   },
   {
     ".table-topic strong": {
-      color: "#3b564a",
+      color: designColors.text,
     },
   },
   {
     ".filter-select,.search-wrap": {
-      borderColor: "#dce9de",
+      borderColor: designColors.border,
     },
   },
   {
     ".timer-face": {
-      borderColor: "#e4efdf",
-      background: "linear-gradient(160deg,#f3faf0,#ffffff)",
+      borderColor: designColors.border,
+      background: `linear-gradient(160deg,${designColors.surface},${designColors.background})`,
     },
   },
   {
     ".timer-icon": {
-      color: "#538d6d",
-      background: "#ebf5e8",
+      color: designColors.primary,
+      background: designColors.surface,
     },
   },
   {
     ".cycle-card.active": {
-      borderColor: "#69ad8a",
-      background: "#f1faf0",
+      borderColor: designColors.accent,
+      background: designColors.surface,
     },
   },
   {
     ".cycle-next-label": {
-      color: "#388b68",
+      color: designColors.primary,
     },
   },
   {
     ".focus-suggestion": {
-      background: "#f2f8e8",
-      borderColor: "#e0ecd3",
+      background: designColors.surface,
+      borderColor: designColors.border,
     },
   },
   {
     ".focus-symbol": {
-      background: "#e2f0d4",
-      color: "#62925a",
+      background: designColors.surface,
+      color: designColors.primary,
     },
   },
   {
     ".tip": {
-      background: "#f0f7ed",
-      borderColor: "#dcebd9",
-      color: "#628069",
+      background: designColors.surface,
+      borderColor: designColors.border,
+      color: designColors.muted,
     },
   },
   {
     ".tip svg": {
-      color: "#4e9574",
+      color: designColors.primary,
     },
   },
   {
     ".stats-panel,.analytics-section": {
-      borderColor: "#e1ebe3",
+      borderColor: designColors.border,
     },
   },
   {
     ".analytics-view .panel": {
-      background: "#fff",
+      background: designColors.background,
     },
   },
   {
@@ -6422,7 +6421,7 @@ export const globalStyles = [
         bottom: "14px",
       },
       ".nimbo-panel": {
-        boxShadow: "0 12px 45px #17372e4d",
+        boxShadow: `0 12px 45px ${withOpacity(designColors.dark, 0.302)}`,
       },
     },
   },
@@ -6662,20 +6661,20 @@ export const globalStyles = [
   },
   {
     ":root": {
-      "--accent": "#287b63",
-      "--dark": "#234137",
-      "--muted": "#657d70",
-      "--border": "#dce7dd",
-      "--success": "#2a9673",
-      "--soft": "#f5f9f5",
+      "--accent": designColors.primary,
+      "--dark": designColors.dark,
+      "--muted": designColors.muted,
+      "--border": designColors.border,
+      "--success": designColors.primary,
+      "--soft": designColors.surface,
     },
   },
   {
     body: {
       fontSize: "15px",
       lineHeight: "1.55",
-      background: "#f5f8f5",
-      color: "#253e35",
+      background: designColors.surface,
+      color: designColors.dark,
     },
   },
   {
@@ -6716,7 +6715,7 @@ export const globalStyles = [
   {
     ".nimbo-theme input:not(.MuiInputBase-input)::placeholder,.nimbo-theme textarea::placeholder":
       {
-        color: "#84968d",
+        color: designColors.muted,
       },
   },
   {
@@ -6733,7 +6732,7 @@ export const globalStyles = [
   },
   {
     ".nimbo-theme .btn:focus-visible,.nimbo-theme .icon-button:focus-visible": {
-      outline: "3px solid #edb66e",
+      outline: `3px solid ${statusColors.warning}`,
       outlineOffset: "2px",
     },
   },
@@ -6829,8 +6828,8 @@ export const globalStyles = [
   {
     ".nimbo-theme .panel,.nimbo-theme .simple-card,.nimbo-theme .home-metric,.nimbo-theme .mini-metric,.nimbo-theme .note-card,\n.nimbo-theme .insight-card":
       {
-        borderColor: "#dce7dd",
-        boxShadow: "0 4px 16px #193e290a",
+        borderColor: designColors.border,
+        boxShadow: `0 4px 16px ${withOpacity(designColors.dark, 0.039)}`,
         minWidth: "0",
       },
   },
@@ -6847,7 +6846,7 @@ export const globalStyles = [
     ".nimbo-theme .panel-heading h3": {
       fontSize: "18px",
       lineHeight: "1.35",
-      color: "#254637",
+      color: designColors.dark,
       marginBottom: "4px",
     },
   },
@@ -6855,7 +6854,7 @@ export const globalStyles = [
     ".nimbo-theme .panel-heading p": {
       fontSize: "13px",
       lineHeight: "1.55",
-      color: "#71857a",
+      color: designColors.muted,
     },
   },
   {
@@ -6876,7 +6875,7 @@ export const globalStyles = [
     ".nimbo-theme .toolbar-info": {
       fontSize: "13px",
       lineHeight: "1.5",
-      color: "#587363",
+      color: designColors.muted,
       gap: "8px",
     },
   },
@@ -6935,14 +6934,14 @@ export const globalStyles = [
   {
     ".nimbo-theme .field-label": {
       fontSize: "13px",
-      color: "#3f5e4f",
+      color: designColors.muted,
       fontWeight: "750",
     },
   },
   {
     ".nimbo-theme .field-hint": {
       fontSize: "12px",
-      color: "#647e70",
+      color: designColors.muted,
     },
   },
   {
@@ -7032,8 +7031,8 @@ export const globalStyles = [
       fontSize: "11px",
       letterSpacing: ".45px",
       padding: "14px 13px",
-      color: "#546e60",
-      background: "#f5f9f5",
+      color: designColors.muted,
+      background: designColors.surface,
       lineHeight: "1.4",
     },
   },
@@ -7041,7 +7040,7 @@ export const globalStyles = [
     ".nimbo-theme .data-table td": {
       fontSize: "13px",
       lineHeight: "1.5",
-      color: "#486255",
+      color: designColors.muted,
       padding: "14px 13px",
       verticalAlign: "middle",
     },
@@ -7049,7 +7048,7 @@ export const globalStyles = [
   {
     ".nimbo-theme .data-table strong": {
       fontSize: "13px",
-      color: "#2b4b3d",
+      color: designColors.dark,
       lineHeight: "1.5",
     },
   },
@@ -7072,7 +7071,7 @@ export const globalStyles = [
         fontSize: "12px",
         lineHeight: "1.4",
         display: "block",
-        color: "#728679",
+        color: designColors.muted,
         marginTop: "4px",
         overflowWrap: "anywhere",
       },
@@ -7094,7 +7093,7 @@ export const globalStyles = [
       maxWidth: "100%",
       overflowX: "auto",
       overscrollBehaviorX: "contain",
-      border: "1px solid #e6eee7",
+      border: `1px solid ${designColors.border}`,
       borderRadius: "12px",
     },
   },
@@ -7171,7 +7170,7 @@ export const globalStyles = [
       fontSize: "11px",
       letterSpacing: ".45px",
       lineHeight: "1.45",
-      color: "#678173",
+      color: designColors.muted,
       minHeight: "0",
       margin: "0",
     },
@@ -7181,7 +7180,7 @@ export const globalStyles = [
       gridColumn: "2",
       fontSize: "clamp(23px,2.1vw,31px)",
       lineHeight: "1.2",
-      color: "#234637",
+      color: designColors.dark,
       minWidth: "0",
       overflowWrap: "anywhere",
       margin: "2px 0",
@@ -7191,7 +7190,7 @@ export const globalStyles = [
     ".nimbo-theme .mini-metric>small": {
       gridColumn: "2",
       fontSize: "12px",
-      color: "#6c8576",
+      color: designColors.muted,
       minWidth: "0",
       margin: "0",
     },
@@ -7199,7 +7198,7 @@ export const globalStyles = [
   {
     ".metric-split": {
       fontSize: ".69em",
-      color: "#9c675d",
+      color: statusColors.error,
       fontWeight: "650",
       verticalAlign: "baseline",
     },
@@ -7224,13 +7223,13 @@ export const globalStyles = [
       whiteSpace: "normal",
       lineHeight: "1.4",
       overflowWrap: "anywhere",
-      color: "#2e5040",
+      color: designColors.text,
     },
   },
   {
     ".nimbo-theme .performance-info span": {
       fontSize: "12px",
-      color: "#698375",
+      color: designColors.muted,
       lineHeight: "1.4",
     },
   },
@@ -7245,13 +7244,13 @@ export const globalStyles = [
   {
     ".nimbo-theme .performance-counts span": {
       fontSize: "12px",
-      color: "#617b6b",
+      color: designColors.muted,
       whiteSpace: "nowrap",
     },
   },
   {
     ".nimbo-theme .performance-counts b": {
-      color: "#2c5140",
+      color: designColors.text,
     },
   },
   {
@@ -7299,7 +7298,7 @@ export const globalStyles = [
   {
     ".nimbo-theme .note-source small": {
       fontSize: "12px",
-      color: "#6f8376",
+      color: designColors.muted,
     },
   },
   {
@@ -7317,12 +7316,12 @@ export const globalStyles = [
     ".nimbo-theme .note-block p": {
       fontSize: "13px",
       lineHeight: "1.7",
-      color: "#654c4a",
+      color: designColors.muted,
     },
   },
   {
     ".nimbo-theme .note-block.correct-block p": {
-      color: "#375d4d",
+      color: statusColors.success,
     },
   },
   {
@@ -7613,7 +7612,7 @@ export const globalStyles = [
       flexDirection: "column",
       gap: "6px",
       minWidth: "0",
-      color: "#466454",
+      color: designColors.muted,
       fontSize: "13px",
       fontWeight: "750",
       lineHeight: "1.35",
@@ -7628,10 +7627,10 @@ export const globalStyles = [
     ".filter-item input:not(.MuiInputBase-input),.filter-item select:not(.MuiInputBase-input)":
       {
         width: "100%",
-        border: "1px solid #dce8de",
+        border: `1px solid ${designColors.border}`,
         borderRadius: "10px",
-        background: "#fbfdfb",
-        color: "#244639",
+        background: designColors.surface,
+        color: designColors.dark,
         padding: "9px 11px",
         minHeight: "43px",
         fontSize: "13px",
@@ -7657,41 +7656,41 @@ export const globalStyles = [
       justifyContent: "space-between",
       flexWrap: "wrap",
       gap: "12px",
-      borderTop: "1px solid #e8eee9",
+      borderTop: `1px solid ${designColors.border}`,
       paddingTop: "13px",
-      color: "#687f71",
+      color: designColors.muted,
       fontSize: "13px",
     },
   },
   {
     ".filter-foot strong": {
-      color: "#28583f",
+      color: designColors.text,
     },
   },
   {
     ".nimbo-theme .btn-danger-outline": {
-      background: "#fffaf9",
-      color: "#9d5049",
-      border: "1px solid #ebcac5",
+      background: statusColors.errorSoft,
+      color: statusColors.error,
+      border: `1px solid ${statusColors.errorSoft}`,
       boxShadow: "none",
     },
   },
   {
     ".nimbo-theme .btn-danger-outline:hover": {
-      background: "#fff0ee",
-      color: "#933c36",
+      background: statusColors.errorSoft,
+      color: statusColors.error,
     },
   },
   {
     ".nimbo-theme .btn-danger": {
-      background: "#b2463c",
-      color: "white",
-      border: "1px solid #a63d35",
+      background: statusColors.error,
+      color: designColors.paper,
+      border: `1px solid ${statusColors.error}`,
     },
   },
   {
     ".nimbo-theme .btn-danger:hover": {
-      background: "#962f27",
+      background: statusColors.error,
     },
   },
   {
@@ -7707,10 +7706,10 @@ export const globalStyles = [
       gap: "14px",
       padding: "18px",
       borderRadius: "12px",
-      border: "1px solid #ecc8c2",
-      background: "#fff5f3",
+      border: `1px solid ${statusColors.errorSoft}`,
+      background: statusColors.errorSoft,
       marginBottom: "19px",
-      color: "#8c3d35",
+      color: statusColors.error,
     },
   },
   {
@@ -7720,7 +7719,7 @@ export const globalStyles = [
   },
   {
     ".danger-explanation strong": {
-      color: "#813a32",
+      color: statusColors.error,
       fontSize: "14px",
     },
   },
@@ -7728,19 +7727,19 @@ export const globalStyles = [
     ".danger-explanation p": {
       fontSize: "13px",
       margin: "7px 0 0",
-      color: "#81554e",
+      color: statusColors.error,
     },
   },
   {
     ".maintenance-details summary": {
       cursor: "pointer",
       fontWeight: "750",
-      color: "#2d6a55",
+      color: designColors.text,
       fontSize: "14px",
       padding: "12px",
-      border: "1px solid #dae9de",
+      border: `1px solid ${designColors.border}`,
       borderRadius: "10px",
-      background: "#f7fbf8",
+      background: designColors.surface,
     },
   },
   {
@@ -7758,7 +7757,7 @@ export const globalStyles = [
   {
     ".maintenance-option": {
       padding: "15px",
-      border: "1px solid #e4ece5",
+      border: `1px solid ${designColors.border}`,
       borderRadius: "12px",
       display: "flex",
       flexWrap: "wrap",
@@ -7778,13 +7777,13 @@ export const globalStyles = [
   {
     ".maintenance-option strong": {
       fontSize: "14px",
-      color: "#284c3a",
+      color: designColors.dark,
     },
   },
   {
     ".maintenance-option span,.maintenance-hint": {
       fontSize: "12px",
-      color: "#657c6d",
+      color: designColors.muted,
     },
   },
   {
@@ -7802,7 +7801,7 @@ export const globalStyles = [
     ".dashboard-section-title p": {
       margin: "8px 0 0",
       fontSize: "13px",
-      color: "#698274",
+      color: designColors.muted,
     },
   },
   {
@@ -7815,9 +7814,9 @@ export const globalStyles = [
   },
   {
     ".insight-card": {
-      border: "1px solid #dce7dd",
+      border: `1px solid ${designColors.border}`,
       borderRadius: "17px",
-      background: "white",
+      background: designColors.paper,
       padding: "22px",
       minWidth: "0",
     },
@@ -7835,14 +7834,14 @@ export const globalStyles = [
   {
     ".insight-card header h3": {
       fontSize: "17px",
-      color: "#274c3b",
+      color: designColors.dark,
       margin: "5px 0 0",
     },
   },
   {
     ".insight-card header p": {
       fontSize: "13px",
-      color: "#687f71",
+      color: designColors.muted,
       margin: "8px 0 0",
       lineHeight: "1.6",
     },
@@ -7850,7 +7849,7 @@ export const globalStyles = [
   {
     ".insight-card .eyebrow": {
       fontSize: "11px",
-      color: "#559878",
+      color: designColors.primary,
       letterSpacing: ".6px",
     },
   },
@@ -7858,7 +7857,7 @@ export const globalStyles = [
     ".insight-link": {
       background: "none",
       border: "0",
-      color: "#27785e",
+      color: designColors.text,
       fontSize: "12px",
       fontWeight: "750",
       display: "inline-flex",
@@ -7907,7 +7906,7 @@ export const globalStyles = [
   {
     ".coverage-top strong": {
       fontSize: "13px",
-      color: "#315540",
+      color: designColors.text,
       overflowWrap: "anywhere",
       maxWidth: "55%",
     },
@@ -7915,14 +7914,14 @@ export const globalStyles = [
   {
     ".coverage-top span": {
       fontSize: "12px",
-      color: "#657f71",
+      color: designColors.muted,
       textAlign: "right",
     },
   },
   {
     ".coverage-top b": {
       marginLeft: "8px",
-      color: "#285942",
+      color: designColors.text,
       whiteSpace: "nowrap",
     },
   },
@@ -7947,13 +7946,13 @@ export const globalStyles = [
       gap: "10px",
       alignItems: "center",
       fontSize: "13px",
-      color: "#547260",
+      color: designColors.muted,
     },
   },
   {
     ".stage-line strong": {
       fontSize: "14px",
-      color: "#2c5c42",
+      color: designColors.text,
       whiteSpace: "nowrap",
     },
   },
@@ -7961,9 +7960,9 @@ export const globalStyles = [
     ".data-footnote": {
       fontSize: "12px",
       lineHeight: "1.6",
-      color: "#74897a",
+      color: designColors.muted,
       marginTop: "22px",
-      borderTop: "1px solid #e9f0ea",
+      borderTop: `1px solid ${designColors.border}`,
       paddingTop: "12px",
     },
   },
@@ -7974,7 +7973,7 @@ export const globalStyles = [
       flexWrap: "wrap",
       gap: "16px",
       fontSize: "12px",
-      color: "#687f71",
+      color: designColors.muted,
     },
   },
   {
@@ -7994,12 +7993,12 @@ export const globalStyles = [
   },
   {
     ".legend-correct": {
-      background: "#3e9c7b",
+      background: designColors.primary,
     },
   },
   {
     ".legend-wrong": {
-      background: "#e49b80",
+      background: statusColors.warning,
     },
   },
   {
@@ -8023,7 +8022,7 @@ export const globalStyles = [
   {
     ".chart-topic-name": {
       fontSize: "12px",
-      color: "#3e5b4a",
+      color: designColors.muted,
       display: "-webkit-box",
       WebkitLineClamp: "2",
       WebkitBoxOrient: "vertical",
@@ -8035,7 +8034,7 @@ export const globalStyles = [
     ".stacked-track": {
       height: "12px",
       borderRadius: "7px",
-      background: "#f0f4f0",
+      background: designColors.surface,
       display: "flex",
       overflow: "hidden",
     },
@@ -8049,18 +8048,18 @@ export const globalStyles = [
   },
   {
     ".stacked-correct": {
-      background: "#3e9c7b",
+      background: designColors.primary,
     },
   },
   {
     ".stacked-wrong": {
-      background: "#e49b80",
+      background: statusColors.warning,
     },
   },
   {
     ".correct-error-row>strong": {
       fontSize: "12px",
-      color: "#2d6250",
+      color: statusColors.success,
       textAlign: "right",
       whiteSpace: "nowrap",
     },
@@ -8068,7 +8067,7 @@ export const globalStyles = [
   {
     ".correct-error-row>strong em": {
       fontWeight: "400",
-      color: "#9cafa2",
+      color: designColors.muted,
     },
   },
   {
@@ -8081,8 +8080,8 @@ export const globalStyles = [
   {
     ".review-overview>div": {
       borderRadius: "11px",
-      background: "#f2f7f3",
-      border: "1px solid #e5eee7",
+      background: designColors.surface,
+      border: `1px solid ${designColors.border}`,
       display: "flex",
       flexDirection: "column",
       gap: "8px",
@@ -8094,13 +8093,13 @@ export const globalStyles = [
     ".review-overview span": {
       fontSize: "11px",
       lineHeight: "1.4",
-      color: "#687d6f",
+      color: designColors.muted,
     },
   },
   {
     ".review-overview strong": {
       fontSize: "25px",
-      color: "#265e46",
+      color: designColors.text,
       lineHeight: "1.1",
     },
   },
@@ -8123,19 +8122,19 @@ export const globalStyles = [
   {
     ".review-week-list>div span,.review-week-list>div strong": {
       fontSize: "12px",
-      color: "#657d6c",
+      color: designColors.muted,
     },
   },
   {
     ".review-week-list>div strong": {
       textAlign: "right",
-      color: "#346b50",
+      color: designColors.text,
     },
   },
   {
     ".review-day-track": {
       height: "10px",
-      background: "#e9f0e9",
+      background: designColors.surface,
       borderRadius: "10px",
       overflow: "hidden",
     },
@@ -8145,7 +8144,7 @@ export const globalStyles = [
       display: "block",
       height: "100%",
       borderRadius: "10px",
-      background: "#71af91",
+      background: designColors.accent,
     },
   },
   {
@@ -8160,20 +8159,20 @@ export const globalStyles = [
   {
     ".question-summary-line>span": {
       flex: "1 1 145px",
-      border: "1px solid #e7eee8",
+      border: `1px solid ${designColors.border}`,
       borderRadius: "11px",
       padding: "12px",
       fontSize: "12px",
       display: "flex",
       flexDirection: "column",
       gap: "5px",
-      color: "#617a6b",
+      color: designColors.muted,
     },
   },
   {
     ".question-summary-line strong": {
       fontSize: "19px",
-      color: "#2c6147",
+      color: designColors.text,
     },
   },
   {
@@ -8202,9 +8201,8 @@ export const globalStyles = [
       display: "flex",
       alignItems: "flex-end",
       justifyContent: "center",
-      background:
-        "repeating-linear-gradient(to top,#e6eee8 0 1px,transparent 1px 30px)",
-      borderBottom: "1px solid #d3e3d7",
+      background: `repeating-linear-gradient(to top,${designColors.surface} 0 1px,transparent 1px 30px)`,
+      borderBottom: `1px solid ${designColors.border}`,
     },
   },
   {
@@ -8215,14 +8213,14 @@ export const globalStyles = [
       flexDirection: "column",
       justifyContent: "flex-end",
       borderRadius: "5px 5px 0 0",
-      background: "#e49b80",
+      background: statusColors.warning,
       overflow: "hidden",
       minHeight: "0",
     },
   },
   {
     ".trend-correct": {
-      background: "#3e9c7b",
+      background: designColors.primary,
       display: "block",
       width: "100%",
     },
@@ -8230,7 +8228,7 @@ export const globalStyles = [
   {
     ".trend-column small": {
       fontSize: "11px",
-      color: "#657d6d",
+      color: designColors.muted,
     },
   },
   {
@@ -8275,7 +8273,7 @@ export const globalStyles = [
       padding: "13px 0 0",
       flexWrap: "wrap",
       fontSize: "13px",
-      color: "#6a8271",
+      color: designColors.muted,
     },
   },
   {
@@ -8296,8 +8294,8 @@ export const globalStyles = [
     ".planner-switch": {
       display: "flex",
       gap: "3px",
-      background: "#edf5ed",
-      border: "1px solid #d9e9df",
+      background: designColors.surface,
+      border: `1px solid ${designColors.border}`,
       borderRadius: "11px",
       padding: "4px",
     },
@@ -8308,7 +8306,7 @@ export const globalStyles = [
       borderRadius: "8px",
       padding: "9px 13px",
       background: "transparent",
-      color: "#597c6a",
+      color: designColors.muted,
       fontWeight: "750",
       display: "inline-flex",
       alignItems: "center",
@@ -8318,9 +8316,9 @@ export const globalStyles = [
   },
   {
     ".planner-switch button.active": {
-      background: "#fff",
-      color: "#245c44",
-      boxShadow: "0 2px 8px #1e58321a",
+      background: designColors.background,
+      color: designColors.text,
+      boxShadow: `0 2px 8px ${withOpacity(designColors.dark, 0.102)}`,
     },
   },
   {
@@ -8334,8 +8332,8 @@ export const globalStyles = [
       overflowX: "auto",
       overscrollBehaviorX: "contain",
       borderRadius: "17px",
-      border: "1px solid #dde9df",
-      background: "#fff",
+      border: `1px solid ${designColors.border}`,
+      background: designColors.background,
     },
   },
   {
@@ -8344,15 +8342,15 @@ export const globalStyles = [
       display: "grid",
       gridTemplateColumns: "repeat(7,minmax(0,1fr))",
       gap: "1px",
-      background: "#e8f0ea",
+      background: designColors.surface,
     },
   },
   {
     ".planner-month-weekday": {
       padding: "12px",
-      background: "#f1f7f1",
+      background: designColors.surface,
       textAlign: "center",
-      color: "#4d705c",
+      color: designColors.muted,
       fontWeight: "800",
       fontSize: "12px",
     },
@@ -8370,25 +8368,25 @@ export const globalStyles = [
       border: "0",
       borderRadius: "0",
       padding: "10px 10px 9px",
-      background: "#fff",
+      background: designColors.background,
       transition: "background .15s",
     },
   },
   {
     ".planner-month-day:hover,.planner-month-day:focus-visible": {
-      background: "#eff8f0",
+      background: designColors.surface,
     },
   },
   {
     ".planner-month-day.outside": {
-      background: "#fafcf9",
-      color: "#a8b9ad",
+      background: designColors.surface,
+      color: designColors.muted,
     },
   },
   {
     ".planner-month-day.today": {
-      background: "#eff8f0",
-      boxShadow: "inset 0 0 0 2px #5da785",
+      background: designColors.surface,
+      boxShadow: `inset 0 0 0 2px ${designColors.accent}`,
     },
   },
   {
@@ -8407,20 +8405,20 @@ export const globalStyles = [
       fontWeight: "800",
       width: "26px",
       height: "26px",
-      color: "#365f47",
+      color: designColors.text,
       borderRadius: "8px",
     },
   },
   {
     ".planner-month-day.today .month-day-top strong": {
-      background: "#317e5f",
-      color: "#fff",
+      background: designColors.primary,
+      color: designColors.background,
     },
   },
   {
     ".planner-month-day .month-day-top small": {
       fontSize: "11px",
-      color: "#688874",
+      color: designColors.muted,
       whiteSpace: "nowrap",
     },
   },
@@ -8439,8 +8437,8 @@ export const globalStyles = [
       lineHeight: "1.35",
       padding: "3px 6px 3px 8px",
       borderRadius: "4px",
-      background: "#f3f7f3",
-      color: "#355443",
+      background: designColors.surface,
+      color: designColors.text,
       borderLeft: "3px solid var(--event-color)",
       whiteSpace: "nowrap",
       textOverflow: "ellipsis",
@@ -8456,7 +8454,7 @@ export const globalStyles = [
   {
     ".month-event-more": {
       fontSize: "10px",
-      color: "#547960",
+      color: designColors.muted,
     },
   },
   {
@@ -8477,9 +8475,9 @@ export const globalStyles = [
       display: "flex",
       alignItems: "flex-start",
       gap: "11px",
-      border: "1px solid #e2ede4",
+      border: `1px solid ${designColors.border}`,
       borderLeft: "4px solid var(--event-color)",
-      background: "#fcfefc",
+      background: designColors.surface,
       borderRadius: "10px",
       padding: "13px",
     },
@@ -8496,7 +8494,7 @@ export const globalStyles = [
   {
     ".planner-day-item strong": {
       fontSize: "14px",
-      color: "#2d503d",
+      color: designColors.text,
       lineHeight: "1.45",
       overflowWrap: "anywhere",
     },
@@ -8504,14 +8502,14 @@ export const globalStyles = [
   {
     ".planner-day-item span": {
       fontSize: "12px",
-      color: "#668274",
+      color: designColors.muted,
     },
   },
   {
     ".planner-day-item p": {
       margin: "4px 0 0",
       fontSize: "12px",
-      color: "#5a7564",
+      color: designColors.muted,
       whiteSpace: "pre-wrap",
       overflowWrap: "anywhere",
     },
@@ -8525,7 +8523,7 @@ export const globalStyles = [
   {
     ".planner-day-empty": {
       fontSize: "14px",
-      color: "#668171",
+      color: designColors.muted,
       padding: "20px 0",
     },
   },
@@ -8763,7 +8761,7 @@ export const globalStyles = [
     ".nimbo-theme .analytics-kpis>div>span": {
       fontSize: "12px",
       lineHeight: "1.45",
-      color: "#668274",
+      color: designColors.muted,
     },
   },
   {
@@ -8828,7 +8826,7 @@ export const globalStyles = [
   {
     ".nimbo-theme .radar-line b": {
       whiteSpace: "nowrap",
-      color: "#28563f",
+      color: designColors.text,
     },
   },
   {
@@ -8866,7 +8864,7 @@ export const globalStyles = [
   },
   {
     ".nimbo-theme .radar-rating b": {
-      color: "#245c43",
+      color: designColors.text,
       fontSize: "14px",
     },
   },
@@ -8923,7 +8921,7 @@ export const globalStyles = [
       display: "block",
       marginTop: "5px",
       fontSize: "12px",
-      color: "#6e8375",
+      color: designColors.muted,
     },
   },
   {
@@ -9057,11 +9055,11 @@ export const globalStyles = [
   },
   {
     ".nimbo-theme": {
-      "--ui-ink": "#244536",
-      "--ui-muted": "#597467",
-      "--ui-border": "#dce9df",
-      "--ui-soft": "#f6faf6",
-      "--ui-green": "#287758",
+      "--ui-ink": designColors.dark,
+      "--ui-muted": designColors.muted,
+      "--ui-border": designColors.border,
+      "--ui-soft": designColors.surface,
+      "--ui-green": designColors.primary,
       fontSize: "15px",
       lineHeight: "1.5",
     },
@@ -9087,7 +9085,7 @@ export const globalStyles = [
       {
         fontSize: "14px",
         lineHeight: "1.6",
-        color: "#657c6e",
+        color: designColors.muted,
       },
   },
   {
@@ -9116,22 +9114,22 @@ export const globalStyles = [
   },
   {
     ".nimbo-theme .btn-subtle": {
-      color: "#2b624c",
-      background: "#f4f9f4",
-      border: "1px solid #d5e5d8",
+      color: designColors.text,
+      background: designColors.surface,
+      border: `1px solid ${designColors.border}`,
     },
   },
   {
     ".nimbo-theme .btn-primary": {
-      color: "#fff",
-      background: "#287a5b",
-      border: "1px solid #287a5b",
+      color: designColors.background,
+      background: designColors.primary,
+      border: `1px solid ${designColors.accent}`,
     },
   },
   {
     ".nimbo-theme .btn:focus-visible,.nimbo-theme button:focus-visible,.nimbo-theme select:not(.MuiInputBase-input):focus-visible,.nimbo-theme input:not(.MuiInputBase-input):focus-visible":
       {
-        outline: "3px solid #8bcdb0",
+        outline: `3px solid ${designColors.accent}`,
         outlineOffset: "2px",
       },
   },
@@ -9182,9 +9180,9 @@ export const globalStyles = [
       {
         minHeight: "44px",
         fontSize: "14px",
-        color: "#284d3a",
-        background: "#fff",
-        border: "1px solid #d8e6dc",
+        color: designColors.dark,
+        background: designColors.background,
+        border: `1px solid ${designColors.border}`,
         borderRadius: "10px",
       },
   },
@@ -9192,7 +9190,7 @@ export const globalStyles = [
     ".nimbo-theme .search-wrap input:not(.MuiInputBase-input)": {
       fontSize: "14px",
       minHeight: "40px",
-      color: "#284d3a",
+      color: designColors.dark,
     },
   },
   {
@@ -9200,8 +9198,8 @@ export const globalStyles = [
       fontSize: "12px",
       letterSpacing: ".4px",
       padding: "13px 14px",
-      color: "#526c5a",
-      background: "#f5f9f5",
+      color: designColors.muted,
+      background: designColors.surface,
       whiteSpace: "nowrap",
     },
   },
@@ -9209,7 +9207,7 @@ export const globalStyles = [
     ".nimbo-theme .data-table td": {
       fontSize: "14px",
       padding: "14px",
-      color: "#355645",
+      color: designColors.text,
       lineHeight: "1.5",
     },
   },
@@ -9286,8 +9284,8 @@ export const globalStyles = [
       padding: "17px 18px",
       border: "1px solid var(--ui-border)",
       borderRadius: "15px",
-      background: "white",
-      boxShadow: "0 4px 12px #2c50350a",
+      background: designColors.paper,
+      boxShadow: `0 4px 12px ${withOpacity(designColors.primary, 0.039)}`,
     },
   },
   {
@@ -9298,8 +9296,8 @@ export const globalStyles = [
       height: "34px",
       padding: "8px",
       borderRadius: "10px",
-      background: "#e9f3ed",
-      color: "#2d8462",
+      background: designColors.surface,
+      color: designColors.primary,
     },
   },
   {
@@ -9308,7 +9306,7 @@ export const globalStyles = [
       fontSize: "29px",
       fontWeight: "800",
       lineHeight: "1.1",
-      color: "#244f3a",
+      color: designColors.dark,
       minWidth: "0",
     },
   },
@@ -9317,7 +9315,7 @@ export const globalStyles = [
       gridArea: "label",
       fontSize: "14px",
       fontWeight: "600",
-      color: "#567362",
+      color: designColors.muted,
       overflowWrap: "anywhere",
     },
   },
@@ -9348,7 +9346,7 @@ export const globalStyles = [
   {
     ".nimbo-theme .vault-filters>label svg": {
       flexShrink: "0",
-      color: "#4e8167",
+      color: designColors.primary,
     },
   },
   {
@@ -9369,9 +9367,9 @@ export const globalStyles = [
     ".nimbo-theme .vault-card": {
       overflow: "hidden",
       minWidth: "0",
-      border: "1px solid #dce9df",
+      border: `1px solid ${designColors.border}`,
       borderRadius: "15px",
-      background: "white",
+      background: designColors.paper,
     },
   },
   {
@@ -9399,7 +9397,7 @@ export const globalStyles = [
       position: "relative",
       minHeight: "165px",
       overflow: "hidden",
-      background: "#eff6ef",
+      background: designColors.surface,
       border: "0",
     },
   },
@@ -9418,7 +9416,7 @@ export const globalStyles = [
       alignItems: "center",
       justifyContent: "center",
       gap: "10px",
-      color: "#51846a",
+      color: designColors.primary,
     },
   },
   {
@@ -9428,7 +9426,7 @@ export const globalStyles = [
       gap: "5px",
       border: "0",
       background: "none",
-      color: "#267b59",
+      color: designColors.text,
       fontSize: "13px",
       fontWeight: "750",
     },
@@ -9480,20 +9478,20 @@ export const globalStyles = [
       padding: "20px",
       border: "1px solid var(--ui-border)",
       borderRadius: "15px",
-      background: "#fff",
+      background: designColors.background,
       minWidth: "0",
       minHeight: "160px",
     },
   },
   {
     ".nimbo-theme .analytics-kpis>div svg": {
-      color: "#348261",
+      color: designColors.primary,
     },
   },
   {
     ".nimbo-theme .analytics-kpis>div>span": {
       fontSize: "14px",
-      color: "#557260",
+      color: designColors.muted,
       lineHeight: "1.4",
       fontWeight: "650",
     },
@@ -9510,7 +9508,7 @@ export const globalStyles = [
   {
     ".nimbo-theme .analytics-kpis>div>small": {
       fontSize: "13px",
-      color: "#627e6b",
+      color: designColors.muted,
     },
   },
   {
@@ -9548,7 +9546,7 @@ export const globalStyles = [
   {
     ".nimbo-theme .analytics-chart-row .chart-track": {
       height: "11px",
-      background: "#edf2ec",
+      background: designColors.surface,
       borderRadius: "20px",
       overflow: "hidden",
     },
@@ -9573,11 +9571,11 @@ export const globalStyles = [
       display: "flex",
       flexDirection: "column",
       gap: "12px",
-      border: "1px solid #dce9df",
+      border: `1px solid ${designColors.border}`,
       borderRadius: "15px",
       padding: "19px",
       minWidth: "0",
-      background: "linear-gradient(180deg,#fff,#fbfdfb)",
+      background: `linear-gradient(180deg,${designColors.background},${designColors.surface})`,
     },
   },
   {
@@ -9616,7 +9614,7 @@ export const globalStyles = [
       background: "color-mix(in srgb,var(--priority-color) 12%,white)",
       borderRadius: "16px",
       padding: "5px 9px",
-      color: "#3e5547",
+      color: designColors.text,
       fontSize: "12px",
       fontWeight: "800",
       whiteSpace: "nowrap",
@@ -9643,8 +9641,8 @@ export const globalStyles = [
       display: "block",
       minWidth: "0",
       fontSize: "13px",
-      color: "#587261",
-      background: "#f2f8f2",
+      color: designColors.muted,
+      background: designColors.surface,
       borderRadius: "9px",
       padding: "9px",
       lineHeight: "1.4",
@@ -9666,14 +9664,14 @@ export const globalStyles = [
       flexDirection: "column",
       gap: "5px",
       fontSize: "13px",
-      color: "#597362",
+      color: designColors.muted,
       minWidth: "0",
     },
   },
   {
     ".nimbo-theme .radar-rating>span b": {
       display: "block",
-      color: "#25523c",
+      color: designColors.dark,
       fontSize: "16px",
     },
   },
@@ -9686,9 +9684,9 @@ export const globalStyles = [
       alignSelf: "flex-start",
       fontSize: "14px",
       fontWeight: "750",
-      color: "#2b7051",
-      background: "#eff7f0",
-      border: "1px solid #cfe4d4",
+      color: designColors.text,
+      background: designColors.surface,
+      border: `1px solid ${designColors.border}`,
       borderRadius: "10px",
       minHeight: "42px",
       padding: "9px 13px",
@@ -9696,7 +9694,7 @@ export const globalStyles = [
   },
   {
     ".nimbo-theme .radar-edit:hover": {
-      background: "#e0f0e4",
+      background: designColors.surface,
     },
   },
   {
@@ -9732,7 +9730,7 @@ export const globalStyles = [
   },
   {
     ".nimbo-theme .analytics-detail-row": {
-      background: "#f4faf4",
+      background: designColors.surface,
     },
   },
   {
@@ -9748,19 +9746,19 @@ export const globalStyles = [
       placeItems: "center",
       width: "43px",
       height: "43px",
-      border: "1px solid #cfe1d3",
+      border: `1px solid ${designColors.border}`,
       borderRadius: "10px",
-      color: "#286849",
-      background: "#f7fbf7",
+      color: designColors.text,
+      background: designColors.surface,
       fontWeight: "800",
       fontSize: "15px",
     },
   },
   {
     ".nimbo-theme .rating-options button.selected": {
-      background: "#2d8460",
-      color: "#fff",
-      borderColor: "#2d8460",
+      background: designColors.primary,
+      color: designColors.background,
+      borderColor: designColors.accent,
     },
   },
   {
@@ -9770,7 +9768,7 @@ export const globalStyles = [
       justifyContent: "space-between",
       gap: "15px",
       flexWrap: "wrap",
-      borderBottom: "1px solid #e4eee6",
+      borderBottom: `1px solid ${designColors.border}`,
       padding: "12px 0",
     },
   },
@@ -9796,11 +9794,11 @@ export const globalStyles = [
       display: "flex",
       alignItems: "flex-start",
       gap: "12px",
-      background: "#f2f8ef",
-      border: "1px solid #d5e6d5",
+      background: designColors.surface,
+      border: `1px solid ${designColors.border}`,
       borderRadius: "12px",
       padding: "17px",
-      color: "#476a52",
+      color: designColors.muted,
     },
   },
   {
@@ -9817,9 +9815,9 @@ export const globalStyles = [
       flexWrap: "wrap",
       gap: "18px",
       padding: "19px",
-      border: "1px solid #d8e9d1",
+      border: `1px solid ${designColors.border}`,
       borderRadius: "16px",
-      background: "#f1f8e9",
+      background: designColors.surface,
     },
   },
   {
@@ -9830,7 +9828,7 @@ export const globalStyles = [
       display: "grid",
       placeItems: "center",
       borderRadius: "12px",
-      color: "#548e61",
+      color: designColors.primary,
     },
   },
   {
@@ -9846,7 +9844,7 @@ export const globalStyles = [
   {
     ".nimbo-theme .focus-suggestion .eyebrow": {
       fontSize: "12px",
-      color: "#608978",
+      color: designColors.muted,
       letterSpacing: ".7px",
       lineHeight: "1.5",
     },
@@ -9854,7 +9852,7 @@ export const globalStyles = [
   {
     ".nimbo-theme .focus-suggestion strong": {
       fontSize: "17px",
-      color: "#2b573f",
+      color: designColors.text,
       lineHeight: "1.4",
       overflowWrap: "anywhere",
     },
@@ -9863,7 +9861,7 @@ export const globalStyles = [
     ".nimbo-theme .focus-suggestion small": {
       fontSize: "13px",
       lineHeight: "1.5",
-      color: "#557662",
+      color: designColors.muted,
     },
   },
   {
@@ -9882,7 +9880,7 @@ export const globalStyles = [
     ".nimbo-theme .week-chart-explainer": {
       fontSize: "13px",
       lineHeight: "1.55",
-      color: "#65816d",
+      color: designColors.muted,
       margin: "0 0 8px",
     },
   },
@@ -9900,14 +9898,14 @@ export const globalStyles = [
   {
     ".nimbo-theme .week-chart-total": {
       fontSize: "13px",
-      color: "#51705a",
+      color: designColors.muted,
       marginTop: "9px",
     },
   },
   {
     ".nimbo-theme .week-chart-total strong": {
       fontSize: "14px",
-      color: "#24553e",
+      color: designColors.dark,
     },
   },
   {
@@ -9922,7 +9920,7 @@ export const globalStyles = [
       display: "flex",
       flexDirection: "column",
       gap: "7px",
-      background: "#fff",
+      background: designColors.background,
       border: "1px solid var(--ui-border)",
       borderRadius: "15px",
       padding: "18px",
@@ -9934,7 +9932,7 @@ export const globalStyles = [
     ".nimbo-theme .edital-summary>div>span:not(.summary-icon)": {
       fontSize: "14px",
       fontWeight: "650",
-      color: "#53705e",
+      color: designColors.muted,
     },
   },
   {
@@ -9947,7 +9945,7 @@ export const globalStyles = [
   {
     ".nimbo-theme .edital-summary small": {
       fontSize: "12px",
-      color: "#657b6b",
+      color: designColors.muted,
     },
   },
   {
@@ -9957,26 +9955,26 @@ export const globalStyles = [
       display: "grid",
       placeItems: "center",
       borderRadius: "11px",
-      background: "#e8f5ea",
-      color: "#33845d",
+      background: designColors.surface,
+      color: designColors.primary,
     },
   },
   {
     ".nimbo-theme .summary-icon.blue": {
-      background: "#e9f1fb",
-      color: "#4b86a7",
+      background: designColors.surface,
+      color: designColors.primary,
     },
   },
   {
     ".nimbo-theme .summary-icon.sand": {
-      background: "#fff2de",
-      color: "#a98245",
+      background: statusColors.warningSoft,
+      color: statusColors.warning,
     },
   },
   {
     ".nimbo-theme .summary-icon.rose": {
-      background: "#fceced",
-      color: "#b57477",
+      background: statusColors.errorSoft,
+      color: statusColors.error,
     },
   },
   {
@@ -9994,9 +9992,9 @@ export const globalStyles = [
       display: "flex",
       alignItems: "flex-start",
       gap: "10px",
-      border: "1px solid #d7e9dc",
-      background: "#f2f9f3",
-      color: "#436a50",
+      border: `1px solid ${designColors.border}`,
+      background: designColors.surface,
+      color: designColors.text,
       borderRadius: "10px",
       padding: "12px 15px",
       margin: "0 23px 18px",
@@ -10031,7 +10029,7 @@ export const globalStyles = [
     ".nimbo-theme .sheet-filter>span": {
       fontSize: "12px",
       fontWeight: "750",
-      color: "#466450",
+      color: designColors.muted,
     },
   },
   {
@@ -10039,11 +10037,11 @@ export const globalStyles = [
       height: "44px",
       minWidth: "0",
       width: "100%",
-      border: "1px solid #d7e7db",
+      border: `1px solid ${designColors.border}`,
       borderRadius: "9px",
       padding: "0 8px",
-      color: "#2b523b",
-      background: "#fff",
+      color: designColors.text,
+      background: designColors.background,
       fontSize: "13px",
     },
   },
@@ -10065,10 +10063,10 @@ export const globalStyles = [
       width: "100%",
       overflow: "auto",
       maxHeight: "73vh",
-      scrollbarColor: "#adcdb7 #edf4ee",
+      scrollbarColor: `${designColors.light} ${designColors.surface}`,
       overscrollBehaviorX: "contain",
-      borderTop: "1px solid #e0eae0",
-      borderBottom: "1px solid #e0eae0",
+      borderTop: `1px solid ${designColors.border}`,
+      borderBottom: `1px solid ${designColors.border}`,
     },
   },
   {
@@ -10089,24 +10087,24 @@ export const globalStyles = [
       textTransform: "none",
       fontSize: "12px",
       letterSpacing: "0",
-      background: "#eaf3eb",
-      borderBottom: "1px solid #d2e1d5",
-      color: "#325541",
+      background: designColors.surface,
+      borderBottom: `1px solid ${designColors.border}`,
+      color: designColors.text,
     },
   },
   {
     ".nimbo-theme .edital-sheet td": {
       whiteSpace: "nowrap",
       padding: "12px 10px",
-      borderBottom: "1px solid #e9eee9",
-      background: "#fff",
+      borderBottom: `1px solid ${designColors.border}`,
+      background: designColors.background,
       verticalAlign: "middle",
       fontSize: "13px",
     },
   },
   {
     ".nimbo-theme .edital-sheet tbody tr:hover td": {
-      background: "#f9fcf9",
+      background: designColors.surface,
     },
   },
   {
@@ -10117,14 +10115,14 @@ export const globalStyles = [
       width: "305px",
       minWidth: "305px",
       maxWidth: "305px",
-      borderRight: "1px solid #dbe8dc",
-      boxShadow: "5px 0 8px -6px #1a49313f",
+      borderRight: `1px solid ${designColors.border}`,
+      boxShadow: `5px 0 8px -6px ${withOpacity(designColors.dark, 0.247)}`,
     },
   },
   {
     ".nimbo-theme .edital-sheet th.sheet-sticky": {
       zIndex: "3",
-      background: "#eaf3eb",
+      background: designColors.surface,
     },
   },
   {
@@ -10137,7 +10135,7 @@ export const globalStyles = [
       padding: "4px 0",
       border: "0",
       background: "none",
-      color: "#2b583c",
+      color: designColors.text,
       whiteSpace: "normal",
     },
   },
@@ -10161,14 +10159,14 @@ export const globalStyles = [
   {
     ".nimbo-theme .sheet-topic-copy strong": {
       fontSize: "13px",
-      color: "#254b37",
+      color: designColors.dark,
       lineHeight: "1.45",
     },
   },
   {
     ".nimbo-theme .sheet-topic-copy small": {
       fontSize: "12px",
-      color: "#738877",
+      color: designColors.muted,
       lineHeight: "1.3",
     },
   },
@@ -10180,12 +10178,12 @@ export const globalStyles = [
       alignItems: "center",
       justifyContent: "flex-start",
       gap: "6px",
-      border: "1px solid #d6e6da",
+      border: `1px solid ${designColors.border}`,
       borderRadius: "8px",
       padding: "7px 9px",
-      background: "#fff",
+      background: designColors.background,
       minHeight: "37px",
-      color: "#69826d",
+      color: designColors.muted,
       fontSize: "12px",
       fontWeight: "650",
     },
@@ -10193,9 +10191,9 @@ export const globalStyles = [
   {
     ".nimbo-theme .study-check.is-checked,.nimbo-theme .review-check.is-checked":
       {
-        background: "#e7f5eb",
-        color: "#287550",
-        borderColor: "#8ac5a0",
+        background: designColors.surface,
+        color: designColors.text,
+        borderColor: designColors.border,
       },
   },
   {
@@ -10205,23 +10203,23 @@ export const globalStyles = [
       width: "18px",
       height: "18px",
       flex: "0 0 18px",
-      border: "1.5px solid #9fb7a6",
+      border: `1.5px solid ${designColors.border}`,
       borderRadius: "5px",
-      background: "#fff",
-      color: "#fff",
+      background: designColors.background,
+      color: designColors.background,
     },
   },
   {
     ".nimbo-theme .is-checked>.study-check-square": {
-      background: "#2b8962",
-      borderColor: "#2b8962",
+      background: designColors.primary,
+      borderColor: designColors.accent,
     },
   },
   {
     ".nimbo-theme .review-check.is-overdue": {
-      background: "#fff5ed",
-      borderColor: "#eac6ad",
-      color: "#8a5a35",
+      background: statusColors.warningSoft,
+      borderColor: statusColors.warningSoft,
+      color: statusColors.warning,
     },
   },
   {
@@ -10229,7 +10227,7 @@ export const globalStyles = [
       display: "inline-flex",
       alignItems: "center",
       gap: "7px",
-      color: "#91a59a",
+      color: designColors.muted,
       fontSize: "12px",
       whiteSpace: "nowrap",
     },
@@ -10238,7 +10236,7 @@ export const globalStyles = [
     ".nimbo-theme .review-blank-circle": {
       width: "17px",
       height: "17px",
-      border: "1.5px dashed #adc4b1",
+      border: `1.5px dashed ${designColors.border}`,
       borderRadius: "5px",
     },
   },
@@ -10247,17 +10245,17 @@ export const globalStyles = [
       fontVariantNumeric: "tabular-nums",
       textAlign: "center",
       fontWeight: "750",
-      color: "#324d3c",
+      color: designColors.text,
     },
   },
   {
     ".nimbo-theme .sheet-good": {
-      color: "#2d8a58",
+      color: designColors.primary,
     },
   },
   {
     ".nimbo-theme .sheet-wrong": {
-      color: "#b6685a",
+      color: statusColors.error,
     },
   },
   {
@@ -10271,7 +10269,7 @@ export const globalStyles = [
   {
     ".nimbo-theme .sheet-progress>strong": {
       fontSize: "13px",
-      color: "#387856",
+      color: designColors.primary,
     },
   },
   {
@@ -10291,7 +10289,7 @@ export const globalStyles = [
   {
     ".nimbo-theme .edital-sheet .sheet-details-row td": {
       position: "relative",
-      background: "#f3faf4",
+      background: designColors.surface,
       whiteSpace: "normal",
       padding: "17px",
     },
@@ -10314,7 +10312,7 @@ export const globalStyles = [
   {
     ".nimbo-theme .sheet-detail h4": {
       fontSize: "16px",
-      color: "#2e6146",
+      color: designColors.text,
       margin: "0 0 10px",
     },
   },
@@ -10323,7 +10321,7 @@ export const globalStyles = [
       fontSize: "13px",
       lineHeight: "1.65",
       margin: "3px 0",
-      color: "#4c7059",
+      color: designColors.muted,
     },
   },
   {
@@ -10347,7 +10345,7 @@ export const globalStyles = [
       flexWrap: "wrap",
       justifyContent: "space-between",
       fontSize: "13px",
-      color: "#5d7865",
+      color: designColors.muted,
     },
   },
   {
@@ -10360,11 +10358,11 @@ export const globalStyles = [
   {
     ".nimbo-theme .sheet-footer select:not(.MuiInputBase-input)": {
       minHeight: "37px",
-      border: "1px solid #cfdfd2",
+      border: `1px solid ${designColors.border}`,
       borderRadius: "8px",
       padding: "5px 9px",
-      color: "#31593d",
-      background: "#fff",
+      color: designColors.text,
+      background: designColors.background,
     },
   },
   {
@@ -10496,22 +10494,22 @@ export const globalStyles = [
       gap: "10px",
       textAlign: "center",
       padding: "24px",
-      border: "2px dashed #b9d8c3",
-      background: "#f6fbf6",
+      border: `2px dashed ${designColors.border}`,
+      background: designColors.surface,
       borderRadius: "14px",
-      color: "#386950",
+      color: designColors.text,
     },
   },
   {
     ".nimbo-theme .vault-upload-zone strong": {
       fontSize: "16px",
-      color: "#315940",
+      color: designColors.text,
     },
   },
   {
     ".nimbo-theme .vault-upload-zone small": {
       fontSize: "13px",
-      color: "#698574",
+      color: designColors.muted,
     },
   },
   {
@@ -10527,7 +10525,7 @@ export const globalStyles = [
       alignItems: "center",
       justifyContent: "center",
       gap: "12px",
-      color: "#809587",
+      color: designColors.muted,
       fontSize: "13px",
       padding: "5px",
     },
@@ -10537,7 +10535,7 @@ export const globalStyles = [
       content: '""',
       flex: "1",
       height: "1px",
-      background: "#dce8df",
+      background: designColors.border,
     },
   },
   {
@@ -10563,8 +10561,8 @@ export const globalStyles = [
       position: "absolute",
       bottom: "9px",
       right: "9px",
-      background: "#245c48dd",
-      color: "#fff",
+      background: withOpacity(designColors.primary, 0.867),
+      color: designColors.background,
       borderRadius: "8px",
       padding: "6px 9px",
       display: "inline-flex",
@@ -10580,8 +10578,8 @@ export const globalStyles = [
       justifyContent: "space-between",
       gap: "13px",
       flexWrap: "wrap",
-      background: "#f3f8f3",
-      border: "1px solid #dce9df",
+      background: designColors.surface,
+      border: `1px solid ${designColors.border}`,
       borderRadius: "11px",
       padding: "13px",
     },
@@ -10630,7 +10628,7 @@ export const globalStyles = [
     ".nimbo-theme .reader-pdf": {
       width: "100%",
       height: "min(65vh,770px)",
-      border: "1px solid #dce9df",
+      border: `1px solid ${designColors.border}`,
       borderRadius: "11px",
     },
   },
@@ -10640,7 +10638,7 @@ export const globalStyles = [
       maxWidth: "100%",
       maxHeight: "65vh",
       objectFit: "contain",
-      border: "1px solid #dce9df",
+      border: `1px solid ${designColors.border}`,
       borderRadius: "11px",
     },
   },
@@ -10652,7 +10650,7 @@ export const globalStyles = [
       gap: "12px",
       flexDirection: "column",
       minHeight: "230px",
-      background: "#f7faf6",
+      background: designColors.surface,
       borderRadius: "13px",
       textAlign: "center",
       padding: "24px",
@@ -10661,14 +10659,14 @@ export const globalStyles = [
   {
     ".nimbo-theme .reader-empty h3": {
       fontSize: "17px",
-      color: "#38624c",
+      color: designColors.text,
       margin: "0",
     },
   },
   {
     ".nimbo-theme .reader-empty p": {
       fontSize: "14px",
-      color: "#627c6a",
+      color: designColors.muted,
       margin: "0",
     },
   },
@@ -10682,8 +10680,8 @@ export const globalStyles = [
   {
     ".nimbo-theme .reader-notes": {
       padding: "15px",
-      background: "#f8fbf7",
-      border: "1px solid #dce9df",
+      background: designColors.surface,
+      border: `1px solid ${designColors.border}`,
       borderRadius: "12px",
       display: "flex",
       flexDirection: "column",
@@ -10696,7 +10694,7 @@ export const globalStyles = [
       alignItems: "center",
       gap: "8px",
       fontSize: "15px",
-      color: "#315a43",
+      color: designColors.text,
     },
   },
   {
@@ -10704,7 +10702,7 @@ export const globalStyles = [
       width: "100%",
       padding: "12px",
       borderRadius: "9px",
-      border: "1px solid #ccddcf",
+      border: `1px solid ${designColors.border}`,
       minHeight: "125px",
     },
   },
@@ -10713,7 +10711,7 @@ export const globalStyles = [
       display: "flex",
       flexDirection: "column",
       gap: "11px",
-      border: "1px solid #dce9df",
+      border: `1px solid ${designColors.border}`,
       borderRadius: "12px",
       padding: "15px",
     },
@@ -10724,7 +10722,7 @@ export const globalStyles = [
       minHeight: "340px",
       resize: "vertical",
       padding: "13px",
-      border: "1px solid #d6e5da",
+      border: `1px solid ${designColors.border}`,
       borderRadius: "8px",
     },
   },
@@ -10732,14 +10730,14 @@ export const globalStyles = [
     ".nimbo-theme .docx-editor p,.nimbo-theme .reader-notes p": {
       fontSize: "13px",
       lineHeight: "1.6",
-      color: "#607867",
+      color: designColors.muted,
       margin: "0",
     },
   },
   {
     ".nimbo-theme .reader-aside": {
-      border: "1px solid #dce9df",
-      background: "#f8fbf7",
+      border: `1px solid ${designColors.border}`,
+      background: designColors.surface,
       borderRadius: "12px",
       padding: "16px",
       display: "flex",
@@ -10750,14 +10748,14 @@ export const globalStyles = [
   {
     ".nimbo-theme .reader-aside h3": {
       fontSize: "16px",
-      color: "#315940",
+      color: designColors.text,
       margin: "0",
     },
   },
   {
     ".nimbo-theme .reader-aside>small": {
       fontSize: "13px",
-      color: "#728678",
+      color: designColors.muted,
     },
   },
   {
@@ -10766,7 +10764,7 @@ export const globalStyles = [
       alignItems: "center",
       gap: "9px",
       fontSize: "14px",
-      color: "#385743",
+      color: designColors.text,
     },
   },
   {
@@ -10785,16 +10783,16 @@ export const globalStyles = [
   },
   {
     ".nimbo-theme .screenshot-input": {
-      border: "1px solid #d4e5d9",
+      border: `1px solid ${designColors.border}`,
       borderRadius: "12px",
-      background: "#f7fbf7",
+      background: designColors.surface,
       padding: "16px",
       outlineOffset: "3px",
     },
   },
   {
     ".nimbo-theme .screenshot-input:focus-visible": {
-      outline: "3px solid #92c9a5",
+      outline: `3px solid ${designColors.accent}`,
     },
   },
   {
@@ -10803,7 +10801,7 @@ export const globalStyles = [
       alignItems: "center",
       gap: "8px",
       marginBottom: "12px",
-      color: "#2e6348",
+      color: designColors.text,
       fontSize: "15px",
     },
   },
@@ -10814,7 +10812,7 @@ export const globalStyles = [
       alignItems: "flex-start",
       gap: "11px",
       minHeight: "180px",
-      color: "#5e7c67",
+      color: designColors.muted,
     },
   },
   {
@@ -10829,9 +10827,9 @@ export const globalStyles = [
         display: "inline-flex",
         alignItems: "center",
         gap: "8px",
-        background: "#e8f5ed",
-        color: "#286c4a",
-        border: "1px solid #c5dfcc",
+        background: designColors.surface,
+        color: designColors.text,
+        border: `1px solid ${designColors.border}`,
         borderRadius: "9px",
         padding: "9px 12px",
         fontWeight: "750",
@@ -10858,8 +10856,8 @@ export const globalStyles = [
       width: "100%",
       maxHeight: "210px",
       objectFit: "contain",
-      background: "#fff",
-      border: "1px solid #d4e4d8",
+      background: designColors.background,
+      border: `1px solid ${designColors.border}`,
       borderRadius: "10px",
     },
   },
@@ -10875,8 +10873,8 @@ export const globalStyles = [
     ".nimbo-theme .error-screenshots>button": {
       minWidth: "0",
       overflow: "hidden",
-      border: "1px solid #d5e7d9",
-      background: "#f5faf5",
+      border: `1px solid ${designColors.border}`,
+      background: designColors.surface,
       borderRadius: "10px",
       padding: "5px",
       textAlign: "left",
@@ -10897,7 +10895,7 @@ export const globalStyles = [
       gap: "6px",
       justifyContent: "center",
       fontSize: "12px",
-      color: "#3f7558",
+      color: designColors.primary,
       marginTop: "5px",
     },
   },
@@ -10922,9 +10920,9 @@ export const globalStyles = [
       display: "block",
       fontSize: "13px",
       lineHeight: "1.5",
-      color: "#9f433e",
-      background: "#fff1ef",
-      border: "1px solid #f1d2cd",
+      color: statusColors.error,
+      background: statusColors.errorSoft,
+      border: `1px solid ${statusColors.errorSoft}`,
       borderRadius: "9px",
       padding: "10px",
     },
@@ -11014,7 +11012,7 @@ export const globalStyles = [
   {
     ".nimbo-theme .footer": {
       padding: "16px 0",
-      color: "#86998c",
+      color: designColors.muted,
       fontSize: "12px",
     },
   },
@@ -11052,7 +11050,7 @@ export const globalStyles = [
       display: "inline-flex",
       alignItems: "center",
       gap: "7px",
-      color: "#567567",
+      color: designColors.muted,
       fontSize: "13px",
       lineHeight: "1.5",
       whiteSpace: "nowrap",
@@ -11061,7 +11059,7 @@ export const globalStyles = [
   {
     ".nimbo-theme .time-split b": {
       fontSize: "13px",
-      color: "#214e3e",
+      color: designColors.dark,
       fontWeight: "800",
       marginLeft: "3px",
     },
@@ -11077,12 +11075,12 @@ export const globalStyles = [
   },
   {
     ".nimbo-theme .time-dot.theory": {
-      background: "#4e9785",
+      background: designColors.primary,
     },
   },
   {
     ".nimbo-theme .time-dot.questions": {
-      background: "#ecae60",
+      background: statusColors.warning,
     },
   },
   {
@@ -11099,7 +11097,7 @@ export const globalStyles = [
     ".nimbo-theme .week-mini-track .week-bar-split": {
       display: "block",
       width: "100%",
-      background: "#4e9785",
+      background: designColors.primary,
       borderRadius: "5px 5px 0 0",
       position: "relative",
       overflow: "hidden",
@@ -11112,7 +11110,7 @@ export const globalStyles = [
       bottom: "0",
       left: "0",
       width: "100%",
-      background: "#ecae60",
+      background: statusColors.warning,
     },
   },
   {
@@ -11122,14 +11120,14 @@ export const globalStyles = [
       borderRadius: "7px",
       fontSize: "12px",
       fontWeight: "700",
-      background: "#eaf5f1",
-      color: "#286a58",
+      background: designColors.surface,
+      color: designColors.text,
     },
   },
   {
     ".nimbo-theme .study-type.questions": {
-      background: "#fff2e1",
-      color: "#946023",
+      background: statusColors.warningSoft,
+      color: statusColors.warning,
     },
   },
   {
@@ -11138,11 +11136,11 @@ export const globalStyles = [
       gridTemplateColumns: "minmax(220px,1fr) auto auto",
       alignItems: "center",
       gap: "20px",
-      background: "#fff",
-      border: "1px solid #dce9e0",
+      background: designColors.background,
+      border: `1px solid ${designColors.border}`,
       borderRadius: "18px",
       padding: "19px 22px",
-      boxShadow: "0 4px 24px rgba(28,77,51,.035)",
+      boxShadow: `0 4px 24px ${withOpacity(designColors.dark, 0.035)}`,
     },
   },
   {
@@ -11159,14 +11157,14 @@ export const globalStyles = [
       alignItems: "center",
       flexWrap: "wrap",
       gap: "10px",
-      color: "#28755b",
+      color: designColors.text,
     },
   },
   {
     ".nimbo-theme .question-focus-title h3": {
       fontSize: "17px",
       fontWeight: "800",
-      color: "#224e3a",
+      color: designColors.dark,
       margin: "0",
     },
   },
@@ -11187,7 +11185,7 @@ export const globalStyles = [
   {
     ".nimbo-theme .question-topic-picker>span": {
       fontSize: "12px",
-      color: "#6c8777",
+      color: designColors.muted,
       fontWeight: "700",
     },
   },
@@ -11196,11 +11194,11 @@ export const globalStyles = [
       width: "100%",
       minHeight: "42px",
       fontSize: "14px",
-      border: "1px solid #dbe9df",
+      border: `1px solid ${designColors.border}`,
       borderRadius: "10px",
-      background: "#f9fcfa",
+      background: designColors.surface,
       padding: "8px",
-      color: "#264e3b",
+      color: designColors.dark,
     },
   },
   {
@@ -11223,7 +11221,7 @@ export const globalStyles = [
       fontSize: "clamp(26px,2.5vw,39px)",
       fontWeight: "800",
       letterSpacing: ".012em",
-      color: "#194e3a",
+      color: designColors.dark,
       fontVariantNumeric: "tabular-nums",
       lineHeight: "1.1",
     },
@@ -11231,7 +11229,7 @@ export const globalStyles = [
   {
     ".nimbo-theme .question-focus-clock>span": {
       fontSize: "12px",
-      color: "#809387",
+      color: designColors.muted,
     },
   },
   {
@@ -11254,7 +11252,7 @@ export const globalStyles = [
     ".nimbo-theme .question-focus-actions .icon-button": {
       width: "42px",
       height: "42px",
-      border: "1px solid #e1eae4",
+      border: `1px solid ${designColors.border}`,
       borderRadius: "10px",
     },
   },
@@ -11271,16 +11269,16 @@ export const globalStyles = [
       display: "flex",
       flexDirection: "column",
       gap: "8px",
-      background: "#fff",
+      background: designColors.background,
       padding: "18px",
-      border: "1px solid #e0ebe3",
+      border: `1px solid ${designColors.border}`,
       borderRadius: "14px",
     },
   },
   {
     ".nimbo-theme .question-stat-grid span": {
       fontSize: "13px",
-      color: "#688675",
+      color: designColors.muted,
       fontWeight: "650",
     },
   },
@@ -11290,35 +11288,35 @@ export const globalStyles = [
       lineHeight: "1.2",
       fontWeight: "800",
       letterSpacing: "-.025em",
-      color: "#224f3c",
+      color: designColors.dark,
       overflowWrap: "anywhere",
     },
   },
   {
     ".nimbo-theme .question-stat-grid em": {
       fontWeight: "600",
-      color: "#9b8473",
+      color: designColors.muted,
       fontStyle: "normal",
     },
   },
   {
     ".nimbo-theme .question-record-time": {
-      background: "#eef8f2",
-      border: "1px solid #d7e9dd",
+      background: designColors.surface,
+      border: `1px solid ${designColors.border}`,
       display: "flex",
       alignItems: "center",
       justifyContent: "space-between",
       gap: "12px",
       padding: "12px 14px",
       borderRadius: "10px",
-      color: "#2f765b",
+      color: designColors.text,
       fontSize: "14px",
     },
   },
   {
     ".nimbo-theme .question-record-time strong": {
       fontSize: "18px",
-      color: "#1e6244",
+      color: designColors.text,
       fontVariantNumeric: "tabular-nums",
     },
   },
@@ -11392,9 +11390,9 @@ export const globalStyles = [
   },
   {
     ".nimbo-theme .dashboard-deep": {
-      border: "1px solid #e0ebe3",
+      border: `1px solid ${designColors.border}`,
       borderRadius: "15px",
-      background: "#fff",
+      background: designColors.background,
       overflow: "visible",
       marginTop: "12px",
     },
@@ -11406,7 +11404,7 @@ export const globalStyles = [
       justifyContent: "space-between",
       gap: "10px",
       padding: "18px 21px",
-      color: "#285a42",
+      color: designColors.text,
       cursor: "pointer",
       listStyle: "none",
       fontSize: "16px",
@@ -11426,13 +11424,13 @@ export const globalStyles = [
   {
     ".nimbo-theme .dashboard-deep>summary span": {
       fontSize: "12px",
-      color: "#6a8b76",
+      color: designColors.muted,
     },
   },
   {
     ".nimbo-theme .dashboard-deep>summary:after": {
       content: '"⌄"',
-      color: "#497e62",
+      color: designColors.primary,
       fontSize: "23px",
       transition: "transform .2s",
     },
@@ -11468,12 +11466,12 @@ export const globalStyles = [
   },
   {
     ".ux-v54": {
-      "--ux-ink": "#1e3c33",
-      "--ux-muted": "#62776e",
-      "--ux-green": "#26745b",
-      "--ux-border": "#dce8de",
-      "--ux-canvas": "#f5f8f5",
-      "--ux-shadow": "0 8px 26px rgba(29,66,46,.045)",
+      "--ux-ink": designColors.dark,
+      "--ux-muted": designColors.muted,
+      "--ux-green": designColors.primary,
+      "--ux-border": designColors.border,
+      "--ux-canvas": designColors.surface,
+      "--ux-shadow": `0 8px 26px ${withOpacity(designColors.dark, 0.045)}`,
       background: "var(--ux-canvas)",
       color: "var(--ux-ink)",
     },
@@ -11498,16 +11496,16 @@ export const globalStyles = [
   {
     ".ux-v54 :is(button,input:not(.MuiInputBase-input),select:not(.MuiInputBase-input),textarea,summary,a):focus-visible":
       {
-        outline: "3px solid #72ad98 !important",
+        outline: `3px solid ${designColors.accent} !important`,
         outlineOffset: "3px",
       },
   },
   {
     ".ux-v54 .sidebar": {
       width: "244px",
-      background: "#173a32",
-      color: "#d5e5d9",
-      borderRight: "1px solid #174333",
+      background: designColors.dark,
+      color: designColors.light,
+      borderRight: `1px solid ${designColors.accent}`,
       overflowY: "auto",
     },
   },
@@ -11538,28 +11536,28 @@ export const globalStyles = [
       placeItems: "center",
       flex: "none",
       borderRadius: "13px",
-      background: "#2c8166",
-      color: "white",
+      background: designColors.primary,
+      color: designColors.paper,
       boxShadow: "none",
     },
   },
   {
     ".ux-v54 .brand-wordmark strong": {
       fontSize: "26px",
-      color: "white",
+      color: designColors.paper,
       letterSpacing: "-1px",
     },
   },
   {
     ".ux-v54 .brand-wordmark small": {
       fontSize: "10px",
-      color: "#a4cbb9",
+      color: designColors.light,
       letterSpacing: "1px",
     },
   },
   {
     ".ux-v54 .brand-wordmark strong span": {
-      color: "#b0e4c1",
+      color: designColors.light,
     },
   },
   {
@@ -11577,7 +11575,7 @@ export const globalStyles = [
   },
   {
     ".ux-v54 .nav-label": {
-      color: "#8fbdac",
+      color: designColors.light,
       fontSize: "11px",
       letterSpacing: ".08em",
       margin: "0 0 9px",
@@ -11592,7 +11590,7 @@ export const globalStyles = [
       padding: "10px 12px",
       fontSize: "15px",
       lineHeight: "1.35",
-      color: "#bfd5c9",
+      color: designColors.border,
       borderRadius: "11px",
       gap: "12px",
       fontWeight: "600",
@@ -11601,27 +11599,27 @@ export const globalStyles = [
   },
   {
     ".ux-v54 .nav-item:hover": {
-      background: "#285145",
-      color: "white",
+      background: designColors.dark,
+      color: designColors.paper,
     },
   },
   {
     ".ux-v54 .nav-item.selected": {
-      background: "#31765d",
+      background: designColors.primary,
       boxShadow: "none",
-      color: "#fff",
+      color: designColors.background,
       fontWeight: "800",
     },
   },
   {
     ".ux-v54 .nav-item.selected svg": {
-      color: "#fff",
+      color: designColors.background,
     },
   },
   {
     ".ux-v54 .nav-count": {
-      background: "#e3aa65",
-      color: "#352410",
+      background: statusColors.warningSoft,
+      color: statusColors.warning,
       fontSize: "12px",
       minWidth: "25px",
     },
@@ -11634,10 +11632,10 @@ export const globalStyles = [
       justifyContent: "space-between",
       textAlign: "left",
       background: "transparent",
-      color: "#b5d1c3",
+      color: designColors.light,
       border: "0",
       padding: "13px 12px",
-      borderTop: "1px solid #315549",
+      borderTop: `1px solid ${designColors.accent}`,
       borderRadius: "0",
       fontSize: "14px",
       fontWeight: "700",
@@ -11645,7 +11643,7 @@ export const globalStyles = [
   },
   {
     ".ux-v54 .more-toggle:hover": {
-      color: "white",
+      color: designColors.paper,
     },
   },
   {
@@ -11681,9 +11679,9 @@ export const globalStyles = [
       gap: "9px",
       width: "100%",
       padding: "11px 12px",
-      background: "#234d3f",
-      color: "#d8e8df",
-      border: "1px solid #36624f",
+      background: designColors.dark,
+      color: designColors.light,
+      border: `1px solid ${designColors.accent}`,
       borderRadius: "10px",
       textAlign: "left",
       fontSize: "13px",
@@ -11714,14 +11712,14 @@ export const globalStyles = [
   {
     ".ux-v54 .topbar": {
       height: "68px",
-      background: "#fff",
+      background: designColors.background,
       borderBottom: "1px solid var(--ux-border)",
       padding: "0 36px",
     },
   },
   {
     ".ux-v54 .topbar-path": {
-      color: "#516d5f",
+      color: designColors.muted,
       fontSize: "14px",
       fontWeight: "650",
     },
@@ -11729,7 +11727,7 @@ export const globalStyles = [
   {
     ".ux-v54 .topbar-path span": {
       padding: "0 5px",
-      color: "#acc0b3",
+      color: designColors.muted,
     },
   },
   {
@@ -11743,12 +11741,12 @@ export const globalStyles = [
       display: "flex",
       alignItems: "center",
       gap: "10px",
-      background: "#f6faf6",
-      border: "1px solid #e1ebe3",
+      background: designColors.surface,
+      border: `1px solid ${designColors.border}`,
       borderRadius: "10px",
       padding: "9px 12px",
       minHeight: "38px",
-      color: "#426b56",
+      color: designColors.text,
       fontSize: "13px",
     },
   },
@@ -11761,9 +11759,9 @@ export const globalStyles = [
     ".ux-v54 .edition-chip": {
       maxWidth: "225px",
       fontSize: "12px",
-      color: "#577265",
-      background: "#f9fbf9",
-      border: "1px solid #e1ebe3",
+      color: designColors.muted,
+      background: designColors.surface,
+      border: `1px solid ${designColors.border}`,
       boxShadow: "none",
     },
   },
@@ -11784,7 +11782,7 @@ export const globalStyles = [
       fontWeight: "800",
       letterSpacing: "-.035em",
       margin: "0",
-      color: "#1d4034",
+      color: designColors.dark,
     },
   },
   {
@@ -11796,7 +11794,7 @@ export const globalStyles = [
     ".ux-v54 .panel,.ux-v54 .simple-card,.ux-v54 .insight-card,.ux-v54 .question-focus-panel":
       {
         border: "1px solid var(--ux-border)",
-        background: "#fff",
+        background: designColors.background,
         borderRadius: "16px",
         boxShadow: "var(--ux-shadow)",
       },
@@ -11833,9 +11831,9 @@ export const globalStyles = [
       fontSize: "12px",
       padding: "7px 10px",
       borderRadius: "9px",
-      color: "#527363",
-      background: "#f3f8f3",
-      border: "1px solid #dfe8de",
+      color: designColors.muted,
+      background: designColors.surface,
+      border: `1px solid ${designColors.border}`,
     },
   },
   {
@@ -11850,39 +11848,39 @@ export const globalStyles = [
   },
   {
     ".ux-v54 .btn-primary": {
-      background: "#277459",
-      color: "#fff",
+      background: designColors.primary,
+      color: designColors.background,
     },
   },
   {
     ".ux-v54 .btn-primary:hover": {
-      background: "#1a5d44",
-      boxShadow: "0 5px 14px rgba(39,116,89,.15)",
+      background: designColors.dark,
+      boxShadow: `0 5px 14px ${withOpacity(designColors.primary, 0.15)}`,
     },
   },
   {
     ".ux-v54 .btn-subtle": {
-      background: "#f7faf7",
-      color: "#355b47",
-      borderColor: "#dce8df",
+      background: designColors.surface,
+      color: designColors.text,
+      borderColor: designColors.border,
     },
   },
   {
     ".ux-v54 .btn-subtle:hover": {
-      background: "#edf5ee",
+      background: designColors.surface,
     },
   },
   {
     ".ux-v54 .icon-button": {
       minWidth: "36px",
       minHeight: "36px",
-      color: "#537362",
+      color: designColors.muted,
     },
   },
   {
     ".ux-v54 .text-link,.ux-v54 .plain-action": {
       fontSize: "14px",
-      color: "#26765b",
+      color: designColors.text,
     },
   },
   {
@@ -11890,7 +11888,7 @@ export const globalStyles = [
       {
         fontSize: "13px",
         fontWeight: "700",
-        color: "#426757",
+        color: designColors.muted,
       },
   },
   {
@@ -11905,7 +11903,7 @@ export const globalStyles = [
         minHeight: "42px",
         lineHeight: "1.35",
         borderRadius: "9px",
-        color: "#244737",
+        color: designColors.dark,
       },
   },
   {
@@ -11918,7 +11916,7 @@ export const globalStyles = [
       height: "auto",
       minHeight: "43px",
       borderColor: "var(--ux-border)",
-      background: "#fbfdfb",
+      background: designColors.surface,
     },
   },
   {
@@ -11933,8 +11931,8 @@ export const globalStyles = [
       fontSize: "11px",
       letterSpacing: ".035em",
       padding: "13px 14px",
-      color: "#566f60",
-      background: "#f5f9f5",
+      color: designColors.muted,
+      background: designColors.surface,
     },
   },
   {
@@ -11942,7 +11940,7 @@ export const globalStyles = [
       fontSize: "13px",
       lineHeight: "1.45",
       padding: "13px 14px",
-      color: "#355447",
+      color: designColors.text,
     },
   },
   {
@@ -11952,7 +11950,7 @@ export const globalStyles = [
   },
   {
     ".ux-v54 .data-table tbody tr:hover": {
-      background: "#f7faf8",
+      background: designColors.surface,
     },
   },
   {
@@ -11991,12 +11989,12 @@ export const globalStyles = [
   {
     ".ux-v54 .toolbar-info": {
       fontSize: "14px",
-      color: "#456d55",
+      color: designColors.primary,
     },
   },
   {
     ".ux-v54 .toolbar-info svg": {
-      color: "#3b8668",
+      color: designColors.primary,
     },
   },
   {
@@ -12014,7 +12012,7 @@ export const globalStyles = [
       display: "inline-flex",
       gap: "8px",
       alignItems: "center",
-      color: "#326a53",
+      color: designColors.text,
       fontWeight: "750",
       fontSize: "14px",
     },
@@ -12043,7 +12041,7 @@ export const globalStyles = [
       gridTemplateColumns: "repeat(4,minmax(145px,1fr))",
       gap: "12px",
       padding: "12px 0 4px",
-      borderTop: "1px solid #e9f0eb",
+      borderTop: `1px solid ${designColors.border}`,
     },
   },
   {
@@ -12057,7 +12055,7 @@ export const globalStyles = [
   {
     ".ux-v54 .ux-collapsible": {
       border: "1px solid var(--ux-border)",
-      background: "#fff",
+      background: designColors.background,
       borderRadius: "13px",
       boxShadow: "var(--ux-shadow)",
       overflow: "clip",
@@ -12071,7 +12069,7 @@ export const globalStyles = [
       alignItems: "center",
       gap: "12px",
       padding: "14px 18px",
-      color: "#2c6048",
+      color: designColors.text,
       fontSize: "14px",
       fontWeight: "750",
     },
@@ -12085,7 +12083,7 @@ export const globalStyles = [
     ".ux-v54 .ux-collapsible>summary:before": {
       content: "'+'",
       fontSize: "20px",
-      color: "#398363",
+      color: designColors.primary,
       lineHeight: "1",
     },
   },
@@ -12097,7 +12095,7 @@ export const globalStyles = [
   {
     ".ux-v54 .ux-collapsible>summary small": {
       marginLeft: "auto",
-      color: "#7e9987",
+      color: designColors.muted,
       fontWeight: "500",
       fontSize: "12px",
     },
@@ -12115,14 +12113,14 @@ export const globalStyles = [
   {
     ".ux-v54 .ux-inline-help": {
       fontSize: "13px",
-      color: "#60766b",
+      color: designColors.muted,
       padding: "3px 5px",
     },
   },
   {
     ".ux-v54 .ux-inline-help summary": {
       cursor: "pointer",
-      color: "#37775e",
+      color: designColors.primary,
       fontWeight: "700",
     },
   },
@@ -12154,13 +12152,13 @@ export const globalStyles = [
       padding: "16px 18px",
       border: "1px solid var(--ux-border)",
       borderRadius: "13px",
-      background: "#fff",
+      background: designColors.background,
       minWidth: "0",
     },
   },
   {
     ".ux-v54 .vault-metrics>div svg": {
-      color: "#338365",
+      color: designColors.primary,
       flex: "none",
     },
   },
@@ -12168,14 +12166,14 @@ export const globalStyles = [
     ".ux-v54 .vault-metrics strong": {
       fontSize: "24px",
       lineHeight: "1.1",
-      color: "#214a38",
+      color: designColors.dark,
     },
   },
   {
     ".ux-v54 .vault-metrics>div span": {
       width: "100%",
       fontSize: "13px",
-      color: "#63796b",
+      color: designColors.muted,
     },
   },
   {
@@ -12194,57 +12192,57 @@ export const globalStyles = [
       minWidth: "0",
       border: "1px solid var(--ux-border)",
       borderRadius: "13px",
-      background: "#fff",
+      background: designColors.background,
       padding: "17px",
     },
   },
   {
     ".ux-v54 .analytics-kpis>div svg": {
-      color: "#438268",
+      color: designColors.primary,
     },
   },
   {
     ".ux-v54 .analytics-kpis strong": {
       fontSize: "26px",
-      color: "#204839",
+      color: designColors.dark,
     },
   },
   {
     ".ux-v54 .analytics-kpis span": {
       fontSize: "13px",
-      color: "#5c786a",
+      color: designColors.muted,
     },
   },
   {
     ".ux-v54 .analytics-kpis small": {
       fontSize: "12px",
-      color: "#73887d",
+      color: designColors.muted,
     },
   },
   {
     ".ux-v54 .radar-edit": {
       padding: "9px 12px",
-      border: "1px solid #d9e6db",
+      border: `1px solid ${designColors.border}`,
       borderRadius: "10px",
-      background: "#f6faf7",
+      background: designColors.surface,
       display: "inline-flex",
       alignItems: "center",
       gap: "7px",
-      color: "#2b6b4e",
+      color: designColors.text,
       fontSize: "13px",
       fontWeight: "700",
     },
   },
   {
     ".ux-v54 .radar-edit:hover": {
-      background: "#e8f5eb",
+      background: designColors.surface,
     },
   },
   {
     ".ux-v54 .focus-suggestion": {
       gap: "14px",
-      border: "1px solid #dcebdc",
-      background: "#f3f8ef",
+      border: `1px solid ${designColors.border}`,
+      background: designColors.surface,
       padding: "14px 18px",
       borderRadius: "14px",
     },
@@ -12339,7 +12337,7 @@ export const globalStyles = [
   {
     ".ux-v54 .week-summary>div": {
       minWidth: "0",
-      background: "#fff",
+      background: designColors.background,
       border: "1px solid var(--ux-border)",
       borderRadius: "13px",
       padding: "14px 16px",
@@ -12348,20 +12346,20 @@ export const globalStyles = [
   {
     ".ux-v54 .week-summary>div span": {
       fontSize: "12px",
-      color: "#667e70",
+      color: designColors.muted,
     },
   },
   {
     ".ux-v54 .week-summary>div strong": {
       fontSize: "22px",
-      color: "#204b37",
+      color: designColors.dark,
     },
   },
   {
     ".ux-v54 .weekly-hero": {
       padding: "15px 22px",
       minHeight: "0",
-      background: "#fff",
+      background: designColors.background,
       border: "1px solid var(--ux-border)",
       borderRadius: "14px",
     },
@@ -12414,9 +12412,9 @@ export const globalStyles = [
     ".ux-v54 .ux-home-focus": {
       padding: "25px 29px",
       borderRadius: "19px",
-      border: "1px solid #cfe5d5",
-      background: "linear-gradient(120deg,#e8f4ed,#f4f9ef)",
-      boxShadow: "0 5px 25px rgba(28,96,64,.05)",
+      border: `1px solid ${designColors.border}`,
+      background: `linear-gradient(120deg,${designColors.surface},${designColors.surface})`,
+      boxShadow: `0 5px 25px ${withOpacity(designColors.primary, 0.05)}`,
     },
   },
   {
@@ -12431,7 +12429,7 @@ export const globalStyles = [
   {
     ".ux-v54 .ux-kicker": {
       fontSize: "13px",
-      color: "#4f765e",
+      color: designColors.muted,
       fontWeight: "750",
     },
   },
@@ -12439,10 +12437,10 @@ export const globalStyles = [
     ".ux-v54 .ux-focus-reason": {
       display: "inline-flex",
       padding: "5px 11px",
-      border: "1px solid #c4dfcb",
+      border: `1px solid ${designColors.border}`,
       borderRadius: "50px",
-      background: "#f9fcf9",
-      color: "#356d51",
+      background: designColors.surface,
+      color: designColors.text,
       fontSize: "12px",
       fontWeight: "750",
     },
@@ -12453,14 +12451,14 @@ export const globalStyles = [
       letterSpacing: "-.035em",
       lineHeight: "1.25",
       margin: "17px 0 7px",
-      color: "#184938",
+      color: designColors.dark,
       overflowWrap: "anywhere",
     },
   },
   {
     ".ux-v54 .ux-home-focus p": {
       fontSize: "14px",
-      color: "#527362",
+      color: designColors.muted,
       margin: "0 0 18px",
       lineHeight: "1.5",
     },
@@ -12482,7 +12480,7 @@ export const globalStyles = [
   {
     ".ux-v54 .ux-summary-item": {
       border: "1px solid var(--ux-border)",
-      background: "#fff",
+      background: designColors.background,
       borderRadius: "14px",
       textAlign: "left",
       padding: "16px 18px",
@@ -12496,26 +12494,26 @@ export const globalStyles = [
   },
   {
     ".ux-v54 .ux-summary-item:hover": {
-      borderColor: "#8ac4a4",
+      borderColor: designColors.border,
       transform: "translateY(-2px)",
     },
   },
   {
     ".ux-v54 .ux-summary-item svg": {
-      color: "#408d6b",
+      color: designColors.primary,
       marginBottom: "4px",
     },
   },
   {
     ".ux-v54 .ux-summary-item span": {
       fontSize: "13px",
-      color: "#617b6b",
+      color: designColors.muted,
     },
   },
   {
     ".ux-v54 .ux-summary-item strong": {
       fontSize: "clamp(22px,2.5vw,29px)",
-      color: "#203e34",
+      color: designColors.dark,
       fontWeight: "800",
       letterSpacing: "-.035em",
     },
@@ -12523,7 +12521,7 @@ export const globalStyles = [
   {
     ".ux-v54 .ux-summary-item small": {
       fontSize: "12px",
-      color: "#749082",
+      color: designColors.muted,
       lineHeight: "1.35",
     },
   },
@@ -12539,7 +12537,7 @@ export const globalStyles = [
     ".ux-v54 .ux-home-panel": {
       border: "1px solid var(--ux-border)",
       borderRadius: "16px",
-      background: "#fff",
+      background: designColors.background,
       padding: "20px 22px",
       minWidth: "0",
       boxShadow: "var(--ux-shadow)",
@@ -12561,13 +12559,13 @@ export const globalStyles = [
       gap: "9px",
       margin: "0",
       fontSize: "17px",
-      color: "#234e39",
+      color: designColors.dark,
       lineHeight: "1.3",
     },
   },
   {
     ".ux-v54 .ux-home-panel-head h3 svg": {
-      color: "#44876a",
+      color: designColors.primary,
       flex: "none",
     },
   },
@@ -12575,7 +12573,7 @@ export const globalStyles = [
     ".ux-v54 .ux-home-panel-head>button": {
       border: "0",
       background: "transparent",
-      color: "#297959",
+      color: designColors.text,
       display: "inline-flex",
       alignItems: "center",
       gap: "5px",
@@ -12588,7 +12586,7 @@ export const globalStyles = [
   {
     ".ux-v54 .ux-home-panel-head p": {
       fontSize: "12px",
-      color: "#718a7b",
+      color: designColors.muted,
       margin: "5px 0 0 27px",
     },
   },
@@ -12609,8 +12607,8 @@ export const globalStyles = [
       padding: "12px 6px",
       background: "transparent",
       border: "0",
-      borderBottom: "1px solid #edf2ee",
-      color: "#2c5140",
+      borderBottom: `1px solid ${designColors.border}`,
+      color: designColors.text,
     },
   },
   {
@@ -12620,25 +12618,25 @@ export const globalStyles = [
   },
   {
     ".ux-v54 .ux-today-task:hover": {
-      background: "#f4f9f5",
+      background: designColors.surface,
     },
   },
   {
     ".ux-v54 .ux-task-check": {
-      border: "1.5px solid #94b7a2",
+      border: `1.5px solid ${designColors.accent}`,
       borderRadius: "6px",
       width: "20px",
       height: "20px",
       flex: "none",
       display: "grid",
       placeItems: "center",
-      color: "#fff",
+      color: designColors.background,
     },
   },
   {
     ".ux-v54 .ux-today-task.is-complete .ux-task-check": {
-      background: "#388469",
-      borderColor: "#388469",
+      background: designColors.primary,
+      borderColor: designColors.accent,
     },
   },
   {
@@ -12653,20 +12651,20 @@ export const globalStyles = [
     ".ux-v54 .ux-task-label strong,.ux-v54 .ux-review-item strong": {
       fontSize: "14px",
       fontWeight: "750",
-      color: "#274c3c",
+      color: designColors.dark,
       overflowWrap: "anywhere",
     },
   },
   {
     ".ux-v54 .ux-today-task.is-complete .ux-task-label strong": {
       textDecoration: "line-through",
-      color: "#91a79a",
+      color: designColors.muted,
     },
   },
   {
     ".ux-v54 .ux-task-label small,.ux-v54 .ux-review-item small": {
       fontSize: "12px",
-      color: "#7a9080",
+      color: designColors.muted,
     },
   },
   {
@@ -12675,7 +12673,7 @@ export const globalStyles = [
       gap: "11px",
       alignItems: "flex-start",
       padding: "12px 4px",
-      borderBottom: "1px solid #edf2ee",
+      borderBottom: `1px solid ${designColors.border}`,
     },
   },
   {
@@ -12693,7 +12691,7 @@ export const globalStyles = [
   },
   {
     ".ux-v54 .ux-review-dot": {
-      background: "#dba96a",
+      background: statusColors.warning,
       width: "8px",
       height: "8px",
       borderRadius: "50%",
@@ -12704,7 +12702,7 @@ export const globalStyles = [
   {
     ".ux-v54 .ux-quiet-empty": {
       fontSize: "14px",
-      color: "#688172",
+      color: designColors.muted,
       padding: "14px 4px",
       lineHeight: "1.5",
       margin: "0",
@@ -12713,7 +12711,7 @@ export const globalStyles = [
   {
     ".ux-v54 .ux-inline-note": {
       fontSize: "12px",
-      color: "#668674",
+      color: designColors.muted,
       display: "block",
       marginTop: "10px",
     },
@@ -12729,13 +12727,13 @@ export const globalStyles = [
   {
     ".ux-v54 .ux-week-head strong": {
       fontSize: "25px",
-      color: "#254838",
+      color: designColors.dark,
     },
   },
   {
     ".ux-v54 .ux-week-head span": {
       fontSize: "13px",
-      color: "#647d6c",
+      color: designColors.muted,
     },
   },
   {
@@ -12761,7 +12759,7 @@ export const globalStyles = [
     ".ux-v54 .ux-week-track": {
       width: "min(100%,64px)",
       height: "102px",
-      borderBottom: "1px solid #dbe7df",
+      borderBottom: `1px solid ${designColors.border}`,
       display: "flex",
       alignItems: "end",
       justifyContent: "center",
@@ -12770,7 +12768,7 @@ export const globalStyles = [
   {
     ".ux-v54 .ux-week-track>span": {
       width: "min(100%,42px)",
-      background: "#5ba185",
+      background: designColors.primary,
       borderRadius: "6px 6px 0 0",
       overflow: "hidden",
       display: "block",
@@ -12783,19 +12781,19 @@ export const globalStyles = [
       bottom: "0",
       left: "0",
       width: "100%",
-      background: "#ebad61",
+      background: statusColors.warning,
     },
   },
   {
     ".ux-v54 .ux-week-day small": {
       fontSize: "12px",
-      color: "#6b8777",
+      color: designColors.muted,
       textTransform: "capitalize",
     },
   },
   {
     ".ux-v54 .ux-goal-line": {
-      borderTop: "1px solid #eaf1ec",
+      borderTop: `1px solid ${designColors.border}`,
       paddingTop: "14px",
       maxWidth: "760px",
     },
@@ -12807,12 +12805,12 @@ export const globalStyles = [
       gap: "10px",
       marginBottom: "7px",
       fontSize: "13px",
-      color: "#5b7969",
+      color: designColors.muted,
     },
   },
   {
     ".ux-v54 .ux-goal-line strong": {
-      color: "#2e7054",
+      color: designColors.text,
     },
   },
   {
@@ -12823,7 +12821,7 @@ export const globalStyles = [
       gap: "14px",
       flexWrap: "wrap",
       padding: "4px 0",
-      color: "#657e6d",
+      color: designColors.muted,
       fontSize: "13px",
     },
   },
@@ -12832,7 +12830,7 @@ export const globalStyles = [
       position: "fixed",
       inset: "0",
       zIndex: "120",
-      background: "rgba(18,42,30,.45)",
+      background: withOpacity(designColors.dark, 0.45),
       display: "flex",
       alignItems: "flex-start",
       justifyContent: "center",
@@ -12842,10 +12840,10 @@ export const globalStyles = [
   {
     ".ux-v54 .ux-command-dialog": {
       width: "min(100%,510px)",
-      background: "white",
-      border: "1px solid #dce9e0",
+      background: designColors.paper,
+      border: `1px solid ${designColors.border}`,
       borderRadius: "17px",
-      boxShadow: "0 20px 70px rgba(10,44,28,.2)",
+      boxShadow: `0 20px 70px ${withOpacity(designColors.dark, 0.2)}`,
       overflow: "hidden",
     },
   },
@@ -12855,8 +12853,8 @@ export const globalStyles = [
       alignItems: "center",
       gap: "12px",
       padding: "12px 17px",
-      borderBottom: "1px solid #e5ede7",
-      color: "#56856c",
+      borderBottom: `1px solid ${designColors.border}`,
+      color: designColors.muted,
     },
   },
   {
@@ -12886,16 +12884,16 @@ export const globalStyles = [
       border: "0",
       borderRadius: "9px",
       padding: "12px 14px",
-      background: "#fff",
+      background: designColors.background,
       textAlign: "left",
-      color: "#315e46",
+      color: designColors.text,
       fontSize: "15px",
     },
   },
   {
     ".ux-v54 .ux-command-results button:hover,.ux-v54 .ux-command-results button:focus":
       {
-        background: "#eff7f1",
+        background: designColors.surface,
       },
   },
   {
@@ -12907,15 +12905,15 @@ export const globalStyles = [
     ".ux-v54 .ux-command-results p": {
       padding: "16px",
       fontSize: "14px",
-      color: "#6e8879",
+      color: designColors.muted,
     },
   },
   {
     ".ux-v54 .ux-command-hint": {
       fontSize: "12px",
-      color: "#6c8978",
+      color: designColors.muted,
       padding: "12px 18px",
-      background: "#f8fbf8",
+      background: designColors.surface,
     },
   },
   {
@@ -13092,17 +13090,17 @@ export const globalStyles = [
   {
     ".ux-v54 .ux-planner-summary span": {
       fontSize: "13px",
-      color: "#5f7e6c",
+      color: designColors.muted,
       border: "1px solid var(--ux-border)",
       borderRadius: "12px",
-      background: "#fff",
+      background: designColors.background,
       padding: "10px 15px",
     },
   },
   {
     ".ux-v54 .ux-planner-summary strong": {
       fontSize: "18px",
-      color: "#245b42",
+      color: designColors.text,
       marginRight: "4px",
     },
   },
@@ -13113,13 +13111,13 @@ export const globalStyles = [
   },
   {
     ".ux-v54 .ux-muted-intro": {
-      color: "#65836e",
+      color: designColors.muted,
       fontSize: "13px",
     },
   },
   {
     ".ux-v54 .ux-security": {
-      borderTop: "1px solid #e3ebe3",
+      borderTop: `1px solid ${designColors.border}`,
       paddingTop: "10px",
     },
   },
@@ -13133,33 +13131,33 @@ export const globalStyles = [
       fontSize: "14px",
       padding: "11px 13px 13px",
       minHeight: "43px",
-      color: "#617b6b",
+      color: designColors.muted,
       borderBottomWidth: "3px",
     },
   },
   {
     ".ux-v54 .tabs button.active": {
-      color: "#276b52",
-      borderBottomColor: "#308466",
+      color: designColors.text,
+      borderBottomColor: designColors.accent,
     },
   },
   {
     ".ux-v54 .tabs button span": {
       fontSize: "12px",
-      background: "#f2f7f3",
-      color: "#668171",
+      background: designColors.surface,
+      color: designColors.muted,
     },
   },
   {
     ".ux-v54 .tabs button.active span": {
-      color: "#226c50",
-      background: "#e0f1e4",
+      color: designColors.text,
+      background: designColors.surface,
     },
   },
   {
     ".ux-v54 .review-item-main strong": {
       fontSize: "14px",
-      color: "#244837",
+      color: designColors.dark,
       whiteSpace: "normal",
       lineHeight: "1.4",
     },
@@ -13167,14 +13165,14 @@ export const globalStyles = [
   {
     ".ux-v54 .review-item-main span": {
       fontSize: "12px",
-      color: "#65806e",
+      color: designColors.muted,
       lineHeight: "1.4",
     },
   },
   {
     ".ux-v54 .review-meta>span": {
       fontSize: "12px",
-      color: "#557265",
+      color: designColors.muted,
     },
   },
   {
@@ -13199,20 +13197,20 @@ export const globalStyles = [
       fontSize: "12px",
       letterSpacing: "0",
       fontWeight: "700",
-      color: "#61806c",
+      color: designColors.muted,
     },
   },
   {
     ".ux-v54 .mini-metric>strong": {
       fontSize: "26px",
       lineHeight: "1.2",
-      color: "#1c4937",
+      color: designColors.dark,
     },
   },
   {
     ".ux-v54 .mini-metric>small": {
       fontSize: "12px",
-      color: "#7a9080",
+      color: designColors.muted,
     },
   },
   {
@@ -13225,7 +13223,7 @@ export const globalStyles = [
     ".ux-v54 .mock-main strong,.ux-v54 .note-card h4,.ux-v54 .vault-card h4": {
       fontSize: "15px",
       lineHeight: "1.45",
-      color: "#244f3b",
+      color: designColors.dark,
       overflowWrap: "anywhere",
     },
   },
@@ -13233,7 +13231,7 @@ export const globalStyles = [
     ".ux-v54 .mock-main span,.ux-v54 .note-source small,.ux-v54 .vault-card small":
       {
         fontSize: "12px",
-        color: "#71897a",
+        color: designColors.muted,
       },
   },
   {
@@ -13273,7 +13271,7 @@ export const globalStyles = [
   },
   {
     ".ux-v54 .sheet-scroll": {
-      border: "1px solid #e5eee7",
+      border: `1px solid ${designColors.border}`,
     },
   },
   {
@@ -13284,7 +13282,7 @@ export const globalStyles = [
   {
     ".ux-v54 .field-hint": {
       fontSize: "12px",
-      color: "#778d7f",
+      color: designColors.muted,
       lineHeight: "1.5",
     },
   },
@@ -13333,7 +13331,7 @@ export const globalStyles = [
   {
     ".n55-planner,.assimilation-picker": {
       fontSize: "15px",
-      color: "var(--text,#25343a)",
+      color: `var(--text,${designColors.dark})`,
     },
   },
   {
@@ -13357,8 +13355,8 @@ export const globalStyles = [
       gap: "4px",
       padding: "4px",
       borderRadius: "13px",
-      background: "#edf4ef",
-      border: "1px solid #d8e5dd",
+      background: designColors.surface,
+      border: `1px solid ${designColors.border}`,
     },
   },
   {
@@ -13370,15 +13368,15 @@ export const globalStyles = [
       borderRadius: "10px",
       border: "0",
       background: "transparent",
-      color: "#526962",
+      color: designColors.muted,
       fontWeight: "650",
     },
   },
   {
     ".n55-calendar-switch button.selected": {
-      background: "white",
-      color: "#245d4b",
-      boxShadow: "0 1px 5px #1b3d291a",
+      background: designColors.paper,
+      color: designColors.text,
+      boxShadow: `0 1px 5px ${withOpacity(designColors.dark, 0.102)}`,
     },
   },
   {
@@ -13404,23 +13402,23 @@ export const globalStyles = [
       textAlign: "left",
       padding: "17px 18px",
       minWidth: "0",
-      border: "1px solid #e0eae5",
+      border: `1px solid ${designColors.border}`,
       borderRadius: "16px",
-      background: "#fff",
-      boxShadow: "0 2px 8px #283c2e09",
+      background: designColors.background,
+      boxShadow: `0 2px 8px ${withOpacity(designColors.text, 0.035)}`,
       color: "inherit",
     },
   },
   {
     ".n55-goal-stat:not(.n55-static):hover": {
-      borderColor: "#6bb198",
-      background: "#fbfefa",
+      borderColor: designColors.accent,
+      background: designColors.surface,
     },
   },
   {
     ".n55-goal-stat>span": {
       fontSize: "13px",
-      color: "#60776c",
+      color: designColors.muted,
       fontWeight: "600",
     },
   },
@@ -13429,13 +13427,13 @@ export const globalStyles = [
       fontSize: "24px",
       lineHeight: "1.15",
       letterSpacing: "-.045em",
-      color: "#20362d",
+      color: designColors.dark,
       fontWeight: "780",
     },
   },
   {
     ".n55-goal-stat>small": {
-      color: "#688074",
+      color: designColors.muted,
       fontSize: "12px",
     },
   },
@@ -13443,7 +13441,7 @@ export const globalStyles = [
     ".n55-goal-stat .progress-track": {
       width: "100%",
       marginTop: "auto",
-      background: "#eaf1ec",
+      background: designColors.surface,
     },
   },
   {
@@ -13454,13 +13452,13 @@ export const globalStyles = [
       columnGap: "20px",
       rowGap: "10px",
       padding: "5px 4px",
-      color: "#546c60",
+      color: designColors.muted,
       fontSize: "14px",
     },
   },
   {
     ".n55-metrics-detail b": {
-      color: "#334c3f",
+      color: designColors.text,
       fontWeight: "700",
       marginRight: "6px",
     },
@@ -13472,11 +13470,11 @@ export const globalStyles = [
   },
   {
     ".n55-calendar": {
-      background: "#fff",
-      border: "1px solid #e0e9e3",
+      background: designColors.background,
+      border: `1px solid ${designColors.border}`,
       borderRadius: "18px",
       overflow: "hidden",
-      boxShadow: "0 3px 12px #1a382c07",
+      boxShadow: `0 3px 12px ${withOpacity(designColors.dark, 0.027)}`,
     },
   },
   {
@@ -13487,7 +13485,7 @@ export const globalStyles = [
       alignItems: "center",
       gap: "16px",
       flexWrap: "wrap",
-      borderBottom: "1px solid #e8eee9",
+      borderBottom: `1px solid ${designColors.border}`,
     },
   },
   {
@@ -13504,7 +13502,7 @@ export const globalStyles = [
       minWidth: "170px",
       textAlign: "center",
       textTransform: "capitalize",
-      color: "#274839",
+      color: designColors.dark,
     },
   },
   {
@@ -13513,7 +13511,7 @@ export const globalStyles = [
       alignItems: "center",
       gap: "9px",
       fontSize: "13px",
-      color: "#637b6b",
+      color: designColors.muted,
       fontWeight: "650",
     },
   },
@@ -13533,8 +13531,8 @@ export const globalStyles = [
   {
     ".n55-week-day": {
       minWidth: "0",
-      borderRight: "1px solid #e7eee8",
-      background: "white",
+      borderRight: `1px solid ${designColors.border}`,
+      background: designColors.paper,
       minHeight: "255px",
     },
   },
@@ -13545,7 +13543,7 @@ export const globalStyles = [
   },
   {
     ".n55-week-day.today": {
-      background: "#f6fbf7",
+      background: designColors.surface,
     },
   },
   {
@@ -13554,8 +13552,8 @@ export const globalStyles = [
       alignItems: "center",
       gap: "7px",
       padding: "11px 10px",
-      borderBottom: "1px solid #e7eee8",
-      color: "#63756a",
+      borderBottom: `1px solid ${designColors.border}`,
+      color: designColors.muted,
     },
   },
   {
@@ -13567,7 +13565,7 @@ export const globalStyles = [
   {
     ".n55-week-day>header strong": {
       fontSize: "20px",
-      color: "#2b4438",
+      color: designColors.dark,
     },
   },
   {
@@ -13579,8 +13577,8 @@ export const globalStyles = [
       borderRadius: "8px",
       width: "28px",
       height: "28px",
-      background: "#f0f6f1",
-      color: "#33785b",
+      background: designColors.surface,
+      color: designColors.text,
     },
   },
   {
@@ -13593,8 +13591,8 @@ export const globalStyles = [
   },
   {
     ".n55-event": {
-      background: "#f5f8f5",
-      border: "1px solid #e5ece5",
+      background: designColors.surface,
+      border: `1px solid ${designColors.border}`,
       borderRadius: "10px",
       padding: "10px",
       display: "flex",
@@ -13605,8 +13603,8 @@ export const globalStyles = [
   },
   {
     ".n55-event.study": {
-      background: "#f1f8f4",
-      borderColor: "#dceadf",
+      background: designColors.surface,
+      borderColor: designColors.border,
     },
   },
   {
@@ -13627,7 +13625,7 @@ export const globalStyles = [
     ".n55-event-body strong": {
       fontSize: "14px",
       lineHeight: "1.4",
-      color: "#2b4638",
+      color: designColors.dark,
       overflowWrap: "anywhere",
       fontWeight: "680",
     },
@@ -13635,14 +13633,14 @@ export const globalStyles = [
   {
     ".n55-event-body small": {
       fontSize: "12px",
-      color: "#708478",
+      color: designColors.muted,
     },
   },
   {
     ".n55-event-progress": {
       fontSize: "12px",
       lineHeight: "1.4",
-      color: "#3b795b",
+      color: designColors.primary,
       overflowWrap: "anywhere",
     },
   },
@@ -13661,13 +13659,13 @@ export const globalStyles = [
       placeItems: "center",
       border: "0",
       borderRadius: "7px",
-      background: "#e5f0e7",
-      color: "#326b53",
+      background: designColors.surface,
+      color: designColors.text,
     },
   },
   {
     ".n55-minibutton:hover": {
-      background: "#d3e7d8",
+      background: designColors.light,
     },
   },
   {
@@ -13678,16 +13676,16 @@ export const globalStyles = [
       width: "17px",
       height: "17px",
       marginTop: "2px",
-      border: "1.5px solid #93b6a0",
+      border: `1.5px solid ${designColors.accent}`,
       borderRadius: "5px",
-      background: "white",
-      color: "white",
+      background: designColors.paper,
+      color: designColors.paper,
     },
   },
   {
     ".n55-check.checked": {
-      background: "#3e896a",
-      borderColor: "#3e896a",
+      background: designColors.primary,
+      borderColor: designColors.accent,
     },
   },
   {
@@ -13697,9 +13695,9 @@ export const globalStyles = [
       gap: "5px",
       width: "100%",
       textAlign: "left",
-      border: "1px solid #f3dec1",
-      background: "#fff8ee",
-      color: "#92602d",
+      border: `1px solid ${statusColors.warningSoft}`,
+      background: statusColors.warningSoft,
+      color: statusColors.warning,
       borderRadius: "9px",
       padding: "8px",
       fontSize: "13px",
@@ -13720,19 +13718,19 @@ export const globalStyles = [
   },
   {
     ".n55-day-actual": {
-      color: "#687d70",
+      color: designColors.muted,
       fontSize: "11px",
       lineHeight: "1.4",
       padding: "4px 6px",
-      borderTop: "1px solid #edf1ed",
+      borderTop: `1px solid ${designColors.border}`,
     },
   },
   {
     ".n55-day-empty": {
-      border: "1px dashed #dae7de",
+      border: `1px dashed ${designColors.border}`,
       background: "transparent",
       borderRadius: "9px",
-      color: "#809588",
+      color: designColors.muted,
       fontSize: "12px",
       padding: "17px 6px",
     },
@@ -13753,10 +13751,10 @@ export const globalStyles = [
       textAlign: "center",
       padding: "11px 4px",
       fontWeight: "700",
-      color: "#778a7c",
+      color: designColors.muted,
       fontSize: "12px",
-      borderBottom: "1px solid #e9eee9",
-      background: "#fafcfa",
+      borderBottom: `1px solid ${designColors.border}`,
+      background: designColors.surface,
     },
   },
   {
@@ -13769,30 +13767,30 @@ export const globalStyles = [
       overflow: "hidden",
       textAlign: "left",
       border: "0",
-      borderRight: "1px solid #e7eee8",
-      borderBottom: "1px solid #e7eee8",
-      background: "white",
+      borderRight: `1px solid ${designColors.border}`,
+      borderBottom: `1px solid ${designColors.border}`,
+      background: designColors.paper,
       padding: "11px",
       fontSize: "12px",
-      color: "#2a4436",
+      color: designColors.dark,
       minWidth: "0",
     },
   },
   {
     ".n55-month-day.outside": {
-      background: "#f8faf8",
+      background: designColors.surface,
       opacity: ".5",
     },
   },
   {
     ".n55-month-day.today": {
-      background: "#f1faf3",
-      boxShadow: "inset 0 0 0 2px #66ad83",
+      background: designColors.surface,
+      boxShadow: `inset 0 0 0 2px ${designColors.accent}`,
     },
   },
   {
     ".n55-month-day:hover": {
-      background: "#eef8f1",
+      background: designColors.surface,
     },
   },
   {
@@ -13812,7 +13810,7 @@ export const globalStyles = [
     ".n55-month-top small": {
       whiteSpace: "nowrap",
       fontSize: "11px",
-      color: "#6b8273",
+      color: designColors.muted,
     },
   },
   {
@@ -13821,7 +13819,7 @@ export const globalStyles = [
       flexDirection: "column",
       gap: "3px",
       overflow: "hidden",
-      color: "#647b6b",
+      color: designColors.muted,
       lineHeight: "1.35",
     },
   },
@@ -13845,8 +13843,8 @@ export const globalStyles = [
   },
   {
     ".n55-suggestions": {
-      background: "#f9fcf9",
-      border: "1px solid #dbeadd",
+      background: designColors.surface,
+      border: `1px solid ${designColors.border}`,
       borderRadius: "15px",
       padding: "18px",
       display: "grid",
@@ -13873,7 +13871,7 @@ export const globalStyles = [
       gap: "12px",
       alignItems: "center",
       padding: "10px 0",
-      borderTop: "1px solid #e5eee7",
+      borderTop: `1px solid ${designColors.border}`,
     },
   },
   {
@@ -13892,12 +13890,12 @@ export const globalStyles = [
   {
     ".n55-suggestion small,.n55-suggestions>small": {
       fontSize: "12px",
-      color: "#6d8172",
+      color: designColors.muted,
     },
   },
   {
     ".n55-editor details": {
-      border: "1px solid #e5ece8",
+      border: `1px solid ${designColors.border}`,
       borderRadius: "9px",
       padding: "11px",
     },
@@ -13905,7 +13903,7 @@ export const globalStyles = [
   {
     ".n55-editor details summary": {
       cursor: "pointer",
-      color: "#5d7967",
+      color: designColors.muted,
     },
   },
   {
@@ -13923,7 +13921,7 @@ export const globalStyles = [
     ".assimilation-subject": {
       margin: "0",
       fontWeight: "650",
-      color: "#456251",
+      color: designColors.muted,
     },
   },
   {
@@ -13939,22 +13937,22 @@ export const globalStyles = [
       alignItems: "center",
       minHeight: "69px",
       padding: "11px 14px",
-      border: "1px solid #dce8dd",
+      border: `1px solid ${designColors.border}`,
       borderRadius: "12px",
       cursor: "pointer",
-      background: "#fff",
+      background: designColors.background,
     },
   },
   {
     ".assimilation-choice.selected": {
-      background: "#f1f9f3",
-      borderColor: "#67ae85",
-      boxShadow: "inset 0 0 0 1px #8abc95",
+      background: designColors.surface,
+      borderColor: designColors.accent,
+      boxShadow: `inset 0 0 0 1px ${designColors.accent}`,
     },
   },
   {
     ".assimilation-choice input:not(.MuiInputBase-input)": {
-      accentColor: "#3c8767",
+      accentColor: designColors.primary,
       width: "18px",
       height: "18px",
     },
@@ -13962,7 +13960,7 @@ export const globalStyles = [
   {
     ".assimilation-number": {
       fontWeight: "800",
-      color: "#4d9270",
+      color: designColors.primary,
       fontSize: "20px",
     },
   },
@@ -13977,20 +13975,20 @@ export const globalStyles = [
   {
     ".assimilation-copy strong": {
       fontSize: "15px",
-      color: "#2a4638",
+      color: designColors.dark,
     },
   },
   {
     ".assimilation-copy small": {
       fontSize: "12px",
-      color: "#667f6d",
+      color: designColors.muted,
     },
   },
   {
     ".assimilation-days": {
       borderRadius: "999px",
-      background: "#e3f0e8",
-      color: "#417657",
+      background: designColors.surface,
+      color: designColors.primary,
       fontSize: "12px",
       fontWeight: "800",
       padding: "6px 10px",
@@ -14017,7 +14015,7 @@ export const globalStyles = [
   {
     ".edital-advanced .review-check small": {
       fontSize: "12px",
-      color: "#517a64",
+      color: designColors.muted,
     },
   },
   {
@@ -14097,8 +14095,8 @@ export const globalStyles = [
       gap: "4px",
       borderRadius: "10px",
       padding: "10px",
-      background: "#f5f4fc",
-      border: "1px solid #e2def5",
+      background: designColors.surface,
+      border: `1px solid ${designColors.border}`,
     },
   },
   {
@@ -14106,7 +14104,7 @@ export const globalStyles = [
       fontSize: "10px",
       textTransform: "uppercase",
       letterSpacing: ".04em",
-      color: "#6b63a5",
+      color: designColors.primary,
       fontWeight: "780",
     },
   },
@@ -14114,13 +14112,13 @@ export const globalStyles = [
     ".n55-logged-event strong": {
       fontSize: "13px",
       overflowWrap: "anywhere",
-      color: "#504c7b",
+      color: designColors.primary,
     },
   },
   {
     ".n55-logged-event small": {
       fontSize: "12px",
-      color: "#77709b",
+      color: designColors.muted,
     },
   },
   {
@@ -14128,6 +14126,31 @@ export const globalStyles = [
       border: 0,
       padding: 0,
       background: "transparent",
+    },
+  },
+  {
+    ":root, .nimbo-theme": {
+      "--accent": designColors.primary,
+      "--dark": designColors.text,
+      "--muted": designColors.muted,
+      "--border": designColors.border,
+      "--success": statusColors.success,
+      "--sidebar": designColors.sidebar,
+      "--soft": designColors.surface,
+      "--ui-ink": designColors.text,
+      "--ui-muted": designColors.muted,
+      "--ui-border": designColors.border,
+      "--ui-soft": designColors.surface,
+      "--ui-green": designColors.primary,
+    },
+    "html, body, #root, .app-shell, .nimbo-theme, .nimbo-theme .app-main, .nimbo-theme .main-content":
+      {
+        background: designColors.background,
+        color: designColors.text,
+      },
+    ".nimbo-theme .sidebar": {
+      background: designColors.sidebar,
+      color: designColors.light,
     },
   },
 ];

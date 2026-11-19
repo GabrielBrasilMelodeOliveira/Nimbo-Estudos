@@ -1,3 +1,6 @@
+import { statusColors } from "../../shared/theme/designColors.js";
+import HistoryPeriodFilter from "../../shared/components/history/HistoryPeriodFilter.jsx";
+import HistoryScrollArea from "../../shared/components/history/HistoryScrollArea.jsx";
 import FocusTimer from "../../shared/components/focus/FocusTimer.jsx";
 import CollapsiblePanel from "../../shared/components/CollapsiblePanel.jsx";
 import {
@@ -34,6 +37,7 @@ export default function Questions({
   focusDisciplineId,
 }) {
   const {
+    historyPeriod,
     open,
     setOpen,
     form,
@@ -89,6 +93,7 @@ export default function Questions({
       </div>
       <CollapsiblePanel title="Métricas e histórico de questões">
         <Panel title="Registros e filtros">
+          <HistoryPeriodFilter {...historyPeriod} />
           <div className="filter-workspace">
             <label className="filter-item filter-search">
               <span>Buscar</span>
@@ -243,10 +248,10 @@ export default function Questions({
                       value={percentage(t.correct, t.total)}
                       color={
                         percentage(t.correct, t.total) >= 80
-                          ? "#24ad90"
+                          ? statusColors.success
                           : percentage(t.correct, t.total) >= 60
-                            ? "#efa83e"
-                            : "#ee6d7e"
+                            ? statusColors.warning
+                            : statusColors.error
                       }
                     />
                   </div>
@@ -264,7 +269,10 @@ export default function Questions({
         </Panel>
         <Panel title="Histórico">
           {filtered.length ? (
-            <div className="table-scroll">
+            <HistoryScrollArea
+              label="Histórico de questões"
+              filterKey={`${from}:${to}:${search}:${discipline}:${topic}:${result}:${order}`}
+            >
               <table className="data-table">
                 <thead>
                   <tr>
@@ -317,7 +325,7 @@ export default function Questions({
                   ))}
                 </tbody>
               </table>
-            </div>
+            </HistoryScrollArea>
           ) : (
             <Empty
               title="Sem registros"

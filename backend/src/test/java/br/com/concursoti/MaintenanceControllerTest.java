@@ -29,6 +29,9 @@ class MaintenanceControllerTest {
   br.com.concursoti.planning.repositories.DailyStudyPlanRepository dailyPlans;
 
   @Mock
+  br.com.concursoti.flashcards.repositories.ManualFlashcardRepository manualFlashcards;
+
+  @Mock
   DisciplineRepository disciplines;
 
   @Mock

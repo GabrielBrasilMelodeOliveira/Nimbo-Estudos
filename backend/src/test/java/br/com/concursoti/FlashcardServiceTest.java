@@ -8,6 +8,8 @@ import br.com.concursoti.curriculum.entities.Topic;
 import br.com.concursoti.errornotes.entities.ErrorNote;
 import br.com.concursoti.errornotes.repositories.ErrorNoteRepository;
 import br.com.concursoti.errornotes.services.FlashcardService;
+import br.com.concursoti.flashcards.services.FlashcardSchedulingService;
+import br.com.concursoti.flashcards.services.ManualFlashcardService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.openspacedrepetition.Card;
 import io.github.openspacedrepetition.Rating;
@@ -28,7 +30,11 @@ class FlashcardServiceTest {
   @BeforeEach
   void prepare() {
     repository = mock(ErrorNoteRepository.class);
-    service = new FlashcardService(repository, new ObjectMapper());
+    service = new FlashcardService(
+      repository,
+      new FlashcardSchedulingService(new ObjectMapper()),
+      mock(ManualFlashcardService.class)
+    );
     errorNote = new ErrorNote();
     errorNote.id = 42L;
     errorNote.flashcardEnabled = true;
@@ -81,7 +87,11 @@ class FlashcardServiceTest {
   @Test
   void preventsEarlyReviewAfterReload() {
     service.review(42L, new FlashcardService.ReviewInput(Rating.EASY, 0L));
-    var restoredService = new FlashcardService(repository, new ObjectMapper());
+    var restoredService = new FlashcardService(
+      repository,
+      new FlashcardSchedulingService(new ObjectMapper()),
+      mock(ManualFlashcardService.class)
+    );
     assertThrows(IllegalArgumentException.class, () ->
       restoredService.review(
         42L,

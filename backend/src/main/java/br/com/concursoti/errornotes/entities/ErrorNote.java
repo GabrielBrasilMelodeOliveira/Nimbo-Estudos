@@ -1,12 +1,13 @@
 package br.com.concursoti.errornotes.entities;
 
 import br.com.concursoti.curriculum.entities.Topic;
+import br.com.concursoti.flashcards.entities.FlashcardSchedule;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "error_notes")
-public class ErrorNote {
+public class ErrorNote extends FlashcardSchedule {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,19 +42,4 @@ public class ErrorNote {
   // New notes enter the flashcard deck automatically.
   @Column(nullable = false, columnDefinition = "boolean default true")
   public boolean flashcardEnabled = true;
-
-  @com.fasterxml.jackson.annotation.JsonIgnore
-  @Column(columnDefinition = "text")
-  public String flashcardState;
-
-  @com.fasterxml.jackson.annotation.JsonIgnore
-  @Column(columnDefinition = "text")
-  public String flashcardHistory;
-
-  @Column(nullable = false, columnDefinition = "bigint default 0")
-  public long flashcardRevision;
-
-  @com.fasterxml.jackson.annotation.JsonIgnore
-  @Column(columnDefinition = "text")
-  public String flashcardUndoState;
 }

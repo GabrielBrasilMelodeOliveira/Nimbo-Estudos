@@ -29,7 +29,18 @@ function intervalLabel(date, now) {
       ? `${Math.round(minutes / 60)} h`
       : `${Math.round(minutes / 1440)} dias`;
 }
-export function FlashcardDeck() {
+export function FlashcardDeck({ model }) {
+  return model ? (
+    <FlashcardDeckContent model={model} />
+  ) : (
+    <ConnectedFlashcardDeck />
+  );
+}
+function ConnectedFlashcardDeck() {
+  const model = useFlashcards();
+  return <FlashcardDeckContent model={model} />;
+}
+function FlashcardDeckContent({ model }) {
   const {
     card,
     dueCount,
@@ -49,7 +60,7 @@ export function FlashcardDeck() {
     disciplines,
     undo,
     canUndo,
-  } = useFlashcards();
+  } = model;
   return (
     <Stack spacing={2}>
       <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
@@ -91,9 +102,9 @@ export function FlashcardDeck() {
         </Button>
       </Stack>
       <Typography variant="body2" color="text.secondary">
-        Cada novo erro registrado é um cartão. Tente lembrar a resposta antes de
-        revelá-la. FSRS com retenção de 90% ajusta o próximo intervalo conforme
-        sua avaliação.
+        Crie cartões próprios ou revise os erros registrados. Tente lembrar a
+        resposta antes de revelá-la. FSRS com retenção de 90% ajusta o próximo
+        intervalo conforme sua avaliação.
       </Typography>
       {error && (
         <Alert
@@ -252,7 +263,7 @@ export function FlashcardDeck() {
         <Alert severity="success">
           {total
             ? `Revisões em dia. Próximo cartão em ${nextDue.toLocaleString("pt-BR")}.`
-            : "Registre um erro no caderno para começar os flashcards."}
+            : "Crie seu primeiro flashcard ou registre um erro no caderno para começar."}
         </Alert>
       )}
     </Stack>

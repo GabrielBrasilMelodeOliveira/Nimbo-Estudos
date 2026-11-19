@@ -5,6 +5,7 @@ import br.com.concursoti.curriculum.repositories.EditalImportRepository;
 import br.com.concursoti.curriculum.repositories.TopicRepository;
 import br.com.concursoti.errornotes.repositories.ErrorNoteRepository;
 import br.com.concursoti.exams.repositories.MockExamRepository;
+import br.com.concursoti.flashcards.repositories.ManualFlashcardRepository;
 import br.com.concursoti.materials.entities.Material;
 import br.com.concursoti.materials.repositories.MaterialRepository;
 import br.com.concursoti.planning.repositories.AgendaItemRepository;
@@ -50,6 +51,7 @@ public class MaintenanceController {
   private final EditalImportRepository imports;
   private final PeriodGoalRepository goals;
   private final DailyStudyPlanRepository dailyPlans;
+  private final ManualFlashcardRepository manualFlashcards;
 
   public MaintenanceController(
     DisciplineRepository disciplines,
@@ -63,7 +65,8 @@ public class MaintenanceController {
     AgendaItemRepository agenda,
     EditalImportRepository imports,
     PeriodGoalRepository goals,
-    DailyStudyPlanRepository dailyPlans
+    DailyStudyPlanRepository dailyPlans,
+    ManualFlashcardRepository manualFlashcards
   ) {
     this.disciplines = disciplines;
     this.topics = topics;
@@ -77,6 +80,7 @@ public class MaintenanceController {
     this.imports = imports;
     this.goals = goals;
     this.dailyPlans = dailyPlans;
+    this.manualFlashcards = manualFlashcards;
   }
 
   public record ClearRequest(String scope, String confirmation) {}
@@ -113,6 +117,7 @@ public class MaintenanceController {
       case "topics" -> clearTopics();
       case "edital" -> clearEdital();
       case "all" -> {
+        manualFlashcards.deleteAllInBatch();
         // Mantém os arquivos binários no banco para não destruir anexos órfãos
         // de forma irreversível; a limpeza de blobs será uma rotina separada.
         materials.deleteAllInBatch();

@@ -1,7 +1,28 @@
+import { designColors, statusColors, withOpacity } from "./designColors.js";
 import { createTheme } from "@mui/material/styles";
 
 export const theme = createTheme({
-  palette: { primary: { main: "#39745d" }, background: { default: "#f5f7f5" } },
+  palette: {
+    primary: {
+      main: designColors.primary,
+      light: designColors.accent,
+      dark: designColors.primaryDark,
+      contrastText: designColors.paper,
+    },
+    secondary: { main: designColors.accent, contrastText: designColors.dark },
+    background: { default: designColors.background, paper: designColors.paper },
+    text: { primary: designColors.text, secondary: designColors.muted },
+    divider: designColors.border,
+    success: { main: statusColors.success },
+    error: { main: statusColors.error },
+    warning: { main: statusColors.warning },
+    info: { main: designColors.primary },
+    action: {
+      hover: withOpacity(designColors.accent, 0.06),
+      selected: withOpacity(designColors.accent, 0.12),
+      focus: withOpacity(designColors.accent, 0.16),
+    },
+  },
   typography: {
     fontFamily: '"Inter Variable", sans-serif',
     button: { textTransform: "none" },
@@ -13,7 +34,7 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           "&.Mui-focusVisible": {
-            outline: "2px solid #39745d",
+            outline: `2px solid ${designColors.primary}`,
             outlineOffset: 2,
           },
         },
@@ -27,7 +48,7 @@ export const theme = createTheme({
     MuiOutlinedInput: {
       styleOverrides: {
         root: {
-          backgroundColor: "#fff",
+          backgroundColor: designColors.paper,
           minWidth: 0,
           maxWidth: "100%",
           minHeight: 44,

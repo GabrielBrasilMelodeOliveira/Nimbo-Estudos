@@ -1,3 +1,7 @@
+import {
+  designColors,
+  statusColors,
+} from "../../../shared/theme/designColors.js";
 import { addDays } from "../../../shared/utils/plannerMetrics.js";
 import { TODAY, statusLabels } from "../../../shared/utils/utils.js";
 
@@ -87,7 +91,9 @@ export function buildChartData(
       value: topics.filter(
         (topic) => (topic.status || "NOT_STARTED") === status,
       ).length,
-      color: ["#c5d6ce", "#dfaf55", "#39745d"][index],
+      color: [designColors.border, statusColors.warning, designColors.primary][
+        index
+      ],
     })),
   };
 }

@@ -27,7 +27,7 @@ it("opens independent flashcards below Study and identifies the running release"
   );
   const user = userEvent.setup();
   await screen.findByText("Pronto para começar?");
-  expect(screen.getByText("Nimbo v5.9.0")).toBeTruthy();
+  expect(screen.getByText("Nimbo v5.10.0")).toBeTruthy();
   const navigation = screen.getByRole("navigation");
   const labels = within(navigation)
     .getAllByRole("button")
@@ -37,7 +37,7 @@ it("opens independent flashcards below Study and identifies the running release"
     within(navigation).getByRole("button", { name: "Flashcards", exact: true }),
   );
   await screen.findByText(
-    "Registre um erro no caderno para começar os flashcards.",
+    "Crie seu primeiro flashcard ou registre um erro no caderno para começar.",
   );
   await user.click(
     screen.getByRole("button", { name: "Abrir caderno de erros" }),

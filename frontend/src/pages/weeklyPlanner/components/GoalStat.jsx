@@ -1,3 +1,4 @@
+import { statusColors } from "../../../shared/theme/designColors.js";
 import {
   Card,
   CardActionArea,
@@ -20,7 +21,7 @@ export function GoalStat({
       sx={{
         height: "100%",
         borderColor: completed ? "success.main" : "divider",
-        bgcolor: completed ? "#edf7ef" : "background.paper",
+        bgcolor: completed ? statusColors.successSoft : "background.paper",
       }}
     >
       <CardActionArea
@@ -28,7 +29,7 @@ export function GoalStat({
         sx={{
           height: "100%",
           borderColor: completed ? "success.main" : "divider",
-          bgcolor: completed ? "#edf7ef" : "background.paper",
+          bgcolor: completed ? statusColors.successSoft : "background.paper",
         }}
       >
         <CardContent>

@@ -1,3 +1,7 @@
+import { useHistoryPeriod } from "../../shared/hooks/useHistoryPeriod.js";
+import { isWithinHistoryRange } from "../../shared/utils/historyPeriod.js";
+import HistoryPeriodFilter from "../../shared/components/history/HistoryPeriodFilter.jsx";
+import HistoryScrollArea from "../../shared/components/history/HistoryScrollArea.jsx";
 import {
   Input,
   SearchableSelect,
@@ -35,6 +39,13 @@ export default function StudyCycle({
     manualTopics,
     history,
   } = useStudyCycle({ data, action });
+  const historyPeriod = useHistoryPeriod();
+  const filteredHistory = history
+    .filter((session) => isWithinHistoryRange(session.studyDate, historyPeriod))
+    .sort(
+      (first, second) =>
+        second.studyDate.localeCompare(first.studyDate) || second.id - first.id,
+    );
   return (
     <Stack spacing={3}>
       <FocusTimer
@@ -62,10 +73,18 @@ export default function StudyCycle({
       <CollapsiblePanel title={`Sessões registradas (${history.length})`}>
         <Panel
           title="Sessões registradas"
-          action={<span className="small-chip">{history.length} sessões</span>}
+          action={
+            <span className="small-chip">
+              {filteredHistory.length} de {history.length} sessões
+            </span>
+          }
         >
-          {history.length ? (
-            <div className="table-scroll">
+          <HistoryPeriodFilter {...historyPeriod} />
+          {filteredHistory.length ? (
+            <HistoryScrollArea
+              label="Histórico de sessões de estudo"
+              filterKey={`${historyPeriod.from}:${historyPeriod.to}`}
+            >
               <table className="data-table">
                 <thead>
                   <tr>
@@ -78,7 +97,7 @@ export default function StudyCycle({
                   </tr>
                 </thead>
                 <tbody>
-                  {history.map((s) => (
+                  {filteredHistory.map((s) => (
                     <tr key={s.id}>
                       <td className="table-muted">{dateBR(s.studyDate)}</td>
                       <td>
@@ -116,11 +135,19 @@ export default function StudyCycle({
                   ))}
                 </tbody>
               </table>
-            </div>
+            </HistoryScrollArea>
           ) : (
             <Empty
-              title="Sua primeira sessão começa aqui"
-              description="Inicie o cronômetro e registre sua primeira sessão de foco."
+              title={
+                history.length
+                  ? "Nenhuma sessão neste período"
+                  : "Sua primeira sessão começa aqui"
+              }
+              description={
+                history.length
+                  ? "Escolha outra data ou consulte todo o histórico."
+                  : "Inicie o cronômetro e registre sua primeira sessão de foco."
+              }
               icon={Timer}
             />
           )}

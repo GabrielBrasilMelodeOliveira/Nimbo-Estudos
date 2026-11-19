@@ -1,3 +1,4 @@
+import { designColors } from "./shared/theme/designColors.js";
 import {
   FocusTimerProvider,
   HideDuringFocus,
@@ -357,7 +358,7 @@ export default function App() {
           </nav>
           <Typography
             variant="caption"
-            sx={{ display: "block", px: 3, py: 2, color: "#bed6cc" }}
+            sx={{ display: "block", px: 3, py: 2, color: designColors.light }}
           >
             Nimbo v{appVersion}
           </Typography>

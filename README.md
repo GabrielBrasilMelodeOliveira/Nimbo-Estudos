@@ -1,6 +1,6 @@
-# Nimbo 5.9 — Gráficos e leitura de materiais
+# Nimbo 5.10 — Flashcards próprios, históricos e tema
 
-A versão **5.9.0** aparece no menu lateral. Para atualizar uma instalação Docker existente:
+A versão **5.10.0** aparece no menu lateral. Para atualizar uma instalação Docker existente:
 
 ```bash
 git pull --ff-only origin main
@@ -10,6 +10,29 @@ docker compose up -d --build
 Recarregue a página após a reconstrução. Apenas `git pull` não substitui o frontend que já está no container. Os volumes existentes são preservados.
 
 Nesta versão:
+
+- **Flashcards próprios:** botão “Novo flashcard”, pergunta/resposta lado a lado e disciplina/assunto opcionais. Em “Meus flashcards”, edite ou exclua os cartões criados. Usam a mesma revisão FSRS, atalhos e desfazer dos erros vinculados, sem criar uma anotação no caderno. Editar preserva o agendamento e invalida a avaliação pendente de desfazer. Excluir remove somente aquele cartão pessoal e seu histórico.
+- **Históricos de Estudar e Questões:** rolagem vertical com cabeçalho fixo, navegação por teclado e filtros “Por dia”, “Últimos 7 dias”, “Último mês” (30 dias incluindo hoje) e “Todo o histórico”. Na aba Questões, o período também atualiza as métricas e combina com os filtros de assunto, disciplina, acertos e datas personalizadas.
+- **Nimbo recolhido:** bolinha arrastável com mouse ou toque, posição lembrada entre acessos e limitada ao espaço da tela. Clique para expandir; as setas do teclado também movem a bolinha quando ela está focada. Um arraste não abre o painel.
+- **Cores centralizadas:** quatro paletas prontas, com a azul solicitada ativa e fundo branco em todas as páginas. Botões, campos, menu e gráficos usam os mesmos tokens. Acertos/erros preservam verde/vermelho para manter o significado das métricas.
+
+### Como mudar as cores
+
+Edite **`frontend/src/shared/theme/designColors.js`**. Troque `activePaletteName` por `ocean`, `forest`, `violet` ou `terracotta`, ou edite as quatro cores de uma paleta. A paleta `ocean` começa com:
+
+| Papel | Cor |
+| --- | --- |
+| `dark` — texto e menu | `#1B262C` |
+| `primary` — ações principais | `#0F4C75` |
+| `accent` — destaques e séries de gráficos | `#3282B8` |
+| `light` — superfícies e realces | `#BBE1FA` |
+| `siteBackground` — fundo fixo | `#FFFFFF` |
+
+As variações suaves e bordas são calculadas a partir da paleta. As cores semânticas de sucesso, erro e atenção também estão nesse arquivo, em `statusColors`. A arte dos mascotes e cores de disciplinas já escolhidas pelo usuário permanecem próprias. Depois de alterar o arquivo, reconstrua o frontend (ou execute `docker compose up -d --build`).
+
+A atualização cria a tabela `manual_flashcards` automaticamente pelo mecanismo de esquema já usado no projeto. As colunas e os agendamentos de revisão dos erros existentes são preservados. Limpar apenas o edital ou os assuntos mantém os cartões pessoais, retirando suas associações; “Excluir tudo” também exclui os cartões pessoais.
+
+Recursos da versão 5.9 preservados:
 
 - Desempenho: “Questões por dia” na primeira linha inteira e “Tempo de estudo por dia” na segunda. Gráficos com linhas suaves, cores consistentes, grade discreta e barras arredondadas. Um registro isolado continua visível; os demais pontos aparecem ao interagir.
 - Início: barras agrupadas para tempo de teoria e questões, com a quantidade de questões resolvidas em outro gráfico de linha.
