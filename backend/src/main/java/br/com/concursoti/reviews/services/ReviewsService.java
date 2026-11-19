@@ -44,7 +44,7 @@ public class ReviewsService {
       "Escolha o nível de assimilação."
     );
     ReviewTask task = reviewScheduler.complete(id, rank4(request.level()));
-    pet.progress(15, 5);
+    pet.awardExperience(15);
     return task;
   }
 

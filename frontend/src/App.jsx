@@ -166,7 +166,6 @@ export default function App() {
     [working, setWorking] = useState(false),
     [mobileNav, setMobileNav] = useState(false),
     [more, setMore] = useState(false),
-    [petReaction, setPetReaction] = useState(null),
     [quickOpen, setQuickOpen] = useState(false),
     [quickSearch, setQuickSearch] = useState("");
   const refresh = useCallback(async (first = false) => {
@@ -192,11 +191,6 @@ export default function App() {
       clearInterval(timer);
     };
   }, [refresh]);
-  useEffect(() => {
-    if (!petReaction) return;
-    const timer = setTimeout(() => setPetReaction(null), 2600);
-    return () => clearTimeout(timer);
-  }, [petReaction]);
   useEffect(() => {
     if (!toast) return;
     const t = setTimeout(() => setToast(null), 3900);
@@ -226,25 +220,7 @@ export default function App() {
       setWorking(true);
       await api(path, method, payload);
       await refresh();
-      if (
-        (path === "questions" ||
-          path === "study-sessions" ||
-          path.startsWith("reviews/") ||
-          path === "mock-exams" ||
-          path.startsWith("materials/")) &&
-        method !== "DELETE"
-      )
-        setPetReaction(
-          path === "questions" &&
-            payload?.total > 0 &&
-            payload.correct / payload.total < 0.5
-            ? "sad"
-            : "happy",
-        );
-      setToast({
-        message,
-        success: true,
-      });
+      setToast({ message, success: true });
       return true;
     } catch (e) {
       if (e.status === 409) await refresh();
@@ -487,7 +463,6 @@ export default function App() {
             <PetCompanion
               pet={data.pet}
               navigate={navigate}
-              reaction={petReaction}
               action={action}
               working={working}
             />

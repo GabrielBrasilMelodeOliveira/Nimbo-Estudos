@@ -1,3 +1,5 @@
+import PetCareStatus from "../../shared/components/pet/PetCareStatus.jsx";
+import PetCareRules from "../../shared/components/pet/PetCareRules.jsx";
 import { Button } from "@mui/material";
 import { ArrowRight, Check, LockKeyhole, Sparkles } from "lucide-react";
 import {
@@ -27,9 +29,11 @@ export default function Collection({ data, action, working, navigate }) {
         <PetArt
           species={pet?.species || "nori"}
           stage={pet?.stage || 1}
+          mood={pet?.mood}
           large
         />
       </div>
+      <PetCareRules />
       <div className="section-intro">
         <div>
           <h2>Coleção</h2>
@@ -56,7 +60,12 @@ export default function Collection({ data, action, working, navigate }) {
                 "--nimbo-tone": speciesInfo(member.species).light,
               }}
             >
-              <PetArt species={member.species} stage={member.stage} large />
+              <PetArt
+                species={member.species}
+                stage={member.stage}
+                mood={member.mood}
+                large
+              />
             </div>
             <div className="nimbo-collection-info">
               <div className="nimbo-collection-name">
@@ -77,6 +86,7 @@ export default function Collection({ data, action, working, navigate }) {
                   }}
                 />
               </div>
+              <PetCareStatus pet={member} action={action} working={working} />
               <Button
                 className="btn btn-subtle"
                 disabled={working || member.active}

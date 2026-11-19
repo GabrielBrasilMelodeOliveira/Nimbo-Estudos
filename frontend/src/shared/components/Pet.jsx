@@ -1,3 +1,6 @@
+import { Box } from "@mui/material";
+import PetFace from "./pet/PetFace.jsx";
+import { petMotion, moodLabels } from "./pet/petMotion.js";
 import { Button } from "@mui/material";
 import React, { useId, useState } from "react";
 import { ArrowRight, Sparkles } from "lucide-react";
@@ -111,17 +114,19 @@ export function PetArt({
   species = "nori",
   stage = 1,
   large = false,
-  mood = "normal",
+  mood = "neutral",
   onClick,
 }) {
   const p = speciesInfo(species);
   const unique = useId().replace(/:/g, "");
   return (
-    <svg
+    <Box
+      component="svg"
+      sx={petMotion(mood)}
       className={`nimbo-art ${large ? "nimbo-big" : ""} nimbo-${mood}`}
       viewBox="0 0 300 288"
       role="img"
-      aria-label={`Ilustração original de ${displayName(species, stage)}`}
+      aria-label={`Ilustração original de ${displayName(species, stage)} · ${moodLabels[mood] || "neutro"}`}
       onClick={onClick}
     >
       <defs>
@@ -180,6 +185,32 @@ export function PetArt({
           </>
         )}
       </g>
+      {["proud", "excited", "radiant", "legendary"].includes(mood) && (
+        <g
+          className="pet-aura"
+          fill={mood === "legendary" ? "#c68fea" : "#f1ba49"}
+        >
+          <circle
+            cx="150"
+            cy="150"
+            r="118"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={mood === "legendary" ? 7 : 3}
+            opacity=".18"
+          />
+          <path d="M48 64l5 11 12 2-9 8 2 12-10-6-11 6 2-12-9-8 13-2Z M244 103l4 9 11 2-8 7 2 10-9-5-9 5 2-10-8-7 11-2Z" />
+          {["excited", "radiant", "legendary"].includes(mood) && (
+            <path
+              d="M245 36q-20 20-11 33t27 0q8-12-6-24l-3 13Z"
+              fill="#ed9b47"
+            />
+          )}
+          {["radiant", "legendary"].includes(mood) && (
+            <path d="M70 37l12 9 10-17 10 17 12-9-4 25H74Z" />
+          )}
+        </g>
+      )}
       <g className="nimbo-float" filter={`url(#shadow-${unique})`}>
         <path d="M110 99Q71 68 76 26Q104 34 129 89Z" fill={p.dark} />
         <path d="M187 91Q219 45 245 35Q240 89 207 114Z" fill={p.dark} />
@@ -238,55 +269,7 @@ export function PetArt({
           fill={p.light}
           opacity=".36"
         />
-        <g className="nimbo-face">
-          <ellipse
-            className="nimbo-eye"
-            cx="117"
-            cy="161"
-            rx="8"
-            ry={mood === "tired" ? 3 : 11}
-            fill="#263e3d"
-          />
-          <ellipse
-            className="nimbo-eye"
-            cx="184"
-            cy="161"
-            rx="8"
-            ry={mood === "tired" ? 3 : 11}
-            fill="#263e3d"
-          />
-          <ellipse cx="114" cy="156" rx="2.5" ry="3.6" fill="#fff" />
-          <ellipse cx="181" cy="156" rx="2.5" ry="3.6" fill="#fff" />
-          <ellipse
-            cx="98"
-            cy="182"
-            rx="16"
-            ry="9"
-            fill="#efaa9f"
-            opacity=".56"
-          />
-          <ellipse
-            cx="204"
-            cy="182"
-            rx="16"
-            ry="9"
-            fill="#efaa9f"
-            opacity=".56"
-          />
-          <path
-            d={
-              mood === "sad"
-                ? "M139 203Q151 193 162 204"
-                : mood === "happy"
-                  ? "M137 196Q149 216 165 194"
-                  : "M141 198Q151 205 160 197"
-            }
-            stroke="#3b4e4b"
-            strokeWidth="4.2"
-            strokeLinecap="round"
-            fill="none"
-          />
-        </g>
+        <PetFace mood={mood} />
         <path
           d="M91 216C77 223 80 233 89 235"
           stroke={p.light}
@@ -296,7 +279,7 @@ export function PetArt({
           fill="none"
         />
       </g>
-    </svg>
+    </Box>
   );
 }
 export function PetPicker({
@@ -349,7 +332,7 @@ export function PetPicker({
 export default function Pet({ pet, navigate }) {
   return (
     <div className="nimbo-hero-card">
-      <PetArt species={pet.species} stage={pet.stage} large />
+      <PetArt species={pet.species} stage={pet.stage} mood={pet.mood} large />
       <div>
         <span className="eyebrow">SEU COMPANHEIRO</span>
         <h2>{displayName(pet.species, pet.stage)}</h2>

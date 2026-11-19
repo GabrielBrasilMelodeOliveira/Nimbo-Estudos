@@ -103,16 +103,9 @@ public class QuestionsService {
       focus.durationSeconds = duration;
       focus.studyDate = q.date;
       sessions.save(focus);
-      pet.progress(
-        (int) Math.min(120, duration / 60),
-        (int) Math.min(30, duration / 300)
-      );
+      pet.awardExperience((int) Math.min(120, duration / 60));
     }
-    pet.progress(
-      Math.min(120, request.correct() * 3),
-      Math.min(30, request.correct()) -
-        Math.min(35, (request.total() - request.correct()) * 3)
-    );
+    pet.awardExperience(Math.min(120, request.correct() * 3));
     return saved;
   }
 

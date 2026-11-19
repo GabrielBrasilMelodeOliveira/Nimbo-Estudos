@@ -38,6 +38,7 @@ public class FlashcardService {
     String source,
     String topic,
     String discipline,
+    Long disciplineId,
     String question,
     String answer,
     String questionImageId,
@@ -95,6 +96,16 @@ public class FlashcardService {
         "Aguarde o próximo horário de revisão deste cartão."
       );
     }
+    try {
+      errorNote.flashcardUndoState = objectMapper.writeValueAsString(
+        new UndoSnapshot(errorNote.flashcardState, errorNote.flashcardHistory)
+      );
+    } catch (com.fasterxml.jackson.core.JsonProcessingException exception) {
+      throw new IllegalStateException(
+        "Não foi possível preparar a avaliação para desfazer.",
+        exception
+      );
+    }
     var result = scheduler.reviewCard(card, request.rating(), now);
     errorNote.flashcardState = result.card().toJson();
     errorNote.flashcardRevision++;
@@ -113,6 +124,44 @@ public class FlashcardService {
     }
     errorNoteRepository.save(errorNote);
     return view(errorNote, now);
+  }
+
+  public record UndoInput(Long expectedRevision) {}
+
+  public record UndoSnapshot(String state, String history) {}
+
+  @Transactional
+  public FlashcardView undo(Long id, UndoInput input) {
+    ErrorNote note = errorNoteRepository.findLockedById(id).orElseThrow();
+    if (
+      input == null ||
+      input.expectedRevision() == null ||
+      !note.flashcardEnabled ||
+      note.flashcardUndoState == null ||
+      note.flashcardRevision != input.expectedRevision()
+    ) {
+      throw new ResponseStatusException(
+        HttpStatus.CONFLICT,
+        "Esta avaliação não pode mais ser desfeita. Atualize a fila."
+      );
+    }
+    try {
+      UndoSnapshot previous = objectMapper.readValue(
+        note.flashcardUndoState,
+        UndoSnapshot.class
+      );
+      note.flashcardState = previous.state();
+      note.flashcardHistory = previous.history();
+    } catch (com.fasterxml.jackson.core.JsonProcessingException exception) {
+      throw new IllegalStateException(
+        "Não foi possível restaurar a avaliação anterior.",
+        exception
+      );
+    }
+    note.flashcardUndoState = null;
+    note.flashcardRevision++;
+    errorNoteRepository.save(note);
+    return view(note, Instant.now());
   }
 
   public record LinkInput(Boolean enabled) {}
@@ -134,6 +183,7 @@ public class FlashcardService {
       );
     if (errorNote.flashcardEnabled != request.enabled()) {
       errorNote.flashcardEnabled = request.enabled();
+      errorNote.flashcardUndoState = null;
       errorNote.flashcardRevision++;
       errorNoteRepository.save(errorNote);
     }
@@ -159,6 +209,7 @@ public class FlashcardService {
       errorNote.source,
       errorNote.topic.title,
       errorNote.topic.discipline.name,
+      errorNote.topic.discipline.id,
       errorNote.trap,
       errorNote.correctAnswer,
       errorNote.questionImageId,

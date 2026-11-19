@@ -28,6 +28,10 @@ public class CompanionsService {
     return pet.choose(selection.species());
   }
 
+  public Map<String, Object> restartPet(Long id) {
+    return pet.restart(id);
+  }
+
   public Map<String, Object> activatePet(Long id) {
     return pet.activate(id);
   }

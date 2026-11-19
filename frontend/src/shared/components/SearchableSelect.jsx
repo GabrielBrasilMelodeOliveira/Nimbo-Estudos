@@ -1,4 +1,4 @@
-import { Children, isValidElement, useEffect, useRef } from "react";
+import { Children, isValidElement, useEffect, useMemo, useRef } from "react";
 import { Autocomplete, TextField } from "@mui/material";
 
 function readOptions(children, group = "") {
@@ -36,7 +36,9 @@ export function SearchableSelect({
   size = "small",
   ...props
 }) {
-  const options = readOptions(children);
+  // Keep option/value identities stable during background refreshes (e.g. flashcard countdown).
+  const optionSnapshot = JSON.stringify(readOptions(children));
+  const options = useMemo(() => JSON.parse(optionSnapshot), [optionSnapshot]);
   const selected =
     options.find((option) => option.value === String(value)) || null;
   const inputReference = useRef(null);

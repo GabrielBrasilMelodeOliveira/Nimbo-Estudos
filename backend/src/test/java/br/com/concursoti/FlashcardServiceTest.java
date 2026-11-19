@@ -117,4 +117,46 @@ class FlashcardServiceTest {
     service.setLinked(42L, new FlashcardService.LinkInput(true));
     assertEquals(revision, errorNote.flashcardRevision);
   }
+
+  @Test
+  void undoRestoresNewCardAndRejectsSecondUndo() {
+    service.review(42L, new FlashcardService.ReviewInput(Rating.GOOD, 0L));
+    assertNotNull(errorNote.flashcardUndoState);
+    var restored = service.undo(42L, new FlashcardService.UndoInput(1L));
+    assertNull(errorNote.flashcardState);
+    assertNull(errorNote.flashcardHistory);
+    assertNull(errorNote.flashcardUndoState);
+    assertEquals(2, restored.revision());
+    assertFalse(restored.due().isAfter(Instant.now()));
+    assertThrows(ResponseStatusException.class, () ->
+      service.undo(42L, new FlashcardService.UndoInput(2L))
+    );
+  }
+
+  @Test
+  void undoRestoresExactFsrsStateAndHistoryAfterAnotherReview() {
+    errorNote.flashcardState = Card.builder()
+      .cardId(42)
+      .due(Instant.now().minusSeconds(300))
+      .build()
+      .toJson();
+    errorNote.flashcardHistory = "[]";
+    String previousState = errorNote.flashcardState;
+    service.review(42L, new FlashcardService.ReviewInput(Rating.EASY, 0L));
+    assertThrows(ResponseStatusException.class, () ->
+      service.undo(42L, new FlashcardService.UndoInput(0L))
+    );
+    service.undo(42L, new FlashcardService.UndoInput(1L));
+    assertEquals(previousState, errorNote.flashcardState);
+    assertEquals("[]", errorNote.flashcardHistory);
+    service.review(42L, new FlashcardService.ReviewInput(Rating.HARD, 2L));
+    service.setLinked(42L, new FlashcardService.LinkInput(false));
+    assertNull(errorNote.flashcardUndoState);
+    assertThrows(ResponseStatusException.class, () ->
+      service.undo(
+        42L,
+        new FlashcardService.UndoInput(errorNote.flashcardRevision)
+      )
+    );
+  }
 }

@@ -15,6 +15,11 @@ public class CompanionsController {
     this.service = service;
   }
 
+  @PostMapping("/pet/{id}/restart")
+  public Map<String, Object> restart(@PathVariable Long id) {
+    return service.restartPet(id);
+  }
+
   @PostMapping("/pet/interact")
   public Map<String, Object> interactPet(@RequestBody PetInteraction request) {
     return service.interactPet(request);

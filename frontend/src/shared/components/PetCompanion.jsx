@@ -1,22 +1,29 @@
-import { Input } from "./FormControls.jsx";
-import { Button } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import {
+  Box,
+  Button,
+  Chip,
+  IconButton,
+  LinearProgress,
+  Paper,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import {
   ChevronUp,
   ChevronDown,
-  Heart,
-  Star,
-  MessageCircle,
-  X,
   Moon,
-  HandHeart,
   SmilePlus,
+  MessageCircle,
   Volume2,
   VolumeX,
   Send,
   Sparkles,
 } from "lucide-react";
-import { PetArt, PetPicker, displayName, speciesInfo } from "./Pet.jsx";
+import { PetArt, speciesInfo } from "./Pet.jsx";
+import PetCareStatus from "./pet/PetCareStatus.jsx";
+
 const starters = [
   "Vamos avançar um pouquinho hoje?",
   "Consistência vale mais do que pressa.",
@@ -24,6 +31,7 @@ const starters = [
   "Um assunto de cada vez. Eu fico aqui com você.",
 ];
 function reply(text, pet) {
+  if (pet.care?.dead || pet.care?.missedDays > 0) return pet.message;
   const s = text.toLowerCase();
   if (/cans|sono|descans|dorm/.test(s))
     return "Descansar também faz parte do plano. Que tal uma pausa de verdade?";
@@ -39,151 +47,163 @@ function reply(text, pet) {
     ? "Estou um pouco cansado. Podemos ir com calma."
     : starters[Math.floor(s.length % starters.length)];
 }
-export default function PetCompanion({
-  pet,
-  navigate,
-  reaction,
-  action,
-  working,
-}) {
-  const [open, setOpen] = useState(() => {
-    const saved = localStorage.getItem("nimbo:open");
-    return saved !== null
-      ? saved === "true"
-      : window.matchMedia("(min-width: 900px)").matches;
-  });
-  const [chat, setChat] = useState(false),
-    [message, setMessage] = useState("");
-  const [line, setLine] = useState("Eu acompanho seus passos.");
-  const [speaking, setSpeaking] = useState(false),
-    [spark, setSpark] = useState(false);
-  const mood =
-    reaction ||
-    (pet?.energy <= 22
-      ? "tired"
-      : pet?.energy <= 42
-        ? "sad"
-        : pet?.energy >= 78
-          ? "happy"
-          : "normal");
-  useEffect(() => {
-    if (reaction) {
-      setLine(
-        reaction === "happy"
-          ? "Uhu! Mais um passo na direção da sua meta!"
-          : "Tudo bem errar. Vamos aprender com isso.",
-      );
-      setSpark(true);
-      const t = setTimeout(() => setSpark(false), 1800);
-      return () => clearTimeout(t);
-    }
-  }, [reaction]);
+export default function PetCompanion({ pet, navigate, action, working }) {
+  const [open, setOpen] = useState(
+    () => localStorage.getItem("nimbo:open") === "true",
+  );
+  const [chat, setChat] = useState(false);
+  const [message, setMessage] = useState("");
+  const [feedback, setFeedback] = useState("");
+  const [speaking, setSpeaking] = useState(false);
+  const dead = !!pet?.care?.dead;
+  const mood = pet?.mood || "neutral";
   const toggle = () => {
     localStorage.setItem("nimbo:open", String(!open));
     setOpen(!open);
   };
-  const speak = (t) => {
-    if (!speaking || !("speechSynthesis" in window)) return;
+  useEffect(() => {
+    if (!feedback) return;
+    const timeout = setTimeout(() => setFeedback(""), 6000);
+    return () => clearTimeout(timeout);
+  }, [feedback]);
+  useEffect(() => {
+    if (!speaking || !pet?.message || !("speechSynthesis" in window)) return;
+    const utterance = new SpeechSynthesisUtterance(pet.message);
+    utterance.lang = "pt-BR";
     window.speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(t);
-    u.lang = "pt-BR";
-    u.rate = 1.08;
-    window.speechSynthesis.speak(u);
-  };
-  const say = (t) => {
-    setLine(t);
-    speak(t);
-  };
+    window.speechSynthesis.speak(utterance);
+    return () => window.speechSynthesis.cancel();
+  }, [speaking, pet?.message]);
   const interact = async (type) => {
-    if (working) return;
-    const ok = await action(
-      "pet/interact",
-      "POST",
-      {
-        action: type,
-      },
-      "Nimbo gostou da atenção!",
-    );
-    if (ok)
-      say(
+    if (working || dead) return;
+    if (
+      await action(
+        "pet/interact",
+        "POST",
+        { action: type },
+        "Vínculo fortalecido.",
+      )
+    ) {
+      setFeedback(
         {
-          PET: "Carinho recebido! Obrigado por cuidar de mim.",
-          PLAY: "Foi divertido! Que tal um bloco de foco agora?",
-          REST: "Boa ideia. Até os guardiões precisam descansar.",
-          TALK: "Eu gosto de conversar com você.",
+          PET: "Recebi seu carinho! Nosso vínculo ficou mais forte.",
+          PLAY: "Foi divertido! Vamos cuidar das metas também?",
+          REST: "Descansei um pouco. Para recuperar minha energia, precisamos avançar nas metas.",
+          TALK: "Gosto de conversar com você!",
         }[type],
       );
+    }
   };
-  const send = (e) => {
-    e.preventDefault();
-    if (!message.trim()) return;
+  const send = async (event) => {
+    event.preventDefault();
+    if (!message.trim() || working || dead) return;
     const answer = reply(message, pet);
-    setMessage("");
-    say(answer);
+    if (
+      await action(
+        "pet/interact",
+        "POST",
+        { action: "TALK" },
+        "Nimbo ouviu você.",
+      )
+    ) {
+      setMessage("");
+      setFeedback(answer);
+    }
   };
-  if (!pet)
-    return (
-      <div className="nimbo-onboarding-floating">
-        <Button className="nimbo-tab" onClick={toggle} type="button">
-          <Sparkles size={18} /> {open ? "Fechar" : "Conhecer Nimbo"}
-        </Button>
-        {open && (
-          <div className="nimbo-first">
-            Comece escolhendo um Nimbo na página inicial.
-          </div>
-        )}
-      </div>
-    );
   return (
-    <div className={`nimbo-widget ${open ? "is-open" : "is-closed"}`}>
-      {!open ? (
-        <Button className="nimbo-tab" onClick={toggle} type="button">
-          <span className="nimbo-tab-avatar">
+    <Box
+      sx={{
+        position: "fixed",
+        bottom: { xs: 8, sm: 16 },
+        right: { xs: 8, sm: 16 },
+        zIndex: 1100,
+        maxWidth: "calc(100vw - 16px)",
+      }}
+    >
+      {!pet ? (
+        <Button
+          variant="outlined"
+          startIcon={<Sparkles size={18} />}
+          onClick={() => navigate("collection")}
+          sx={{ bgcolor: "background.paper" }}
+        >
+          Conhecer Nimbo
+        </Button>
+      ) : !open ? (
+        <Button
+          onClick={toggle}
+          variant="outlined"
+          aria-label="Abrir companheiro Nimbo"
+          sx={{ bgcolor: "background.paper", textAlign: "left", px: 1, gap: 1 }}
+        >
+          <Box
+            sx={{
+              width: 56,
+              height: 54,
+              "& svg.nimbo-art": { width: "100%", height: "100%" },
+            }}
+          >
             <PetArt species={pet.species} stage={pet.stage} mood={mood} />
-          </span>
-          <span>
-            <strong>{speciesInfo(pet.species).short}</strong>
-            <small>
-              Nível {pet.level} · Energia {pet.energy}%
-            </small>
-          </span>
-          <ChevronUp size={18} />
+          </Box>
+          <Box>
+            <Typography variant="body2" fontWeight={700}>
+              {speciesInfo(pet.species).short} ·{" "}
+              {pet.care?.moodLabel || "Neutro"}
+            </Typography>
+            <Typography variant="caption">
+              {dead
+                ? "Esta vida terminou"
+                : `${pet.care?.streak || 0} dias de metas · Nível ${pet.level}`}
+            </Typography>
+          </Box>
+          <ChevronUp size={17} />
         </Button>
       ) : (
-        <section className="nimbo-panel" aria-label="Seu companheiro Nimbo">
-          <header className="nimbo-panel-head">
-            <span className="nimbo-live">
-              <i /> COMPANHEIRO
-            </span>
-            <div>
-              <Button
-                title="Ativar ou desativar voz"
-                className="nimbo-tool"
-                onClick={() => setSpeaking(!speaking)}
-                type="button"
-              >
-                {speaking ? <Volume2 size={16} /> : <VolumeX size={16} />}
-              </Button>
-              <Button
-                className="nimbo-tool"
-                aria-label="Recolher companheiro"
-                onClick={toggle}
-                type="button"
-              >
-                <ChevronDown size={19} />
-              </Button>
-            </div>
-          </header>
-          <div className={`nimbo-habitat ${spark ? "is-sparkling" : ""}`}>
-            <div className="nimbo-light" />
-            <span className="nimbo-star star-a">✧</span>
-            <span className="nimbo-star star-b">✦</span>
+        <Paper
+          component="section"
+          aria-label="Seu companheiro Nimbo"
+          elevation={5}
+          sx={{
+            width: 340,
+            maxWidth: "calc(100vw - 16px)",
+            maxHeight: "calc(100dvh - 32px)",
+            overflowY: "auto",
+            borderRadius: 3,
+          }}
+        >
+          <Stack
+            direction="row"
+            sx={{
+              alignItems: "center",
+              px: 2,
+              py: 1,
+              borderBottom: "1px solid",
+              borderColor: "divider",
+            }}
+          >
+            <Typography fontWeight={700} variant="body2" sx={{ flex: 1 }}>
+              {speciesInfo(pet.species).name}
+            </Typography>
+            <IconButton
+              aria-label={speaking ? "Desativar voz" : "Ativar voz"}
+              onClick={() => setSpeaking(!speaking)}
+            >
+              {speaking ? <Volume2 size={18} /> : <VolumeX size={18} />}
+            </IconButton>
+            <IconButton aria-label="Recolher companheiro" onClick={toggle}>
+              <ChevronDown size={19} />
+            </IconButton>
+          </Stack>
+          <Stack spacing={1.5} sx={{ p: 2 }}>
             <Button
-              className="nimbo-art-button"
-              title="Dar carinho"
+              aria-label="Dar carinho"
               onClick={() => interact("PET")}
-              disabled={working}
-              type="button"
+              disabled={working || dead}
+              sx={{
+                alignSelf: "center",
+                p: 0,
+                "& svg.nimbo-art": { width: 170, height: 164 },
+              }}
             >
               <PetArt
                 species={pet.species}
@@ -192,102 +212,87 @@ export default function PetCompanion({
                 large
               />
             </Button>
-            <span className="nimbo-floor" />
-          </div>
-          <div className="nimbo-panel-body">
-            <div className="nimbo-title">
-              <div>
-                <h3>{speciesInfo(pet.species).name}</h3>
-                <small>
-                  Nível {pet.level} ·{" "}
-                  {pet.stage === 3
-                    ? "Forma radiante"
-                    : `Estágio ${pet.stage}/3`}
-                </small>
-              </div>
-              <span className="nimbo-mood">
-                {mood === "happy"
-                  ? "Radiante"
-                  : mood === "tired"
-                    ? "Cansado"
-                    : mood === "sad"
-                      ? "Quietinho"
-                      : "Tranquilo"}
-              </span>
-            </div>
-            <div className="nimbo-meter-label">
-              <span>
-                <Heart size={13} /> Energia
-              </span>
-              <b>{pet.energy}%</b>
-            </div>
-            <div className="nimbo-meter">
-              <i
-                style={{
-                  width: `${pet.energy}%`,
-                }}
-              />
-            </div>
-            <div className="nimbo-meter-label">
-              <span>
-                <Star size={13} /> Experiência
-              </span>
-              <b>{pet.xp} XP</b>
-            </div>
-            <div className="nimbo-meter xp">
-              <i
-                style={{
-                  width: `${pet.xpToNextStage ? Math.min(100, (100 * pet.xpWithinStage) / pet.xpToNextStage) : 100}%`,
-                }}
-              />
-            </div>
-            <div className="nimbo-bubble">
-              <MessageCircle size={16} />
-              <span>{line}</span>
-            </div>
-            <div className="nimbo-actions">
-              <Button
-                onClick={() => interact("PLAY")}
-                disabled={working}
-                type="button"
-              >
-                <SmilePlus size={16} /> Brincar
-              </Button>
-              <Button
-                onClick={() => interact("REST")}
-                disabled={working}
-                type="button"
-              >
-                <Moon size={16} /> Descansar
-              </Button>
-              <Button onClick={() => setChat(!chat)} type="button">
-                <MessageCircle size={16} /> Conversar
-              </Button>
-            </div>
-            {chat && (
-              <form className="nimbo-chat" onSubmit={send}>
-                <Input
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  maxLength={180}
-                  placeholder="Conte como está seu dia..."
-                  aria-label="Mensagem para Nimbo"
-                />
-                <Button type="submit" aria-label="Enviar mensagem">
-                  <Send size={16} />
-                </Button>
-              </form>
+            <PetCareStatus
+              pet={pet}
+              action={action}
+              working={working}
+              compact
+            />
+            <Stack direction="row" justifyContent="space-between">
+              <Typography variant="caption">Energia {pet.energy}%</Typography>
+              <Typography variant="caption">
+                Nível {pet.level} · {pet.xp} XP · Vínculo {pet.bond ?? 20}
+              </Typography>
+            </Stack>
+            <LinearProgress
+              variant="determinate"
+              value={pet.energy}
+              color={dead ? "inherit" : "primary"}
+              sx={{ height: 6, borderRadius: 3 }}
+            />
+            {feedback && (
+              <Typography variant="body2" role="status" color="primary">
+                “{feedback}”
+              </Typography>
             )}
-            <Button
-              className="nimbo-collection-link"
-              onClick={() => navigate("collection")}
-              type="button"
-            >
-              Ver meus companheiros <span>→</span>
+            {!dead && (
+              <>
+                <Stack direction="row" spacing={0.5}>
+                  <Button
+                    size="small"
+                    onClick={() => interact("PLAY")}
+                    disabled={working}
+                    startIcon={<SmilePlus size={16} />}
+                  >
+                    Brincar
+                  </Button>
+                  <Button
+                    size="small"
+                    onClick={() => interact("REST")}
+                    disabled={working}
+                    startIcon={<Moon size={16} />}
+                  >
+                    Descansar
+                  </Button>
+                  <IconButton
+                    aria-label="Conversar"
+                    onClick={() => setChat(!chat)}
+                  >
+                    <MessageCircle size={18} />
+                  </IconButton>
+                </Stack>
+                {chat && (
+                  <Stack
+                    component="form"
+                    direction="row"
+                    spacing={1}
+                    onSubmit={send}
+                  >
+                    <TextField
+                      value={message}
+                      onChange={(event) => setMessage(event.target.value)}
+                      label="Mensagem para Nimbo"
+                      size="small"
+                      fullWidth
+                      slotProps={{ htmlInput: { maxLength: 180 } }}
+                    />
+                    <IconButton
+                      type="submit"
+                      disabled={working || !message.trim()}
+                      aria-label="Enviar mensagem"
+                    >
+                      <Send size={18} />
+                    </IconButton>
+                  </Stack>
+                )}
+              </>
+            )}
+            <Button onClick={() => navigate("collection")}>
+              Coleção e regras do Nimbo →
             </Button>
-          </div>
-        </section>
+          </Stack>
+        </Paper>
       )}
-    </div>
+    </Box>
   );
 }

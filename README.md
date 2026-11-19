@@ -1,6 +1,6 @@
-# Nimbo 5.7 — Foco contínuo e planejamento diário
+# Nimbo 5.8 — Fechamento do dia, flashcards e vida do Nimbo
 
-A versão **5.7.0** aparece no menu lateral. Para atualizar uma instalação Docker existente:
+A versão **5.8.0** aparece no menu lateral. Para atualizar uma instalação Docker existente:
 
 ```bash
 git pull --ff-only origin main
@@ -9,9 +9,31 @@ docker compose up -d --build
 
 Recarregue a página após a reconstrução. Apenas `git pull` não substitui o frontend que já está no container. Os volumes existentes são preservados.
 
-Nesta versão, Estudar e Questões usam o mesmo cronômetro: ele continua entre páginas, permite pausar e registrar pela barra flutuante e preserva a sessão ao recarregar a aba. A Agenda permite até duas disciplinas por dia e orienta o próximo passo no Início. A fonte Inter é distribuída junto com o app. Os gráficos separam horas de estudo da quantidade de questões, mostram acertos e erros e têm pontos visíveis nos dias com registros. Novos erros entram automaticamente nos flashcards; o histórico existente é preservado.
+Nesta versão:
 
+- **Fechamento do dia** no Início e na Agenda: metas diárias editáveis, tempo/questões/assuntos realizados, atividades planejadas/concluídas/pendentes, histórico de 14 dias e reagendamento em lote. Pode incluir pendências anteriores e escolher a data de destino. A operação inteira é cancelada se uma atividade mudou, já foi concluída ou conflita com um estudo no destino.
+- **Flashcards** com filtro pesquisável por disciplina, Espaço para revelar, teclas 1–4 para avaliar e Z para desfazer a última avaliação da sessão. Desfazer restaura o estado e o histórico FSRS anteriores; revisões feitas em outra aba são protegidas por uma revisão numérica. Atalhos ficam inativos ao digitar ou abrir diálogos.
+- **Nimbo** com expressões, movimentos e falas para fome, cansaço, tristeza, irritação, morte, neutralidade, felicidade e marcos de constância. Respeita a preferência de reduzir movimentos do sistema. A voz é opcional.
 
+### Regras de metas e do Nimbo
+
+As metas diárias iniciais dividem por sete as metas semanais de minutos e assuntos, arredondando para cima (mínimo de um minuto). Edite em **Fechamento do dia → Editar metas diárias**, inclusive a meta de questões. Zero desativa uma medida; ao menos uma precisa ser positiva. Alterações valem para hoje e os próximos dias. Essas metas são independentes dos objetivos semanais/mensais da agenda depois de criadas.
+
+O horário de referência é **America/Fortaleza**. O dia atual fica em aberto até meia-noite. Dias encerrados têm metas e resultados preservados; edições retroativas não reescrevem resultados já fechados. O servidor contabiliza dias de ausência na próxima consulta, sem depender de o navegador ficar aberto. A contagem de cuidado começa no primeiro acesso da versão nova ou na adoção, sem punir dias anteriores à atualização.
+
+| Resultado | Estado do Nimbo |
+| --- | --- |
+| Todas as metas configuradas atingidas | Feliz; soma um dia à sequência |
+| Algum progresso, sem completar tudo | Neutro, sem fome/cansaço; interrompe as sequências positiva e negativa |
+| 1 dia encerrado sem progresso | Com fome |
+| 2 dias consecutivos sem progresso | Cansado |
+| 3 dias consecutivos sem progresso | Triste pela manhã, irritado à tarde |
+| 4 dias consecutivos sem progresso | Morre; precisa de recomeço explícito |
+| 3 / 7 / 14 / 30 dias de metas completas | Orgulhoso / empolgado / radiante / lendário |
+
+Um dia parcialmente cumprido interrompe a contagem de faltas. Progresso hoje neutraliza fome e cansaço, mas não revive um Nimbo já morto. Carinho, conversa, brincadeira e descanso fortalecem o vínculo e não substituem metas. A coleção inteira acompanha as metas, inclusive os companheiros inativos. Recomeçar zera XP, vínculo e sequência daquela vida, preservando recorde, número de vidas, XP da vida anterior e todos os estudos. O estado é calculado no backend; trocar de aba ou recarregar a página não muda as regras.
+
+Os recursos anteriores permanecem: cronômetro contínuo entre páginas, planejamento de duas disciplinas por dia, gráficos de acertos/erros e novos erros automaticamente vinculados aos flashcards.
 
 Aplicação local para concursos e organização pessoal. **Java 21 / Spring Boot 3.5, React 19, PostgreSQL 17 e Docker Compose**. Esta atualização preserva os recursos e dados da versão 5.4 e modifica o backend, frontend e o esquema de dados.
 
@@ -84,7 +106,10 @@ Hibernate (configurado com `ddl-auto: update` para uso pessoal local) adiciona:
 - `topics.assimilation_level` e `topics.review_schedule_initialized`;
 - `review_tasks.assimilation_level` e `review_tasks.cancelled_at`;
 - `agenda_items.topic_id`, `agenda_items.study_kind` e `agenda_items.target_questions`;
-- nova tabela `period_goals` (metas semanais/mensais).
+- nova tabela `period_goals` (metas semanais/mensais);
+- `daily_goal_settings` e `daily_goal_days` para metas diárias e resultados encerrados;
+- campos de cuidado, sequências, morte e vidas anteriores em `pet_companions`;
+- `error_notes.flashcard_undo_state` para desfazer a última avaliação do cartão.
 
 Os registros antigos permanecem. Para um ambiente de produção ou hospedagem pública, serão necessárias migrações versionadas e autenticação; esta instalação foi projetada para uso local individual.
 
@@ -99,6 +124,11 @@ docker compose up -d --build
 Acesse **http://localhost:3000**. O edital começa vazio para você importar seu próprio documento PDF/DOCX ou cadastrar disciplinas e assuntos manualmente.
 
 ## Rotas adicionais da API
+
+- `GET/PUT /api/daily-progress`: resultado de hoje e metas `{ "targetMinutes":60, "targetQuestions":20, "targetTopics":1 }`.
+- `POST /api/agenda/reschedule`: `{ "scheduledDate":"AAAA-MM-DD", "items":[{ "id":1, "expectedVersion":0 }] }`.
+- `POST /api/flashcards/{id}/undo`: `{ "expectedRevision":1 }` restaura a avaliação anterior uma única vez.
+- `POST /api/pet/{id}/restart`: inicia uma nova vida apenas para um Nimbo morto.
 
 - `POST /api/topics/{id}/assimilate` com `{ "level": 1|2|3|4 }`: reavaliação da assimilação e reagendamento do assunto cuja teoria está concluída.
 - `PATCH /api/reviews/{id}/complete` com `{ "level": 1|2|3|4 }`: conclui revisão e cria uma única próxima revisão.

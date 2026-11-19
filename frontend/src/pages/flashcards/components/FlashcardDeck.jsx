@@ -9,6 +9,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
+import { SearchableSelect } from "../../../shared/components/FormControls.jsx";
 import { useFlashcards } from "../hooks/useFlashcards.js";
 import { fileUrl } from "../../../shared/services/api.js";
 
@@ -44,9 +45,41 @@ export function FlashcardDeck() {
     reviewed,
     nextDue,
     now,
+    disciplineId,
+    setDisciplineId,
+    disciplines,
+    undo,
+    canUndo,
   } = useFlashcards();
   return (
     <Stack spacing={2}>
+      <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+        <SearchableSelect
+          label="Filtrar cartões por disciplina"
+          value={disciplineId}
+          onChange={(event) => setDisciplineId(event.target.value)}
+          disabled={saving || loading}
+          sx={{ flex: 1 }}
+        >
+          <option value="">Todas as disciplinas</option>
+          {disciplines.map((discipline) => (
+            <option key={discipline.id} value={discipline.id}>
+              {discipline.name}
+            </option>
+          ))}
+        </SearchableSelect>
+        <Button
+          variant="outlined"
+          onClick={undo}
+          disabled={!canUndo || saving || loading}
+        >
+          Desfazer última avaliação
+        </Button>
+      </Stack>
+      <Typography variant="caption" color="text.secondary">
+        Atalhos: Espaço revela · 1 Novamente · 2 Difícil · 3 Bom · 4 Fácil · Z
+        desfaz. Inativos durante a digitação.
+      </Typography>
       <Stack
         direction="row"
         sx={{ gap: 1, flexWrap: "wrap", alignItems: "center" }}
@@ -108,6 +141,7 @@ export function FlashcardDeck() {
           {!revealed ? (
             <Button
               variant="contained"
+              disabled={saving}
               onClick={() => setRevealed(true)}
               sx={{ mt: 3 }}
             >
@@ -141,16 +175,17 @@ export function FlashcardDeck() {
                 Quanto você lembrou?
               </Typography>
               <Stack direction={{ xs: "column", sm: "row" }} spacing={1}>
-                {ratings.map((rating) => (
+                {ratings.map((rating, index) => (
                   <Button
                     key={rating.value}
+                    aria-label={rating.label}
                     variant="outlined"
                     color={rating.color}
-                    disabled={saving}
+                    disabled={saving || loading}
                     onClick={() => answer(rating.value)}
                     sx={{ flex: 1, flexDirection: "column", py: 1.5 }}
                   >
-                    {rating.label}
+                    {index + 1} · {rating.label}
                     <Typography component="span" variant="caption">
                       {intervalLabel(card.nextReviews[rating.value], now)}
                     </Typography>

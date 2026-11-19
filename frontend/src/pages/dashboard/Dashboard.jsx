@@ -1,3 +1,4 @@
+import DayClosing from "../../shared/sections/dayClosing/DayClosing.jsx";
 import { unplannedStudies } from "../../shared/utils/plannerMetrics.js";
 import { Stack, Typography, Chip } from "@mui/material";
 import StudySummary from "./sections/StudySummary.jsx";
@@ -311,6 +312,7 @@ export default function Dashboard({ data, action, working, navigate }) {
           )}
         </section>
       </div>
+      <DayClosing data={data} action={action} working={working} />
       <StudySummary
         daily={daily}
         questions={data.questions || []}

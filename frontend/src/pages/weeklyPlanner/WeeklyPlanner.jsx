@@ -1,3 +1,4 @@
+import DayClosing from "../../shared/sections/dayClosing/DayClosing.jsx";
 import DailyStudyPlan from "./components/DailyStudyPlan.jsx";
 import { Typography, Stack, TextField, MenuItem } from "@mui/material";
 import { AgendaDay } from "./sections/AgendaDay.jsx";
@@ -388,6 +389,7 @@ export default function WeeklyPlanner({ data, action, working, navigate }) {
           />
         )}
       </section>
+      <DayClosing data={data} action={action} working={working} />
       {selectedDay && (
         <Modal title={dateBR(selectedDay)} onClose={() => setSelectedDay(null)}>
           <div className="n55-day-dialog">

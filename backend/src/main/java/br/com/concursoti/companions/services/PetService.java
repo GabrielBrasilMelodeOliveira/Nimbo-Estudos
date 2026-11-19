@@ -3,10 +3,12 @@ package br.com.concursoti.companions.services;
 import br.com.concursoti.companions.entities.PetCompanion;
 import br.com.concursoti.companions.repositories.PetCompanionRepository;
 import br.com.concursoti.companions.repositories.PetRepository;
+import br.com.concursoti.dailygoals.entities.DailyGoalDay;
+import br.com.concursoti.dailygoals.services.DailyProgressService;
+import java.time.Clock;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +18,9 @@ public class PetService {
 
   private final PetCompanionRepository companions;
   private final PetRepository legacy;
+  private final DailyProgressService dailyProgress;
+  private final PetCarePolicy carePolicy;
+  private final Clock clock;
   private static final List<String> SPECIES = List.of(
     "nori",
     "luma",
@@ -43,9 +48,18 @@ public class PetService {
     "totodile"
   );
 
-  public PetService(PetCompanionRepository companions, PetRepository legacy) {
+  public PetService(
+    PetCompanionRepository companions,
+    PetRepository legacy,
+    DailyProgressService dailyProgress,
+    PetCarePolicy carePolicy,
+    Clock clock
+  ) {
     this.companions = companions;
     this.legacy = legacy;
+    this.dailyProgress = dailyProgress;
+    this.carePolicy = carePolicy;
+    this.clock = clock;
   }
 
   /** Preserva XP, energia e coleção existente ao migrar do tema antigo para Nimbo. */
@@ -90,21 +104,31 @@ public class PetService {
 
   @Transactional
   public Map<String, Object> current() {
+    // The shared daily-goal lock serializes care and XP updates before loading pets.
+    List<DailyGoalDay> days = dailyProgress.synchronize();
     migrate();
     PetCompanion p = active();
     if (p == null) return null;
-    decay(p);
-    return decorated(p);
+    return decorated(p, days);
   }
 
-  private Map<String, Object> decorated(PetCompanion p) {
-    Map<String, Object> view = new LinkedHashMap<>(view(p));
+  private Map<String, Object> decorated(
+    PetCompanion p,
+    List<DailyGoalDay> days
+  ) {
     List<PetCompanion> all = new ArrayList<>(companions.findAll());
+    Map<String, Object> view = new LinkedHashMap<>(view(p, days));
     all.sort(Comparator.comparing(a -> a.id));
-    view.put("collection", all.stream().map(this::view).toList());
+    view.put(
+      "collection",
+      all
+        .stream()
+        .map(member -> view(member, days))
+        .toList()
+    );
     long mature = all
       .stream()
-      .filter(a -> a.xp >= 1200)
+      .filter(a -> a.diedAt == null && a.xp >= 1200)
       .count();
     boolean credit = mature >= all.size(); // Cada Nimbo na fase máxima libera outra variação.
     view.put("canAdopt", credit && all.size() < SPECIES.size());
@@ -124,6 +148,8 @@ public class PetService {
     if (
       species == null || !SPECIES.contains(species.toLowerCase(Locale.ROOT))
     ) throw new IllegalArgumentException("Escolha um companheiro disponível.");
+    // The shared daily-goal lock serializes care and XP updates before loading pets.
+    List<DailyGoalDay> days = dailyProgress.synchronize();
     migrate();
     species = species.toLowerCase(Locale.ROOT);
     if (
@@ -132,11 +158,12 @@ public class PetService {
       "Este companheiro já está na coleção."
     );
     List<PetCompanion> all = new ArrayList<>(companions.findAll());
+    all.forEach(member -> carePolicy.evaluate(member, days));
     if (
       !all.isEmpty() &&
       all
         .stream()
-        .filter(a -> a.xp >= 1200)
+        .filter(a -> a.diedAt == null && a.xp >= 1200)
         .count() < all.size()
     ) throw new IllegalArgumentException(
       "Evolua seu companheiro até o nível 13 para desbloquear outra variação de Nimbo."
@@ -147,13 +174,18 @@ public class PetService {
     }
     PetCompanion p = new PetCompanion();
     p.species = species;
+    p.obtainedAt = LocalDate.now(clock);
+    p.lastActivity = p.obtainedAt;
+    p.lastDecay = p.obtainedAt;
     p.active = true;
     companions.save(p);
-    return decorated(p);
+    return decorated(p, days);
   }
 
   @Transactional
   public Map<String, Object> activate(Long id) {
+    // The shared daily-goal lock serializes care and XP updates before loading pets.
+    List<DailyGoalDay> days = dailyProgress.synchronize();
     migrate();
     PetCompanion chosen = companions
       .findById(id)
@@ -164,27 +196,37 @@ public class PetService {
       other.active = other.id.equals(id);
       companions.save(other);
     }
-    decay(chosen);
-    return decorated(chosen);
+    return decorated(chosen, days);
   }
 
-  private void decay(PetCompanion p) {
-    LocalDate today = LocalDate.now();
-    if (p.lastDecay == null) p.lastDecay = today;
-    long passed = Math.max(0, ChronoUnit.DAYS.between(p.lastDecay, today));
-    if (passed > 0) {
-      long inactive = Math.max(
-        0,
-        ChronoUnit.DAYS.between(p.lastActivity, today) - 1
-      );
-      p.energy = (int) Math.max(0, p.energy - Math.min(inactive, passed) * 8);
-      p.lastDecay = today;
-      companions.save(p);
-    }
+  @Transactional
+  public Map<String, Object> restart(Long id) {
+    // The shared daily-goal lock serializes care and XP updates before loading pets.
+    List<DailyGoalDay> days = dailyProgress.synchronize();
+    migrate();
+    PetCompanion pet = companions.findById(id).orElseThrow();
+    carePolicy.evaluate(pet, days);
+    if (pet.diedAt == null) throw new IllegalArgumentException(
+      "Esta vida ainda está ativa."
+    );
+    pet.previousLifeXp = pet.xp;
+    pet.xp = 0;
+    pet.bond = 20;
+    pet.missedDays = 0;
+    pet.goalStreak = 0;
+    pet.diedAt = null;
+    pet.careStartedAt = LocalDate.now(clock);
+    pet.lastCareDate = pet.careStartedAt.minusDays(1);
+    pet.lastInteraction = null;
+    pet.lastRest = null;
+    companions.save(pet);
+    return decorated(pet, days);
   }
 
   @Transactional
   public Map<String, Object> interact(String type) {
+    // The shared daily-goal lock serializes care and XP updates before loading pets.
+    List<DailyGoalDay> days = dailyProgress.synchronize();
     migrate();
     PetCompanion p = active();
     if (p == null) throw new IllegalArgumentException(
@@ -197,14 +239,17 @@ public class PetService {
     if (
       !Set.of("PET", "TALK", "PLAY", "REST").contains(action)
     ) throw new IllegalArgumentException("Interação inválida.");
-    LocalDateTime now = LocalDateTime.now();
+    carePolicy.evaluate(p, days);
+    if (p.diedAt != null) throw new IllegalArgumentException(
+      "Esta jornada terminou. Recomece uma vida para interagir."
+    );
+    LocalDateTime now = LocalDateTime.now(clock);
     if (
       p.lastInteraction != null &&
       Duration.between(p.lastInteraction, now).toSeconds() < 15
     ) throw new IllegalArgumentException(
       "Nimbo precisa de alguns segundos antes da próxima interação."
     );
-    decay(p);
     switch (action) {
       case "PET" -> p.bond = Math.min(100, (p.bond == null ? 20 : p.bond) + 1);
       case "TALK" -> p.bond = Math.min(100, (p.bond == null ? 20 : p.bond) + 2);
@@ -212,7 +257,6 @@ public class PetService {
         if (p.energy < 4) throw new IllegalArgumentException(
           "Seu companheiro precisa descansar antes de brincar."
         );
-        p.energy = Math.max(0, p.energy - 4);
         p.bond = Math.min(100, (p.bond == null ? 20 : p.bond) + 3);
       }
       case "REST" -> {
@@ -221,34 +265,40 @@ public class PetService {
         ) throw new IllegalArgumentException(
           "Seu companheiro descansou recentemente. Volte depois."
         );
-        p.energy = Math.min(100, p.energy + 10);
+        p.bond = Math.min(100, (p.bond == null ? 20 : p.bond) + 1);
         p.lastRest = now;
       }
     }
     p.lastInteraction = now;
-    p.lastActivity = LocalDate.now();
+    p.lastActivity = LocalDate.now(clock);
     companions.save(p);
-    return decorated(p);
+    return decorated(p, days);
   }
 
   @Transactional
-  public void progress(int xpGain, int energyGain) {
+  public void awardExperience(int experiencePoints) {
+    // The shared daily-goal lock serializes care and XP updates before loading pets.
+    List<DailyGoalDay> days = dailyProgress.synchronize();
     migrate();
     PetCompanion p = active();
     if (p == null) return;
-    decay(p);
-    p.xp = Math.max(0, p.xp + xpGain);
-    p.energy = Math.max(0, Math.min(100, p.energy + energyGain));
-    p.lastActivity = LocalDate.now();
-    p.lastDecay = LocalDate.now();
+    carePolicy.evaluate(p, days);
+    if (p.diedAt != null) return;
+    p.xp = Math.max(0, p.xp + experiencePoints);
+    p.lastActivity = LocalDate.now(clock);
+    p.lastDecay = LocalDate.now(clock);
     companions.save(p);
   }
 
-  private Map<String, Object> view(PetCompanion p) {
+  private Map<String, Object> view(PetCompanion p, List<DailyGoalDay> days) {
+    PetCarePolicy.CareView care = carePolicy.evaluate(p, days);
     int stage = p.xp >= 1200 ? 3 : p.xp >= 400 ? 2 : 1;
     int start = stage == 3 ? 1200 : stage == 2 ? 400 : 0;
     int next = stage == 3 ? 1200 : stage == 2 ? 1200 : 400;
     Map<String, Object> out = new LinkedHashMap<>();
+    out.put("care", care);
+    out.put("mood", care.mood());
+    out.put("message", care.message());
     out.put("id", p.id);
     out.put("species", p.species);
     out.put("xp", p.xp);

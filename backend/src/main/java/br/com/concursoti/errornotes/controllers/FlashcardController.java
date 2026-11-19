@@ -28,6 +28,14 @@ public class FlashcardController {
     flashcardService.setLinked(id, request);
   }
 
+  @PostMapping("/{id}/undo")
+  public FlashcardService.FlashcardView undo(
+    @PathVariable Long id,
+    @RequestBody FlashcardService.UndoInput request
+  ) {
+    return flashcardService.undo(id, request);
+  }
+
   @PostMapping("/{id}/review")
   public FlashcardService.FlashcardView review(
     @PathVariable Long id,

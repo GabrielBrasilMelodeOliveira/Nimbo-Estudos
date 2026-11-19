@@ -5,3 +5,8 @@ export const reviewFlashcard = (card, rating) =>
     rating,
     expectedRevision: card.revision,
   });
+
+export const undoFlashcard = (card) =>
+  api(`flashcards/${card.id}/undo`, "POST", {
+    expectedRevision: card.revision,
+  });

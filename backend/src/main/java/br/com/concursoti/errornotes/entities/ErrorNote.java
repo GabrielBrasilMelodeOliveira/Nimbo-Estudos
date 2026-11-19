@@ -52,4 +52,8 @@ public class ErrorNote {
 
   @Column(nullable = false, columnDefinition = "bigint default 0")
   public long flashcardRevision;
+
+  @com.fasterxml.jackson.annotation.JsonIgnore
+  @Column(columnDefinition = "text")
+  public String flashcardUndoState;
 }

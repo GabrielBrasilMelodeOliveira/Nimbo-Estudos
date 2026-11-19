@@ -32,6 +32,26 @@ public class PetCompanion {
   @Column
   public Integer bond = 20;
 
+  // Null on upgraded pets: their first daily-care evaluation starts today.
+  public LocalDate careStartedAt;
+  public LocalDate lastCareDate;
+  public LocalDate diedAt;
+
+  @Column(nullable = false, columnDefinition = "integer default 0")
+  public int missedDays;
+
+  @Column(nullable = false, columnDefinition = "integer default 0")
+  public int goalStreak;
+
+  @Column(nullable = false, columnDefinition = "integer default 0")
+  public int bestGoalStreak;
+
+  @Column(nullable = false, columnDefinition = "integer default 0")
+  public int deathCount;
+
+  @Column(nullable = false, columnDefinition = "integer default 0")
+  public int previousLifeXp;
+
   public LocalDateTime lastInteraction;
   public LocalDateTime lastRest;
 }

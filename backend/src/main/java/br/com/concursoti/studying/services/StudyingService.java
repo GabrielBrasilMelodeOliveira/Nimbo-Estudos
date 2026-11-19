@@ -88,10 +88,7 @@ public class StudyingService {
     s.durationSeconds = request.durationSeconds();
     s.studyDate = dateOrToday(request.studyDate());
     StudySession saved = sessions.save(s);
-    pet.progress(
-      (int) Math.min(120, s.durationSeconds / 60),
-      (int) Math.min(30, s.durationSeconds / 300)
-    );
+    pet.awardExperience((int) Math.min(120, s.durationSeconds / 60));
     return saved;
   }
 

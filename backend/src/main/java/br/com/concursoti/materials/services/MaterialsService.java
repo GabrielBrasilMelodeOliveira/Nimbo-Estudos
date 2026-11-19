@@ -132,7 +132,7 @@ public class MaterialsService {
     Material m = materials.findById(id).orElseThrow();
     if (request.readDone() != null) {
       if (request.readDone() && !Boolean.TRUE.equals(m.readRewarded)) {
-        pet.progress(10, 2);
+        pet.awardExperience(10);
         m.readRewarded = true;
       }
       m.readDone = request.readDone();
@@ -140,7 +140,7 @@ public class MaterialsService {
     }
     if (request.reviewed() != null) {
       if (request.reviewed() && !Boolean.TRUE.equals(m.reviewRewarded)) {
-        pet.progress(15, 3);
+        pet.awardExperience(15);
         m.reviewRewarded = true;
       }
       m.reviewed = request.reviewed();

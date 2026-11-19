@@ -74,11 +74,7 @@ public class ExamsService {
     m.cutoffPercentage = request.cutoffPercentage();
     m.notes = request.notes();
     MockExam saved = exams.save(m);
-    pet.progress(
-      Math.min(150, request.correct() * 2),
-      Math.min(25, request.correct() / 2) -
-        Math.min(30, request.total() - request.correct())
-    );
+    pet.awardExperience(Math.min(150, request.correct() * 2));
     return saved;
   }
 
