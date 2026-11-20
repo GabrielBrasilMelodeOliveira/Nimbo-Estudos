@@ -30,12 +30,12 @@ export default function PetCareRules() {
           <Typography variant="body2">
             O dia termina à meia-noite, no horário de Fortaleza. O resultado
             fechado fica preservado; registros retroativos ou metas alteradas
-            depois não reescrevem a vida do pet. A contagem começa na
-            atualização ou na adoção, sem penalidades anteriores.
+            depois não reescrevem a vida do aventureiro. A contagem começa na
+            atualização ou no recrutamento, sem penalidades anteriores.
           </Typography>
           <Typography variant="body2">
             Todos os companheiros acompanham suas metas, inclusive os que estão
-            na coleção. Carinho, conversa, brincadeira e descanso fortalecem o
+            na coleção. Incentivo, conversa, treino e descanso fortalecem o
             vínculo, mas não substituem estudar nem revertem a morte.
           </Typography>
           <Alert severity="info">

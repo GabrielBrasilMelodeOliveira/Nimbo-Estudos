@@ -9,4 +9,4 @@ if ($LASTEXITCODE -ne 0) { throw 'Falha ao atualizar o codigo. Resolva as altera
 docker compose up -d --build
 if ($LASTEXITCODE -ne 0) { throw 'Falha ao criar os containers. Confira os logs acima.' }
 docker compose ps
-Write-Host 'Abra http://localhost:3000 e confira Nimbo v5.10.2 no menu lateral' -ForegroundColor Green
+Write-Host 'Abra http://localhost:3000 e confira Nimbo v5.11.0 no menu lateral' -ForegroundColor Green

@@ -2,46 +2,66 @@ import { keyframes } from "@emotion/react";
 
 const breathe = keyframes({
   "0%, 100%": { transform: "translateY(0)" },
-  "50%": { transform: "translateY(-3px)" },
+  "50%": { transform: "translateY(-1px)" },
+});
+const lookAround = keyframes({
+  "0%, 68%, 100%": { transform: "translateX(0)" },
+  "72%, 80%": { transform: "translateX(1px)" },
+  "84%, 92%": { transform: "translateX(-1px)" },
+});
+const blinkOpen = keyframes({
+  "0%, 42%, 46%, 91%, 95%, 100%": { opacity: 1 },
+  "43%, 45%, 92%, 94%": { opacity: 0 },
+});
+const blinkClosed = keyframes({
+  "0%, 42%, 46%, 91%, 95%, 100%": { opacity: 0 },
+  "43%, 45%, 92%, 94%": { opacity: 1 },
+});
+const stretch = keyframes({
+  "0%, 76%, 100%": { transform: "translate(0, 0)" },
+  "80%, 88%": { transform: "translate(-1px, -2px)" },
+  "92%": { transform: "translate(-1px, -1px)" },
+});
+const cape = keyframes({
+  "0%, 100%": { transform: "translateX(0)" },
+  "50%": { transform: "translateX(1px)" },
 });
 const shiver = keyframes({
   "0%, 70%, 100%": { transform: "translateX(0)" },
-  "76%, 88%": { transform: "translateX(-3px) rotate(-1deg)" },
-  "82%, 94%": { transform: "translateX(3px) rotate(1deg)" },
+  "76%, 88%": { transform: "translateX(-1px)" },
+  "82%, 94%": { transform: "translateX(1px)" },
 });
-const tired = keyframes({
-  "0%, 100%": { transform: "translateY(9px) rotate(-5deg)" },
-  "50%": { transform: "translateY(15px) rotate(-8deg)" },
+const slump = keyframes({
+  "0%, 100%": { transform: "translateY(1px)" },
+  "50%": { transform: "translateY(3px)" },
 });
-const sad = keyframes({
-  "0%, 100%": { transform: "translateY(9px) scaleY(.96)" },
-  "50%": { transform: "translateY(13px) scaleY(.94)" },
+const stomp = keyframes({
+  "0%, 80%, 100%": { transform: "translateY(0)" },
+  "84%, 92%": { transform: "translateY(-1px)" },
+  "88%, 96%": { transform: "translateY(1px)" },
 });
-const angry = keyframes({
-  "0%, 100%": { transform: "rotate(-3deg)" },
-  "50%": { transform: "rotate(3deg) scale(1.03)" },
+const cheer = keyframes({
+  "0%, 65%, 100%": { transform: "translateY(0)" },
+  "70%, 85%": { transform: "translateY(-3px)" },
+  "75%, 90%": { transform: "translateY(-4px)" },
 });
-const bounce = keyframes({
-  "0%, 100%": { transform: "translateY(0) scale(1)" },
-  "45%": { transform: "translateY(-16px) scale(1.03)" },
-  "75%": { transform: "translateY(2px) scale(1.02,.97)" },
+const salute = keyframes({
+  "0%, 65%, 100%": { transform: "translateY(0)" },
+  "70%, 90%": { transform: "translateY(-3px)" },
 });
-const proud = keyframes({
-  "0%, 100%": { transform: "translateY(-3px) rotate(-3deg)" },
-  "50%": { transform: "translateY(-9px) rotate(3deg) scale(1.04)" },
-});
-const celebrate = keyframes({
-  "0%, 100%": { transform: "translateY(-4px) rotate(-7deg)" },
-  "50%": { transform: "translateY(-22px) rotate(7deg)" },
-});
-const shimmer = keyframes({
-  "0%, 100%": { opacity: 0.45, transform: "scale(.92)" },
-  "50%": { opacity: 1, transform: "scale(1.06)" },
+const sparkle = keyframes({
+  "0%, 100%": { opacity: 0.25 },
+  "50%": { opacity: 1 },
 });
 const tear = keyframes({
-  "0%": { opacity: 0, transform: "translateY(-4px)" },
+  "0%": { opacity: 0, transform: "translateY(0)" },
   "25%": { opacity: 1 },
-  "100%": { opacity: 0, transform: "translateY(23px)" },
+  "100%": { opacity: 0, transform: "translateY(6px)" },
+});
+const sleep = keyframes({
+  "0%": { opacity: 0, transform: "translateY(2px)" },
+  "50%": { opacity: 1 },
+  "100%": { opacity: 0, transform: "translateY(-3px)" },
 });
 
 export const moodLabels = {
@@ -65,44 +85,63 @@ export const joyfulMoods = [
   "radiant",
   "legendary",
 ];
+
 export function petMotion(mood) {
+  const joyful = joyfulMoods.includes(mood);
+  const distressed = ["hungry", "tired", "sad", "angry"].includes(mood);
   const animation = {
-    hungry: `${shiver} 3s infinite`,
-    tired: `${tired} 4s ease-in-out infinite`,
-    sad: `${sad} 4s ease-in-out infinite`,
-    angry: `${angry} .8s ease-in-out infinite`,
-    happy: `${bounce} 2.2s ease-in-out infinite`,
-    proud: `${proud} 2s ease-in-out infinite`,
-    excited: `${celebrate} 1.5s ease-in-out infinite`,
-    radiant: `${celebrate} 2s ease-in-out infinite`,
-    legendary: `${celebrate} 1.3s ease-in-out infinite`,
+    hungry: `${shiver} 4s steps(1, end) infinite`,
+    tired: `${slump} 5s steps(2, end) infinite`,
+    sad: `${slump} 6s steps(2, end) infinite`,
+    angry: `${stomp} 4s steps(1, end) infinite`,
   };
   return {
-    ...(mood === "dead"
-      ? { "&& *": { animation: "none !important" }, filter: "grayscale(1)" }
-      : {}),
-    "&& .nimbo-float": {
-      transformOrigin: "150px 230px",
+    "&&": {
+      imageRendering: "pixelated",
+      filter: mood === "dead" ? "grayscale(1)" : "none",
+      overflow: "hidden",
+    },
+    "& .hero-body": {
       animation:
-        mood === "dead"
-          ? "none"
-          : animation[mood] || `${breathe} 5s ease-in-out infinite`,
+        animation[mood] ||
+        (joyful
+          ? `${cheer} ${mood === "happy" ? 5 : 3}s steps(1, end) infinite`
+          : "none"),
       ...(mood === "dead"
         ? {
-            transform: "translate(16px, -9px) rotate(-18deg)",
-            filter: "grayscale(1)",
-            opacity: 0.72,
+            transform: "translate(6px, 3px) rotate(-90deg)",
+            transformOrigin: "32px 43px",
+            opacity: 0.65,
           }
         : {}),
     },
-    "& .pet-aura": {
-      transformOrigin: "150px 150px",
-      animation: `${shimmer} 2.5s ease-in-out infinite`,
+    "& .hero-breath": { animation: `${breathe} 3s steps(1, end) infinite` },
+    "& .hero-head": {
+      animation: distressed
+        ? "none"
+        : `${lookAround} 11s steps(1, end) infinite`,
     },
-    "& .pet-tear": { animation: `${tear} 2s ease-in infinite` },
-    "&& .nimbo-eye": {
-      animation: ["dead", "tired"].includes(mood) ? "none" : undefined,
+    "& .hero-arm-left": {
+      animation: distressed ? "none" : `${stretch} 9s steps(1, end) infinite`,
     },
+    "& .hero-cape": { animation: `${cape} 4s steps(1, end) infinite` },
+    "& .hero-weapon, & .hero-arm-right": {
+      animation: joyful
+        ? `${salute} ${mood === "happy" ? 5 : 3}s steps(1, end) infinite`
+        : "none",
+    },
+    "& .hero-eyes-open": {
+      animation: `${blinkOpen} 6.4s steps(1, end) infinite`,
+    },
+    "& .hero-eyes-closed": {
+      opacity: 0,
+      animation: `${blinkClosed} 6.4s steps(1, end) infinite`,
+    },
+    "& .hero-aura, & .hero-sparkles, & .hero-rune, & .hero-hunger, & .hero-anger":
+      { animation: `${sparkle} 3s steps(2, end) infinite` },
+    "& .hero-sleep": { animation: `${sleep} 4s steps(3, end) infinite` },
+    "& .pet-tear": { animation: `${tear} 2.5s steps(4, end) infinite` },
+    ...(mood === "dead" ? { "&& *": { animation: "none !important" } } : {}),
     "@media (prefers-reduced-motion: reduce)": {
       "&, & *": { animation: "none !important", transition: "none !important" },
     },

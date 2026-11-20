@@ -3,6 +3,7 @@ package br.com.concursoti.companions.services;
 import br.com.concursoti.companions.entities.PetCompanion;
 import br.com.concursoti.companions.repositories.PetCompanionRepository;
 import br.com.concursoti.companions.repositories.PetRepository;
+import br.com.concursoti.companions.types.CompanionClass;
 import br.com.concursoti.dailygoals.entities.DailyGoalDay;
 import br.com.concursoti.dailygoals.services.DailyProgressService;
 import java.time.Clock;
@@ -128,9 +129,11 @@ public class PetService {
     );
     long mature = all
       .stream()
-      .filter(a -> a.diedAt == null && a.xp >= 1200)
+      .filter(
+        a -> a.diedAt == null && CompanionClass.BATTLE_MASTER.isReachedBy(a.xp)
+      )
       .count();
-    boolean credit = mature >= all.size(); // Cada Nimbo na fase máxima libera outra variação.
+    boolean credit = mature >= all.size(); // Mastery keeps the existing level-13 recruitment unlock.
     view.put("canAdopt", credit && all.size() < SPECIES.size());
     view.put(
       "availableSpecies",
@@ -139,6 +142,7 @@ public class PetService {
         .toList()
     );
     view.put("totalCompanions", all.size());
+    view.put("classJourney", CompanionClass.journey());
     view.put("collectionComplete", all.size() == SPECIES.size());
     return view;
   }
@@ -163,10 +167,13 @@ public class PetService {
       !all.isEmpty() &&
       all
         .stream()
-        .filter(a -> a.diedAt == null && a.xp >= 1200)
+        .filter(
+          a ->
+            a.diedAt == null && CompanionClass.BATTLE_MASTER.isReachedBy(a.xp)
+        )
         .count() < all.size()
     ) throw new IllegalArgumentException(
-      "Evolua seu companheiro até o nível 13 para desbloquear outra variação de Nimbo."
+      "Alcance Mestre de Batalha (nível 13) com todos os companheiros para recrutar outro aventureiro."
     );
     for (PetCompanion member : all) {
       member.active = false;
@@ -255,7 +262,7 @@ public class PetService {
       case "TALK" -> p.bond = Math.min(100, (p.bond == null ? 20 : p.bond) + 2);
       case "PLAY" -> {
         if (p.energy < 4) throw new IllegalArgumentException(
-          "Seu companheiro precisa descansar antes de brincar."
+          "Seu companheiro precisa recuperar energia antes de treinar."
         );
         p.bond = Math.min(100, (p.bond == null ? 20 : p.bond) + 3);
       }
@@ -292,9 +299,7 @@ public class PetService {
 
   private Map<String, Object> view(PetCompanion p, List<DailyGoalDay> days) {
     PetCarePolicy.CareView care = carePolicy.evaluate(p, days);
-    int stage = p.xp >= 1200 ? 3 : p.xp >= 400 ? 2 : 1;
-    int start = stage == 3 ? 1200 : stage == 2 ? 400 : 0;
-    int next = stage == 3 ? 1200 : stage == 2 ? 1200 : 400;
+    CompanionClass.CareerView career = CompanionClass.describe(p.xp);
     Map<String, Object> out = new LinkedHashMap<>();
     out.put("care", care);
     out.put("mood", care.mood());
@@ -303,10 +308,11 @@ public class PetService {
     out.put("species", p.species);
     out.put("xp", p.xp);
     out.put("energy", p.energy);
-    out.put("stage", stage);
+    out.put("stage", career.current().rank());
+    out.put("career", career);
     out.put("level", 1 + p.xp / 100);
-    out.put("xpWithinStage", stage == 3 ? 0 : p.xp - start);
-    out.put("xpToNextStage", stage == 3 ? 0 : next - start);
+    out.put("xpWithinStage", career.experienceWithinClass());
+    out.put("xpToNextStage", career.experienceToNextClass());
     out.put("bond", p.bond == null ? 20 : p.bond);
     out.put("lastInteraction", p.lastInteraction);
     out.put("lastRest", p.lastRest);

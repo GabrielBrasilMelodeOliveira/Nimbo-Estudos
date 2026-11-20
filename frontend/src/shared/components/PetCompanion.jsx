@@ -1,9 +1,8 @@
 import { useDraggableCompanion } from "../hooks/useDraggableCompanion.js";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Box,
   Button,
-  Chip,
   IconButton,
   LinearProgress,
   Paper,
@@ -22,12 +21,13 @@ import {
   Sparkles,
 } from "lucide-react";
 import { PetArt, speciesInfo } from "./Pet.jsx";
+import { PetClassProgress } from "./pet/PetProgression.jsx";
 import PetCareStatus from "./pet/PetCareStatus.jsx";
 
 const starters = [
   "Vamos avançar um pouquinho hoje?",
   "Consistência vale mais do que pressa.",
-  "Seu esforço está criando raízes.",
+  "Cada estudo fortalece nossa jornada.",
   "Um assunto de cada vez. Eu fico aqui com você.",
 ];
 function reply(text, pet) {
@@ -55,6 +55,22 @@ export default function PetCompanion({ pet, navigate, action, working }) {
   const [message, setMessage] = useState("");
   const [feedback, setFeedback] = useState("");
   const [speaking, setSpeaking] = useState(false);
+  const previousCompanion = useRef({ id: pet?.id, stage: pet?.stage });
+  useEffect(() => {
+    const previous = previousCompanion.current;
+    if (pet?.id !== previous.id) setFeedback("");
+    if (
+      pet?.id === previous.id &&
+      pet?.stage > previous.stage &&
+      pet?.career?.current &&
+      !pet?.care?.dead
+    ) {
+      setFeedback(
+        `Evoluí para ${pet.career.current.name}! Cada estudo nos trouxe até aqui.`,
+      );
+    }
+    previousCompanion.current = { id: pet?.id, stage: pet?.stage };
+  }, [pet?.id, pet?.stage, pet?.career?.current?.name, pet?.care?.dead]);
   const dead = !!pet?.care?.dead;
   const mood = pet?.mood || "neutral";
   const toggle = () => {
@@ -91,8 +107,8 @@ export default function PetCompanion({ pet, navigate, action, working }) {
     ) {
       setFeedback(
         {
-          PET: "Recebi seu carinho! Nosso vínculo ficou mais forte.",
-          PLAY: "Foi divertido! Vamos cuidar das metas também?",
+          PET: "Obrigado pelo incentivo! Seguimos juntos nesta jornada.",
+          PLAY: "Treino concluído! O XP vem dos estudos; vamos cuidar das metas também?",
           REST: "Descansei um pouco. Para recuperar minha energia, precisamos avançar nas metas.",
           TALK: "Gosto de conversar com você!",
         }[type],
@@ -214,13 +230,13 @@ export default function PetCompanion({ pet, navigate, action, working }) {
           </Stack>
           <Stack spacing={1.5} sx={{ p: 2 }}>
             <Button
-              aria-label="Dar carinho"
+              aria-label="Incentivar aventureiro"
               onClick={() => interact("PET")}
               disabled={working || dead}
               sx={{
                 alignSelf: "center",
                 p: 0,
-                "& svg.nimbo-art": { width: 170, height: 164 },
+                "& svg.nimbo-art": { width: 176, height: 209 },
               }}
             >
               <PetArt
@@ -230,6 +246,7 @@ export default function PetCompanion({ pet, navigate, action, working }) {
                 large
               />
             </Button>
+            <PetClassProgress pet={pet} compact />
             <PetCareStatus
               pet={pet}
               action={action}
@@ -262,7 +279,7 @@ export default function PetCompanion({ pet, navigate, action, working }) {
                     disabled={working}
                     startIcon={<SmilePlus size={16} />}
                   >
-                    Brincar
+                    Treinar
                   </Button>
                   <Button
                     size="small"
@@ -306,7 +323,7 @@ export default function PetCompanion({ pet, navigate, action, working }) {
               </>
             )}
             <Button onClick={() => navigate("collection")}>
-              Coleção e regras do Nimbo →
+              Evolução e regras do Nimbo →
             </Button>
           </Stack>
         </Paper>

@@ -1,6 +1,6 @@
-# Nimbo 5.10.2 — Flashcards com imagens e superfícies neutras
+# Nimbo 5.11.0 — Aventureiro em pixel art e evolução de classes
 
-A versão **5.10.2** aparece no menu lateral. Para atualizar uma instalação Docker existente:
+A versão **5.11.0** aparece no menu lateral. Para atualizar uma instalação Docker existente:
 
 ```bash
 git pull --ff-only origin main
@@ -10,6 +10,26 @@ docker compose up -d --build
 Recarregue a página após a reconstrução. Apenas `git pull` não substitui o frontend que já está no container. Os volumes existentes são preservados.
 
 Nesta versão:
+
+- O companheiro agora é um homem em pixel art original, com visual de RPG de 16 bits. Cada classe muda a roupa e o equipamento: bolsa de viajante, livro, espada, escudo, capa, armadura e insígnias.
+- Mesmo parado, respira, pisca, olha para os lados e movimenta o braço. Fome, cansaço, tristeza, irritação e alegria têm expressões e movimentos próprios; as sequências de metas trazem celebrações. Na morte, fica imóvel e sem cor. A preferência do dispositivo por movimento reduzido é respeitada.
+- A aba Meu Nimbo mostra a jornada completa, as classes conquistadas e o XP que falta. O painel flutuante também mostra a classe e avisa quando ela muda.
+- A aparência escolhida, o XP, o vínculo, a coleção e o histórico de vidas são preservados. Nenhuma tabela é apagada ou recriada. Os identificadores existentes passam a representar visuais humanos. O recrutamento continua liberado quando todos os companheiros vivos chegam ao nível 13, agora Mestre de Batalha; há classes adicionais para continuar evoluindo.
+- Metas diárias continuam determinando o humor, a energia e a sobrevivência. Interações fortalecem o vínculo; apenas os estudos, questões e revisões concedem XP.
+
+| Classe | XP total | Nível |
+| --- | ---: | ---: |
+| Pessoa Comum | 0 | 1 |
+| Aprendiz | 200 | 3 |
+| Soldado | 400 | 5 |
+| Guardião da Vigília | 800 | 9 |
+| Mestre de Batalha | 1.200 | 13 |
+| Comandante da Aurora | 2.400 | 25 |
+| Lenda da Constância | 4.000 | 41 |
+
+A progressão é definida em `backend/src/main/java/br/com/concursoti/companions/types/CompanionClass.java`. O sprite, as aparências e as animações ficam em `frontend/src/shared/components/pet/`. São vetores locais desenhados sobre uma grade de pixels, sem imagens remotas ou serviços externos.
+
+Recursos da versão 5.10.2 preservados:
 
 - Cards e painéis usam `Paper` do MUI, inclusive os indicadores e cards legados do Início, Edital, Questões, Caderno de erros, Materiais, Simulados, Agenda, Configurações e coleção do Nimbo. Sombra neutra e discreta dá profundidade sem alterar a cor branca do fundo. O padrão é ajustável em `frontend/src/shared/theme/surfaceStyles.js`.
 - Flashcards próprios aceitam imagem na pergunta e na resposta, selecionada no dispositivo ou colada com Ctrl+V/⌘V. É possível usar texto, imagem ou ambos em cada lado. PNG/JPG/WEBP até 20 MB, com pré-visualização, troca e remoção. O envio precisa terminar antes de salvar; as imagens são armazenadas pelo mesmo serviço de anexos do caderno de erros. A imagem da resposta só aparece na revisão depois de revelada.

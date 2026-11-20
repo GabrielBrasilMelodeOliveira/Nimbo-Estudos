@@ -1,3 +1,6 @@
+import PetProgression, {
+  PetClassProgress,
+} from "../../shared/components/pet/PetProgression.jsx";
 import PetCareStatus from "../../shared/components/pet/PetCareStatus.jsx";
 import PetCareRules from "../../shared/components/pet/PetCareRules.jsx";
 import { Paper, Button } from "@mui/material";
@@ -27,7 +30,9 @@ export default function Collection({ data, action, working, navigate }) {
           <h2>Seus companheiros</h2>
           <div className="collection-hero-tags">
             <span>{team.length} companheiros</span>
-            <span>{team.filter((t) => t.stage === 3).length} evoluídos</span>
+            <span>
+              {team.filter((t) => t.stage >= 5).length} mestres ou além
+            </span>
           </div>
         </div>
         <PetArt
@@ -37,6 +42,7 @@ export default function Collection({ data, action, working, navigate }) {
           large
         />
       </Paper>
+      <PetProgression pet={pet} />
       <PetCareRules />
       <div className="section-intro">
         <div>
@@ -48,7 +54,7 @@ export default function Collection({ data, action, working, navigate }) {
             onClick={() => setAdopt(!adopt)}
             type="button"
           >
-            <Sparkles size={16} /> Conhecer outro
+            <Sparkles size={16} /> Recrutar aventureiro
           </Button>
         )}
       </div>
@@ -92,6 +98,7 @@ export default function Collection({ data, action, working, navigate }) {
                   }}
                 />
               </div>
+              <PetClassProgress pet={member} />
               <PetCareStatus pet={member} action={action} working={working} />
               <Button
                 className="btn btn-subtle"
@@ -133,7 +140,7 @@ export default function Collection({ data, action, working, navigate }) {
                 {
                   species,
                 },
-                "Novo Nimbo adicionado!",
+                "Aventureiro recrutado!",
               )
             )
               setAdopt(false);
@@ -142,8 +149,9 @@ export default function Collection({ data, action, working, navigate }) {
       )}
       {team.length > 0 && !pet?.canAdopt && (
         <div className="nimbo-lock-note">
-          <LockKeyhole size={18} /> Para acolher outra variação, eleve todos os
-          Nimbos da sua coleção à forma radiante, no nível 13.
+          <LockKeyhole size={18} /> Para recrutar outro aventureiro, eleve todos
+          os companheiros a Mestre de Batalha, no nível 13. As classes seguintes
+          continuam disponíveis para cada um.
         </div>
       )}
     </div>
