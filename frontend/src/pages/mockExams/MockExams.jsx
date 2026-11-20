@@ -1,5 +1,5 @@
 import { Input } from "../../shared/components/FormControls.jsx";
-import { TextareaAutosize } from "@mui/material";
+import { Paper, TextareaAutosize } from "@mui/material";
 import { ClipboardCheck, Plus, Target, Trophy } from "lucide-react";
 import {
   Panel,
@@ -41,30 +41,30 @@ export default function MockExams({ data, action, working }) {
         </div>
       </div>
       <div className="mini-metric-grid">
-        <div className="mini-metric">
+        <Paper component="div" variant="outlined" className="mini-metric">
           <div className="mini-icon blue">
             <ClipboardCheck size={21} />
           </div>
           <span>SIMULADOS REALIZADOS</span>
           <strong>{exams.length}</strong>
           <small>Registros acumulados</small>
-        </div>
-        <div className="mini-metric">
+        </Paper>
+        <Paper component="div" variant="outlined" className="mini-metric">
           <div className="mini-icon purple">
             <Trophy size={21} />
           </div>
           <span>MELHOR APROVEITAMENTO</span>
           <strong>{fmtPercent(best)}</strong>
           <small>Seu recorde pessoal</small>
-        </div>
-        <div className="mini-metric">
+        </Paper>
+        <Paper component="div" variant="outlined" className="mini-metric">
           <div className="mini-icon teal">
             <Target size={21} />
           </div>
           <span>ACIMA DA NOTA DE CORTE</span>
           <strong>{goalAchieved}</strong>
           <small>Simulados com meta atingida</small>
-        </div>
+        </Paper>
       </div>
       <Panel title="Histórico de simulados">
         {exams.length ? (

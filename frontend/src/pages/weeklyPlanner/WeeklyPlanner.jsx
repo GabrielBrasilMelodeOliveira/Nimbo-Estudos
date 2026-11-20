@@ -1,6 +1,6 @@
 import DayClosing from "../../shared/sections/dayClosing/DayClosing.jsx";
 import DailyStudyPlan from "./components/DailyStudyPlan.jsx";
-import { Typography, Stack, TextField, MenuItem } from "@mui/material";
+import { Paper, Typography, Stack, TextField, MenuItem } from "@mui/material";
 import { AgendaDay } from "./sections/AgendaDay.jsx";
 import { WeekBoard } from "./sections/WeekBoard.jsx";
 import AssimilationPicker from "../../shared/components/AssimilationPicker.jsx";
@@ -184,11 +184,15 @@ export default function WeeklyPlanner({ data, action, working, navigate }) {
             setGoalOpen(true);
           }}
         />
-        <div className="n55-goal-stat n55-static">
+        <Paper
+          component="div"
+          variant="outlined"
+          className="n55-goal-stat n55-static"
+        >
           <span>Revisões realizadas</span>
           <strong>{metrics.reviewDone}</strong>
           <small>{metrics.reviewDue} agendadas no período</small>
-        </div>
+        </Paper>
       </section>
       <div className="n55-metrics-detail">
         <span>
@@ -213,7 +217,11 @@ export default function WeeklyPlanner({ data, action, working, navigate }) {
         </Button>
       </div>
       {suggestionsOpen && (
-        <section className="n55-suggestions">
+        <Paper
+          component="section"
+          variant="outlined"
+          className="n55-suggestions"
+        >
           <div className="n55-subhead">
             <strong>Próximos estudos sugeridos</strong>
             <Button
@@ -226,7 +234,9 @@ export default function WeeklyPlanner({ data, action, working, navigate }) {
           </div>
           {suggestions.length ? (
             suggestions.map((p) => (
-              <div
+              <Paper
+                component="div"
+                variant="outlined"
                 className="n55-suggestion"
                 key={`${p.topicId}-${p.scheduledDate}`}
               >
@@ -246,13 +256,13 @@ export default function WeeklyPlanner({ data, action, working, navigate }) {
                 >
                   Adicionar
                 </Button>
-              </div>
+              </Paper>
             ))
           ) : (
             <p>Nenhuma sugestão disponível para esta semana.</p>
           )}
           <small>As sugestões não são incluídas sem sua confirmação.</small>
-        </section>
+        </Paper>
       )}
       <Stack direction={{ xs: "column", md: "row" }} spacing={2}>
         <TextField
@@ -278,7 +288,7 @@ export default function WeeklyPlanner({ data, action, working, navigate }) {
         Arraste as atividades pendentes para outro dia ou use Mover. Planeje até
         duas disciplinas em cada dia.
       </Typography>
-      <section className="n55-calendar">
+      <Paper component="section" variant="outlined" className="n55-calendar">
         <div className="n55-calendar-head">
           <div className="n55-date-nav">
             <Button
@@ -340,7 +350,9 @@ export default function WeeklyPlanner({ data, action, working, navigate }) {
                   count = scheduled.length + revs.length;
                 const actual = actualForDay(day);
                 return (
-                  <Button
+                  <Paper
+                    component={Button}
+                    variant="outlined"
                     type="button"
                     key={day}
                     className={`n55-month-day ${day.startsWith(start.slice(0, 7)) ? "" : "outside"} ${day === TODAY() ? "today" : ""}`}
@@ -365,7 +377,7 @@ export default function WeeklyPlanner({ data, action, working, navigate }) {
                         <span>{actual.questions} questões</span>
                       )}
                     </span>
-                  </Button>
+                  </Paper>
                 );
               })}
             </div>
@@ -388,7 +400,7 @@ export default function WeeklyPlanner({ data, action, working, navigate }) {
             onAdd={openAdd}
           />
         )}
-      </section>
+      </Paper>
       <DayClosing data={data} action={action} working={working} />
       {selectedDay && (
         <Modal title={dateBR(selectedDay)} onClose={() => setSelectedDay(null)}>

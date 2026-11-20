@@ -1,3 +1,4 @@
+import { surfaceStyles } from "./surfaceStyles.js";
 import { designColors, statusColors, withOpacity } from "./designColors.js";
 
 export const globalStyles = [
@@ -166,7 +167,7 @@ export const globalStyles = [
     ".sidebar-overline": {
       margin: "7px 26px 24px",
       padding: "9px 12px",
-      border: `1px solid ${designColors.accent}`,
+      border: `1px solid ${designColors.border}`,
       borderRadius: "8px",
       color: designColors.light,
       fontSize: "10px",
@@ -269,7 +270,7 @@ export const globalStyles = [
   {
     ".next-up-card": {
       margin: "2px 7px 22px",
-      border: `1px solid ${designColors.accent}`,
+      border: `1px solid ${designColors.border}`,
       borderRadius: "13px",
       background: `linear-gradient(145deg,${designColors.primary},${designColors.dark})`,
       padding: "19px 16px 17px",
@@ -341,7 +342,7 @@ export const globalStyles = [
   {
     ".sidebar-signature": {
       padding: "17px 10px 0",
-      borderTop: `1px solid ${designColors.accent}`,
+      borderTop: `1px solid ${designColors.border}`,
       display: "flex",
       alignItems: "center",
       gap: "10px",
@@ -1962,7 +1963,7 @@ export const globalStyles = [
     ".table-checkbox.checked": {
       background: designColors.primary,
       color: designColors.background,
-      borderColor: designColors.accent,
+      borderColor: designColors.border,
     },
   },
   {
@@ -2622,7 +2623,7 @@ export const globalStyles = [
   {
     ".tabs button.active": {
       color: designColors.primary,
-      borderColor: designColors.accent,
+      borderColor: designColors.border,
     },
   },
   {
@@ -3980,7 +3981,7 @@ export const globalStyles = [
   {
     "input:not(.MuiInputBase-input):focus,textarea:focus,select:not(.MuiInputBase-input):focus":
       {
-        borderColor: `${designColors.accent} !important`,
+        borderColor: `${designColors.border} !important`,
         boxShadow: `0 0 0 3px ${withOpacity(designColors.accent, 0.157)} !important`,
       },
   },
@@ -3994,7 +3995,7 @@ export const globalStyles = [
     ".sidebar": {
       background: `linear-gradient(171deg,${designColors.dark} 0%,${designColors.dark} 72%,${designColors.dark} 100%)`,
       width: "246px",
-      borderRight: `1px solid ${designColors.accent}`,
+      borderRight: `1px solid ${designColors.border}`,
       color: designColors.border,
       boxShadow: `4px 0 24px ${withOpacity(designColors.dark, 0.078)}`,
     },
@@ -4002,7 +4003,7 @@ export const globalStyles = [
   {
     ".sidebar-overline": {
       margin: "0 18px 25px",
-      border: `1px solid ${designColors.accent}`,
+      border: `1px solid ${designColors.border}`,
       background: withOpacity(designColors.background, 0.031),
       color: designColors.border,
       letterSpacing: "1.06px",
@@ -4103,7 +4104,7 @@ export const globalStyles = [
       alignItems: "center",
       justifyContent: "space-between",
       padding: "11px 15px",
-      border: `1px solid ${withOpacity(designColors.accent, 0.333)}`,
+      border: `1px solid ${withOpacity(designColors.border, 0.333)}`,
       borderRadius: "11px",
       color: designColors.light,
       background: withOpacity(designColors.background, 0.031),
@@ -4132,7 +4133,7 @@ export const globalStyles = [
       display: "flex",
       flexDirection: "column",
       gap: "7px",
-      border: `1px solid ${withOpacity(designColors.accent, 0.333)}`,
+      border: `1px solid ${withOpacity(designColors.border, 0.333)}`,
       borderRadius: "16px",
       background: `linear-gradient(145deg,${withOpacity(designColors.primary, 0.533)},${withOpacity(designColors.dark, 0.6)})`,
       color: designColors.light,
@@ -5273,7 +5274,7 @@ export const globalStyles = [
   },
   {
     ".week-day.today": {
-      borderColor: designColors.accent,
+      borderColor: designColors.border,
       boxShadow: `0 0 0 2px ${withOpacity(designColors.accent, 0.106)}`,
     },
   },
@@ -5391,7 +5392,7 @@ export const globalStyles = [
   {
     ".week-check.checked": {
       background: designColors.primary,
-      borderColor: designColors.accent,
+      borderColor: designColors.border,
     },
   },
   {
@@ -6069,7 +6070,7 @@ export const globalStyles = [
   },
   {
     ".nimbo-choice.active": {
-      borderColor: designColors.accent,
+      borderColor: designColors.border,
       background: designColors.surface,
       boxShadow: `0 0 0 2px ${withOpacity(designColors.accent, 0.212)}`,
     },
@@ -6195,7 +6196,7 @@ export const globalStyles = [
   },
   {
     ".nimbo-collection-card.active": {
-      borderColor: designColors.accent,
+      borderColor: designColors.border,
     },
   },
   {
@@ -6296,7 +6297,7 @@ export const globalStyles = [
   {
     ".table-checkbox.checked": {
       background: designColors.primary,
-      borderColor: designColors.accent,
+      borderColor: designColors.border,
     },
   },
   {
@@ -6323,7 +6324,7 @@ export const globalStyles = [
   },
   {
     ".cycle-card.active": {
-      borderColor: designColors.accent,
+      borderColor: designColors.border,
       background: designColors.surface,
     },
   },
@@ -9123,7 +9124,7 @@ export const globalStyles = [
     ".nimbo-theme .btn-primary": {
       color: designColors.background,
       background: designColors.primary,
-      border: `1px solid ${designColors.accent}`,
+      border: `1px solid ${designColors.border}`,
     },
   },
   {
@@ -9758,7 +9759,7 @@ export const globalStyles = [
     ".nimbo-theme .rating-options button.selected": {
       background: designColors.primary,
       color: designColors.background,
-      borderColor: designColors.accent,
+      borderColor: designColors.border,
     },
   },
   {
@@ -10212,7 +10213,7 @@ export const globalStyles = [
   {
     ".nimbo-theme .is-checked>.study-check-square": {
       background: designColors.primary,
-      borderColor: designColors.accent,
+      borderColor: designColors.border,
     },
   },
   {
@@ -11505,7 +11506,7 @@ export const globalStyles = [
       width: "244px",
       background: designColors.dark,
       color: designColors.light,
-      borderRight: `1px solid ${designColors.accent}`,
+      borderRight: `1px solid ${designColors.border}`,
       overflowY: "auto",
     },
   },
@@ -11635,7 +11636,7 @@ export const globalStyles = [
       color: designColors.light,
       border: "0",
       padding: "13px 12px",
-      borderTop: `1px solid ${designColors.accent}`,
+      borderTop: `1px solid ${designColors.border}`,
       borderRadius: "0",
       fontSize: "14px",
       fontWeight: "700",
@@ -11681,7 +11682,7 @@ export const globalStyles = [
       padding: "11px 12px",
       background: designColors.dark,
       color: designColors.light,
-      border: `1px solid ${designColors.accent}`,
+      border: `1px solid ${designColors.border}`,
       borderRadius: "10px",
       textAlign: "left",
       fontSize: "13px",
@@ -11787,7 +11788,7 @@ export const globalStyles = [
   },
   {
     ".ux-v54 .view-stack": {
-      gap: "18px",
+      gap: "24px",
     },
   },
   {
@@ -12623,7 +12624,7 @@ export const globalStyles = [
   },
   {
     ".ux-v54 .ux-task-check": {
-      border: `1.5px solid ${designColors.accent}`,
+      border: `1.5px solid ${designColors.border}`,
       borderRadius: "6px",
       width: "20px",
       height: "20px",
@@ -12636,7 +12637,7 @@ export const globalStyles = [
   {
     ".ux-v54 .ux-today-task.is-complete .ux-task-check": {
       background: designColors.primary,
-      borderColor: designColors.accent,
+      borderColor: designColors.border,
     },
   },
   {
@@ -13138,7 +13139,7 @@ export const globalStyles = [
   {
     ".ux-v54 .tabs button.active": {
       color: designColors.text,
-      borderBottomColor: designColors.accent,
+      borderBottomColor: designColors.border,
     },
   },
   {
@@ -13411,7 +13412,7 @@ export const globalStyles = [
   },
   {
     ".n55-goal-stat:not(.n55-static):hover": {
-      borderColor: designColors.accent,
+      borderColor: designColors.border,
       background: designColors.surface,
     },
   },
@@ -13676,7 +13677,7 @@ export const globalStyles = [
       width: "17px",
       height: "17px",
       marginTop: "2px",
-      border: `1.5px solid ${designColors.accent}`,
+      border: `1.5px solid ${designColors.border}`,
       borderRadius: "5px",
       background: designColors.paper,
       color: designColors.paper,
@@ -13685,7 +13686,7 @@ export const globalStyles = [
   {
     ".n55-check.checked": {
       background: designColors.primary,
-      borderColor: designColors.accent,
+      borderColor: designColors.border,
     },
   },
   {
@@ -13744,6 +13745,8 @@ export const globalStyles = [
     ".n55-month-grid": {
       display: "grid",
       gridTemplateColumns: "repeat(7,minmax(0,1fr))",
+      gap: "8px",
+      padding: "12px",
     },
   },
   {
@@ -13766,9 +13769,7 @@ export const globalStyles = [
       maxHeight: "140px",
       overflow: "hidden",
       textAlign: "left",
-      border: "0",
-      borderRight: `1px solid ${designColors.border}`,
-      borderBottom: `1px solid ${designColors.border}`,
+      border: `1px solid ${designColors.border}`,
       background: designColors.paper,
       padding: "11px",
       fontSize: "12px",
@@ -13946,7 +13947,7 @@ export const globalStyles = [
   {
     ".assimilation-choice.selected": {
       background: designColors.surface,
-      borderColor: designColors.accent,
+      borderColor: designColors.border,
       boxShadow: `inset 0 0 0 1px ${designColors.accent}`,
     },
   },
@@ -14151,6 +14152,11 @@ export const globalStyles = [
     ".nimbo-theme .sidebar": {
       background: designColors.sidebar,
       color: designColors.light,
+    },
+  },
+  {
+    ".nimbo-theme .MuiPaper-root.MuiPaper-outlined": {
+      boxShadow: surfaceStyles.cardShadow,
     },
   },
 ];

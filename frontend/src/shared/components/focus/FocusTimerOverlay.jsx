@@ -26,7 +26,7 @@ export default function FocusTimerOverlay({ page, navigate, working, action }) {
               lg: "calc(100vw - 320px)",
             },
             border: "1px solid",
-            borderColor: "primary.light",
+            borderColor: "divider",
           }}
         >
           <Stack

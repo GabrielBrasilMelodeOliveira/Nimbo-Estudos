@@ -62,7 +62,9 @@ export const designColors = {
   text: palette.dark,
   muted: mix(palette.dark, siteBackground, 0.34),
   subtle: mix(palette.dark, siteBackground, 0.48),
-  border: mix(palette.light, palette.dark, 0.12),
+  // Bordas estruturais neutras, independentes da paleta ativa.
+  border: "#D0D0D0",
+  borderHover: "#9E9E9E",
   surface: mix(palette.light, siteBackground, 0.82),
   selected: mix(palette.light, siteBackground, 0.35),
   primaryDark: mix(palette.primary, palette.dark, 0.24),

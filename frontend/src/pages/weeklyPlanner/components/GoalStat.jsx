@@ -20,7 +20,7 @@ export function GoalStat({
       variant="outlined"
       sx={{
         height: "100%",
-        borderColor: completed ? "primary.main" : "divider",
+        borderColor: "divider",
         bgcolor: completed ? designColors.surface : "background.paper",
       }}
     >
@@ -28,7 +28,7 @@ export function GoalStat({
         onClick={onClick}
         sx={{
           height: "100%",
-          borderColor: completed ? "primary.main" : "divider",
+          borderColor: "divider",
           bgcolor: completed ? designColors.surface : "background.paper",
         }}
       >

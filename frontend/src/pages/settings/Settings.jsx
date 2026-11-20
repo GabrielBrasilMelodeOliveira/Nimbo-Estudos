@@ -1,3 +1,4 @@
+import { Paper } from "@mui/material";
 import { Input } from "../../shared/components/FormControls.jsx";
 
 import { Target, Save, BookOpenText } from "lucide-react";
@@ -184,7 +185,12 @@ export default function Settings({ data, action, working }) {
                   data.agenda.length,
               },
             ].map((x) => (
-              <div className="maintenance-option" key={x.scope}>
+              <Paper
+                component="div"
+                variant="outlined"
+                className="maintenance-option"
+                key={x.scope}
+              >
                 <div>
                   <strong>{x.title}</strong>
                   <span>{x.count} registros indicativos</span>
@@ -197,7 +203,7 @@ export default function Settings({ data, action, working }) {
                   action={action}
                   working={working}
                 />
-              </div>
+              </Paper>
             ))}
           </div>
           <p className="maintenance-hint">

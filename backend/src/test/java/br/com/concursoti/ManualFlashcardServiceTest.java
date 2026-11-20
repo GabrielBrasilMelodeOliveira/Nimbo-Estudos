@@ -32,6 +32,7 @@ class ManualFlashcardServiceTest {
   TopicRepository topics;
   FlashcardSchedulingService scheduling;
   ManualFlashcardService service;
+  br.com.concursoti.assets.services.AssetService assets;
 
   @BeforeEach
   void prepare() {
@@ -39,11 +40,13 @@ class ManualFlashcardServiceTest {
     disciplines = mock(DisciplineRepository.class);
     topics = mock(TopicRepository.class);
     scheduling = new FlashcardSchedulingService(new ObjectMapper());
+    assets = mock(br.com.concursoti.assets.services.AssetService.class);
     service = new ManualFlashcardService(
       repository,
       disciplines,
       topics,
-      scheduling
+      scheduling,
+      assets
     );
     when(repository.save(any())).thenAnswer(invocation -> {
       ManualFlashcard card = invocation.getArgument(0);
@@ -88,7 +91,8 @@ class ManualFlashcardServiceTest {
       repository,
       disciplines,
       topics,
-      scheduling
+      scheduling,
+      assets
     );
     assertThrows(ResponseStatusException.class, () ->
       reloaded.review(1L, Rating.GOOD, 0L)
@@ -210,5 +214,90 @@ class ManualFlashcardServiceTest {
     verify(repository).delete(manual);
     verify(errors, never()).delete(any());
     verify(errors, never()).save(any());
+  }
+
+  @Test
+  void storesImagesOnBothSidesAndPreservesSchedulingWhenEditingAttachments() {
+    var created = service.create(
+      new ManualFlashcardInput(
+        "Prints",
+        "",
+        "",
+        null,
+        null,
+        null,
+        "question-image",
+        "answer-image"
+      )
+    );
+    assertEquals("question-image", created.questionImageId());
+    assertEquals("answer-image", created.answerImageId());
+    assertEquals("", created.question());
+    verify(assets).ensureImage("question-image");
+    verify(assets).ensureImage("answer-image");
+    var captor = ArgumentCaptor.forClass(ManualFlashcard.class);
+    verify(repository).save(captor.capture());
+    ManualFlashcard card = captor.getValue();
+    when(repository.findLockedById(1L)).thenReturn(Optional.of(card));
+    service.review(1L, Rating.GOOD, 0L);
+    String previousSchedule = card.flashcardState;
+    var edited = service.update(
+      1L,
+      new ManualFlashcardInput(
+        "Prints",
+        "Pergunta digitada",
+        "",
+        null,
+        null,
+        1L,
+        null,
+        "answer-image"
+      )
+    );
+    assertNull(edited.questionImageId());
+    assertEquals("answer-image", edited.answerImageId());
+    assertEquals(previousSchedule, card.flashcardState);
+    assertEquals(2, edited.revision());
+    when(repository.findAll()).thenReturn(List.of(card));
+    assertEquals(
+      "answer-image",
+      service.list(Instant.now()).getFirst().answerImageId()
+    );
+  }
+
+  @Test
+  void rejectsNonImageAttachmentsAndEmptySidesBeforeSaving() {
+    doThrow(new IllegalArgumentException("Arquivo não é imagem"))
+      .when(assets)
+      .ensureImage("pdf-file");
+    assertThrows(IllegalArgumentException.class, () ->
+      service.create(
+        new ManualFlashcardInput(
+          "",
+          "Pergunta",
+          "Resposta",
+          null,
+          null,
+          null,
+          "pdf-file",
+          null
+        )
+      )
+    );
+    assertThrows(IllegalArgumentException.class, () ->
+      service.create(
+        new ManualFlashcardInput(
+          "",
+          "",
+          "Resposta",
+          null,
+          null,
+          null,
+          null,
+          "answer-image"
+        )
+      )
+    );
+    verify(repository, never()).save(any());
   }
 }

@@ -1,6 +1,6 @@
 import PetCareStatus from "../../shared/components/pet/PetCareStatus.jsx";
 import PetCareRules from "../../shared/components/pet/PetCareRules.jsx";
-import { Button } from "@mui/material";
+import { Paper, Button } from "@mui/material";
 import { ArrowRight, Check, LockKeyhole, Sparkles } from "lucide-react";
 import {
   PetArt,
@@ -18,7 +18,11 @@ export default function Collection({ data, action, working, navigate }) {
   });
   return (
     <div className="view-stack">
-      <div className="nimbo-collection-banner">
+      <Paper
+        component="div"
+        variant="outlined"
+        className="nimbo-collection-banner"
+      >
         <div>
           <h2>Seus companheiros</h2>
           <div className="collection-hero-tags">
@@ -32,7 +36,7 @@ export default function Collection({ data, action, working, navigate }) {
           mood={pet?.mood}
           large
         />
-      </div>
+      </Paper>
       <PetCareRules />
       <div className="section-intro">
         <div>
@@ -50,7 +54,9 @@ export default function Collection({ data, action, working, navigate }) {
       </div>
       <div className="nimbo-collection-grid">
         {team.map((member) => (
-          <article
+          <Paper
+            component="article"
+            variant="outlined"
             className={`nimbo-collection-card ${member.active ? "active" : ""}`}
             key={member.id}
           >
@@ -99,11 +105,11 @@ export default function Collection({ data, action, working, navigate }) {
                 <ArrowRight size={15} />
               </Button>
             </div>
-          </article>
+          </Paper>
         ))}
       </div>
       {team.length === 0 && (
-        <div className="simple-card">
+        <Paper component="div" variant="outlined" className="simple-card">
           <p>Escolha seu primeiro Nimbo na tela inicial.</p>
           <Button
             className="btn btn-primary"
@@ -112,7 +118,7 @@ export default function Collection({ data, action, working, navigate }) {
           >
             Ir ao início
           </Button>
-        </div>
+        </Paper>
       )}
       {adopt && (
         <PetPicker

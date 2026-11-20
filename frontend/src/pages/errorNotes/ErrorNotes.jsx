@@ -1,8 +1,9 @@
+import { useState } from "react";
 import {
   Input,
   SearchableSelect,
 } from "../../shared/components/FormControls.jsx";
-import { Button, TextareaAutosize } from "@mui/material";
+import { Paper, Button, Stack, TextareaAutosize } from "@mui/material";
 import {
   NotebookPen,
   Plus,
@@ -26,9 +27,16 @@ import {
 } from "../../shared/components/UI.jsx";
 import { fileUrl } from "../../shared/services/api.js";
 import { dateBR } from "../../shared/utils/utils.js";
-import { ScreenshotInput } from "./components/ScreenshotInput.jsx";
+import { ScreenshotInput } from "../../shared/components/ScreenshotInput.jsx";
 import { useErrorNotes } from "./hooks/useErrorNotes.jsx";
 export default function ErrorNotes({ data, action, working, navigate }) {
+  const [imageUploads, setImageUploads] = useState({
+    question: false,
+    answer: false,
+  });
+  const uploading = Object.values(imageUploads).some(Boolean);
+  const uploadStatus = (side) => (pending) =>
+    setImageUploads((current) => ({ ...current, [side]: pending }));
   const {
     open,
     setOpen,
@@ -77,7 +85,7 @@ export default function ErrorNotes({ data, action, working, navigate }) {
         </div>
       </div>
 
-      <div>
+      <Stack spacing={3}>
         <Panel title="Encontrar anotação">
           <div className="filter-workspace">
             <label className="filter-item filter-search">
@@ -192,30 +200,30 @@ export default function ErrorNotes({ data, action, working, navigate }) {
           </div>
         </Panel>
         <div className="mini-metric-grid">
-          <div className="mini-metric">
+          <Paper component="div" variant="outlined" className="mini-metric">
             <div className="mini-icon blue">
               <NotebookPen size={21} />
             </div>
             <span>ERROS FILTRADOS</span>
             <strong>{visible.length}</strong>
             <small>Registros no caderno</small>
-          </div>
-          <div className="mini-metric">
+          </Paper>
+          <Paper component="div" variant="outlined" className="mini-metric">
             <div className="mini-icon purple">
               <AlertTriangle size={21} />
             </div>
             <span>RECORRENTES</span>
             <strong>{recurringCount}</strong>
             <small>Erros repetidos</small>
-          </div>
-          <div className="mini-metric">
+          </Paper>
+          <Paper component="div" variant="outlined" className="mini-metric">
             <div className="mini-icon teal">
               <Camera size={21} />
             </div>
             <span>COM PRINTS</span>
             <strong>{withPhotos}</strong>
             <small>Com captura anexada</small>
-          </div>
+          </Paper>
         </div>
         <Panel
           title="Minhas anotações"
@@ -226,7 +234,12 @@ export default function ErrorNotes({ data, action, working, navigate }) {
           {visible.length ? (
             <div className="note-grid">
               {visible.map((n) => (
-                <article className="note-card" key={n.id}>
+                <Paper
+                  component="article"
+                  variant="outlined"
+                  className="note-card"
+                  key={n.id}
+                >
                   <div className="note-card-top">
                     <span className="note-topic">
                       <BookOpenText size={15} />
@@ -295,7 +308,7 @@ export default function ErrorNotes({ data, action, working, navigate }) {
                     </span>
                     <p>{n.correctAnswer}</p>
                   </div>
-                </article>
+                </Paper>
               ))}
             </div>
           ) : (
@@ -306,15 +319,23 @@ export default function ErrorNotes({ data, action, working, navigate }) {
             />
           )}
         </Panel>
-      </div>
+      </Stack>
       {open && (
         <Modal
           title="Registrar erro"
           subtitle="O erro será incluído automaticamente nos flashcards. Você também pode anexar prints do enunciado e da resposta."
           wide
-          onClose={() => setOpen(false)}
+          onClose={() => {
+            if (!working && !uploading) setOpen(false);
+          }}
         >
-          <form className="form-stack" onSubmit={save}>
+          <form
+            className="form-stack"
+            onSubmit={(event) => {
+              if (uploading) event.preventDefault();
+              else save(event);
+            }}
+          >
             <Field label="Assunto">
               <TopicSelect
                 topics={data.topics}
@@ -344,6 +365,7 @@ export default function ErrorNotes({ data, action, working, navigate }) {
             <div className="screenshot-pair">
               <ScreenshotInput
                 label="Print da questão"
+                onUploadingChange={uploadStatus("question")}
                 id={form.questionImageId}
                 onChange={(id) =>
                   setForm((f) => ({
@@ -355,6 +377,7 @@ export default function ErrorNotes({ data, action, working, navigate }) {
               />
               <ScreenshotInput
                 label="Print da resposta"
+                onUploadingChange={uploadStatus("answer")}
                 id={form.answerImageId}
                 onChange={(id) =>
                   setForm((f) => ({
@@ -407,10 +430,14 @@ export default function ErrorNotes({ data, action, working, navigate }) {
               Já errei isso mais de uma vez
             </label>
             <div className="modal-actions">
-              <SubtleButton type="button" onClick={() => setOpen(false)}>
+              <SubtleButton
+                type="button"
+                disabled={working || uploading}
+                onClick={() => setOpen(false)}
+              >
                 Cancelar
               </SubtleButton>
-              <PrimaryButton type="submit" loading={working}>
+              <PrimaryButton type="submit" loading={working || uploading}>
                 Salvar no caderno
               </PrimaryButton>
             </div>

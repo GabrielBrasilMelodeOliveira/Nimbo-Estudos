@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Paper, Box } from "@mui/material";
 import PetFace from "./pet/PetFace.jsx";
 import { petMotion, moodLabels } from "./pet/petMotion.js";
 import { Button } from "@mui/material";
@@ -293,7 +293,11 @@ export function PetPicker({
     ? selected
     : availableSpecies[0];
   return (
-    <section className={`nimbo-picker ${compact ? "nimbo-picker-small" : ""}`}>
+    <Paper
+      component="section"
+      variant="outlined"
+      className={`nimbo-picker ${compact ? "nimbo-picker-small" : ""}`}
+    >
       <div className="nimbo-intro">
         <span className="eyebrow">SEU COMPANHEIRO ORIGINAL</span>
         <h2>Conheça os Nimbos.</h2>
@@ -326,12 +330,12 @@ export function PetPicker({
         <Sparkles size={17} /> Começar com {speciesInfo(chosen).short}{" "}
         <ArrowRight size={17} />
       </Button>
-    </section>
+    </Paper>
   );
 }
 export default function Pet({ pet, navigate }) {
   return (
-    <div className="nimbo-hero-card">
+    <Paper component="div" variant="outlined" className="nimbo-hero-card">
       <PetArt species={pet.species} stage={pet.stage} mood={pet.mood} large />
       <div>
         <span className="eyebrow">SEU COMPANHEIRO</span>
@@ -345,6 +349,6 @@ export default function Pet({ pet, navigate }) {
           Iniciar estudo <ArrowRight size={16} />
         </Button>
       </div>
-    </div>
+    </Paper>
   );
 }

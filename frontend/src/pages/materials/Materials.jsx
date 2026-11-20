@@ -1,5 +1,6 @@
 import { useState } from "react";
 import {
+  Paper,
   Accordion,
   AccordionSummary,
   AccordionDetails,
@@ -104,21 +105,21 @@ export default function Materials({ data, action, working }) {
         </div>
       </div>
       <div className="vault-metrics">
-        <div>
+        <Paper component="div" variant="outlined">
           <LibraryBig size={20} />
           <strong>{counts.all}</strong>
           <span>Total</span>
-        </div>
-        <div>
+        </Paper>
+        <Paper component="div" variant="outlined">
           <FileText size={20} />
           <strong>{counts.files}</strong>
           <span>Arquivos salvos</span>
-        </div>
-        <div>
+        </Paper>
+        <Paper component="div" variant="outlined">
           <CheckCircle2 size={20} />
           <strong>{counts.reviewed}</strong>
           <span>Revisados</span>
-        </div>
+        </Paper>
       </div>
       <Panel
         title="Meus materiais"
@@ -181,7 +182,12 @@ export default function Materials({ data, action, working }) {
               const Icon = icons[m.type] || Link2;
               const cover = m.previewAssetId || m.assetId;
               return (
-                <article className="vault-card" key={m.id}>
+                <Paper
+                  component="article"
+                  variant="outlined"
+                  className="vault-card"
+                  key={m.id}
+                >
                   <Button
                     className="vault-preview"
                     onClick={() => setViewing(m.id)}
@@ -244,7 +250,7 @@ export default function Materials({ data, action, working }) {
                       </Button>
                     </div>
                   </div>
-                </article>
+                </Paper>
               );
             })}
           </div>

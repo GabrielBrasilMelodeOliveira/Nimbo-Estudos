@@ -24,6 +24,12 @@ public class ManualFlashcard extends FlashcardSchedule {
   @Column(nullable = false, columnDefinition = "text")
   public String answer;
 
+  @Column(length = 36)
+  public String questionImageId;
+
+  @Column(length = 36)
+  public String answerImageId;
+
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "discipline_id")
   @OnDelete(action = OnDeleteAction.SET_NULL)

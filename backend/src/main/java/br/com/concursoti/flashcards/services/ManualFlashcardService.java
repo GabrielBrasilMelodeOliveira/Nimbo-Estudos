@@ -1,5 +1,6 @@
 package br.com.concursoti.flashcards.services;
 
+import br.com.concursoti.assets.services.AssetService;
 import br.com.concursoti.curriculum.repositories.DisciplineRepository;
 import br.com.concursoti.curriculum.repositories.TopicRepository;
 import br.com.concursoti.flashcards.dto.FlashcardView;
@@ -21,17 +22,20 @@ public class ManualFlashcardService {
   private final DisciplineRepository disciplines;
   private final TopicRepository topics;
   private final FlashcardSchedulingService scheduling;
+  private final AssetService assets;
 
   public ManualFlashcardService(
     ManualFlashcardRepository repository,
     DisciplineRepository disciplines,
     TopicRepository topics,
-    FlashcardSchedulingService scheduling
+    FlashcardSchedulingService scheduling,
+    AssetService assets
   ) {
     this.repository = repository;
     this.disciplines = disciplines;
     this.topics = topics;
     this.scheduling = scheduling;
+    this.assets = assets;
   }
 
   public List<FlashcardView> list(Instant now) {
@@ -107,8 +111,14 @@ public class ManualFlashcardService {
       input.title() == null || input.title().isBlank()
         ? "Cartão pessoal"
         : requiredText(input.title(), "Título", 220);
-    card.question = requiredText(input.question(), "Pergunta", 20000);
-    card.answer = requiredText(input.answer(), "Resposta", 20000);
+    card.questionImageId = imageId(input.questionImageId());
+    card.answerImageId = imageId(input.answerImageId());
+    card.question = sideContent(
+      input.question(),
+      card.questionImageId,
+      "Pergunta"
+    );
+    card.answer = sideContent(input.answer(), card.answerImageId, "Resposta");
     card.discipline =
       input.disciplineId() == null
         ? null
@@ -138,6 +148,29 @@ public class ManualFlashcardService {
     }
   }
 
+  private String imageId(String value) {
+    if (value == null || value.isBlank()) return null;
+    String id = value.trim();
+    if (id.length() > 36) throw new IllegalArgumentException(
+      "Identificador de imagem inválido."
+    );
+    assets.ensureImage(id);
+    return id;
+  }
+
+  private String sideContent(String text, String imageId, String label) {
+    String content = text == null ? "" : text.trim();
+    if (content.length() > 20000) throw new IllegalArgumentException(
+      label + " excede 20000 caracteres."
+    );
+    if (
+      content.isEmpty() && imageId == null
+    ) throw new IllegalArgumentException(
+      label + " precisa de texto ou imagem."
+    );
+    return content;
+  }
+
   private String requiredText(String text, String label, int limit) {
     if (text == null || text.isBlank() || text.trim().length() > limit) {
       throw new IllegalArgumentException(
@@ -159,8 +192,8 @@ public class ManualFlashcardService {
       card.discipline == null ? null : card.discipline.id,
       card.question,
       card.answer,
-      null,
-      null,
+      card.questionImageId,
+      card.answerImageId,
       state.getDue(),
       card.flashcardRevision,
       scheduling.nextReviews(state, now)

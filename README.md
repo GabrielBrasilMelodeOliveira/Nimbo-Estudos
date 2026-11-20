@@ -1,6 +1,6 @@
-# Nimbo 5.10.1 — Cores, alinhamento e navegação
+# Nimbo 5.10.2 — Flashcards com imagens e superfícies neutras
 
-A versão **5.10.1** aparece no menu lateral. Para atualizar uma instalação Docker existente:
+A versão **5.10.2** aparece no menu lateral. Para atualizar uma instalação Docker existente:
 
 ```bash
 git pull --ff-only origin main
@@ -10,6 +10,15 @@ docker compose up -d --build
 Recarregue a página após a reconstrução. Apenas `git pull` não substitui o frontend que já está no container. Os volumes existentes são preservados.
 
 Nesta versão:
+
+- Cards e painéis usam `Paper` do MUI, inclusive os indicadores e cards legados do Início, Edital, Questões, Caderno de erros, Materiais, Simulados, Agenda, Configurações e coleção do Nimbo. Sombra neutra e discreta dá profundidade sem alterar a cor branca do fundo. O padrão é ajustável em `frontend/src/shared/theme/surfaceStyles.js`.
+- Flashcards próprios aceitam imagem na pergunta e na resposta, selecionada no dispositivo ou colada com Ctrl+V/⌘V. É possível usar texto, imagem ou ambos em cada lado. PNG/JPG/WEBP até 20 MB, com pré-visualização, troca e remoção. O envio precisa terminar antes de salvar; as imagens são armazenadas pelo mesmo serviço de anexos do caderno de erros. A imagem da resposta só aparece na revisão depois de revelada.
+- Editar as imagens preserva o agendamento FSRS. A atualização adiciona duas colunas opcionais à tabela de cartões pessoais e mantém os cartões antigos.
+- Bordas de cards, painéis, filtros e separadores em cinza neutro `#D0D0D0`, definido em `designColors.border`. Destaques de foco e erros de formulário continuam visíveis.
+- Seções de página com respiro de 24 px; o grupo de filtros, indicadores e anotações do caderno recebeu espaçamento próprio.
+- Os dois gráficos de “Estudo nos últimos 7 dias” dividem igualmente a largura disponível no computador e ficam empilhados em telas menores.
+
+Recursos da versão 5.10.1 preservados:
 
 - Indicadores de fechamento do dia, registros e metas concluídas seguem a paleta ativa. Verde/vermelho permanecem nas métricas de acertos e erros.
 - “Por assunto”, em Questões, usa colunas alinhadas para acertos, erros, barras e percentuais, com disposição adaptada a telas menores.
@@ -34,7 +43,7 @@ Edite **`frontend/src/shared/theme/designColors.js`**. Troque `activePaletteName
 | `light` — superfícies e realces | `#BBE1FA` |
 | `siteBackground` — fundo fixo | `#FFFFFF` |
 
-As variações suaves e bordas são calculadas a partir da paleta. As cores semânticas de sucesso, erro e atenção também estão nesse arquivo, em `statusColors`. A arte dos mascotes e cores de disciplinas já escolhidas pelo usuário permanecem próprias. Depois de alterar o arquivo, reconstrua o frontend (ou execute `docker compose up -d --build`).
+As variações suaves são calculadas a partir da paleta; as bordas estruturais usam cinza neutro independente da paleta. As cores semânticas de sucesso, erro e atenção também estão nesse arquivo, em `statusColors`. A arte dos mascotes e cores de disciplinas já escolhidas pelo usuário permanecem próprias. Depois de alterar o arquivo, reconstrua o frontend (ou execute `docker compose up -d --build`).
 
 A atualização cria a tabela `manual_flashcards` automaticamente pelo mecanismo de esquema já usado no projeto. As colunas e os agendamentos de revisão dos erros existentes são preservados. Limpar apenas o edital ou os assuntos mantém os cartões pessoais, retirando suas associações; “Excluir tudo” também exclui os cartões pessoais.
 

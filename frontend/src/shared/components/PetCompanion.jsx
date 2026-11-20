@@ -160,7 +160,7 @@ export default function PetCompanion({ pet, navigate, action, working }) {
             bgcolor: "background.paper",
             color: "primary.main",
             border: "2px solid",
-            borderColor: "primary.light",
+            borderColor: "divider",
             boxShadow: 4,
             p: 0.5,
             touchAction: "none",

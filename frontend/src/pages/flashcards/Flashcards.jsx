@@ -79,7 +79,7 @@ export default function Flashcards({ data, action, working, navigate }) {
                 <Stack sx={{ flex: 1, minWidth: 0, width: "100%" }}>
                   <Typography fontWeight={600}>{card.source}</Typography>
                   <Typography variant="body2" color="text.secondary" noWrap>
-                    {card.question}
+                    {card.question || "Pergunta em imagem"}
                   </Typography>
                   <Typography variant="caption" color="text.secondary">
                     {card.discipline} · {card.topic}

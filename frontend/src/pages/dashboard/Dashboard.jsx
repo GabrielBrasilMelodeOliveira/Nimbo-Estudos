@@ -1,6 +1,6 @@
 import DayClosing from "../../shared/sections/dayClosing/DayClosing.jsx";
 import { unplannedStudies } from "../../shared/utils/plannerMetrics.js";
-import { Stack, Typography, Chip } from "@mui/material";
+import { Paper, Stack, Typography, Chip } from "@mui/material";
 import StudySummary from "./sections/StudySummary.jsx";
 import { Checkbox, IconButton } from "@mui/material";
 import { isAgendaCompleted } from "../../shared/utils/plannerMetrics.js";
@@ -54,7 +54,12 @@ export default function Dashboard({ data, action, working, navigate }) {
           }
         />
       )}
-      <section className="ux-home-focus" aria-label="Próximo passo de estudo">
+      <Paper
+        component="section"
+        variant="outlined"
+        className="ux-home-focus"
+        aria-label="Próximo passo de estudo"
+      >
         <div className="ux-home-focus-top">
           <span className="ux-kicker">{greet} · Seu próximo passo</span>
           <span className="ux-focus-reason">
@@ -129,9 +134,11 @@ export default function Dashboard({ data, action, working, navigate }) {
             ))}
           </Stack>
         )}
-      </section>
+      </Paper>
       <section className="ux-home-summary" aria-label="Resumo dos seus estudos">
-        <Button
+        <Paper
+          component={Button}
+          variant="outlined"
           type="button"
           onClick={() => navigate("edital")}
           className="ux-summary-item"
@@ -143,8 +150,10 @@ export default function Dashboard({ data, action, working, navigate }) {
             {overview.completedTopics || 0} de {overview.totalTopics || 0}{" "}
             assuntos
           </small>
-        </Button>
-        <Button
+        </Paper>
+        <Paper
+          component={Button}
+          variant="outlined"
           type="button"
           onClick={() => navigate("questions")}
           className="ux-summary-item"
@@ -157,8 +166,10 @@ export default function Dashboard({ data, action, working, navigate }) {
               : "—"}
           </strong>
           <small>{overview.recentTotal || 0} questões</small>
-        </Button>
-        <Button
+        </Paper>
+        <Paper
+          component={Button}
+          variant="outlined"
           type="button"
           onClick={() => navigate("cycle")}
           className="ux-summary-item"
@@ -169,8 +180,10 @@ export default function Dashboard({ data, action, working, navigate }) {
           <small>
             {goalSeconds ? `Meta: ${fmtHours(goalSeconds)}` : "Tempo líquido"}
           </small>
-        </Button>
-        <Button
+        </Paper>
+        <Paper
+          component={Button}
+          variant="outlined"
           type="button"
           onClick={() => navigate("reviews")}
           className="ux-summary-item"
@@ -179,10 +192,10 @@ export default function Dashboard({ data, action, working, navigate }) {
           <span>Revisões a fazer</span>
           <strong>{due.length}</strong>
           <small>{due.length ? "Até hoje" : "Tudo em dia"}</small>
-        </Button>
+        </Paper>
       </section>
       <div className="ux-home-columns">
-        <section className="ux-home-panel">
+        <Paper component="section" variant="outlined" className="ux-home-panel">
           <div className="ux-home-panel-head">
             <h3>
               <CalendarDays size={19} /> Agenda de hoje
@@ -274,8 +287,8 @@ export default function Dashboard({ data, action, working, navigate }) {
               </Stack>
             ))}
           </Stack>
-        </section>
-        <section className="ux-home-panel">
+        </Paper>
+        <Paper component="section" variant="outlined" className="ux-home-panel">
           <div className="ux-home-panel-head">
             <h3>
               <Repeat2 size={19} /> Próximas revisões
@@ -310,7 +323,7 @@ export default function Dashboard({ data, action, working, navigate }) {
               +{due.length - 4} revisões pendentes
             </span>
           )}
-        </section>
+        </Paper>
       </div>
       <DayClosing data={data} action={action} working={working} />
       <StudySummary

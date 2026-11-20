@@ -1,3 +1,4 @@
+import { surfaceStyles } from "./surfaceStyles.js";
 import { designColors, statusColors, withOpacity } from "./designColors.js";
 import { createTheme } from "@mui/material/styles";
 
@@ -29,6 +30,18 @@ export const theme = createTheme({
   },
   shape: { borderRadius: 10 },
   components: {
+    MuiPaper: {
+      defaultProps: { elevation: 2 },
+      styleOverrides: {
+        root: {
+          backgroundImage: "none",
+          "&.MuiPaper-outlined": {
+            boxShadow: surfaceStyles.cardShadow,
+            borderRadius: surfaceStyles.borderRadius,
+          },
+        },
+      },
+    },
     MuiButtonBase: {
       defaultProps: { disableRipple: true },
       styleOverrides: {
@@ -43,7 +56,20 @@ export const theme = createTheme({
     MuiTextField: { defaultProps: { size: "small", fullWidth: true } },
     MuiButton: {
       defaultProps: { disableElevation: true },
-      styleOverrides: { root: { minWidth: 0, gap: 6, flexShrink: 0 } },
+      styleOverrides: {
+        root: {
+          minWidth: 0,
+          gap: 6,
+          flexShrink: 0,
+          "&.MuiButton-outlined": { borderColor: designColors.border },
+          "&.MuiButton-outlined:hover": {
+            borderColor: designColors.borderHover,
+          },
+        },
+      },
+    },
+    MuiChip: {
+      styleOverrides: { outlined: { borderColor: designColors.border } },
     },
     MuiOutlinedInput: {
       styleOverrides: {
@@ -52,6 +78,18 @@ export const theme = createTheme({
           minWidth: 0,
           maxWidth: "100%",
           minHeight: 44,
+          "& .MuiOutlinedInput-notchedOutline": {
+            borderColor: designColors.border,
+          },
+          "&:hover .MuiOutlinedInput-notchedOutline": {
+            borderColor: designColors.borderHover,
+          },
+          "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+            borderColor: designColors.primary,
+          },
+          "&.Mui-error .MuiOutlinedInput-notchedOutline": {
+            borderColor: statusColors.error,
+          },
         },
         input: {
           fontSize: 14,

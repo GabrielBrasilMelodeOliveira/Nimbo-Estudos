@@ -3,7 +3,7 @@ import {
   Input,
   SearchableSelect,
 } from "../../shared/components/FormControls.jsx";
-import { Button } from "@mui/material";
+import { Paper, Button } from "@mui/material";
 import React from "react";
 import {
   BookOpenText,
@@ -121,7 +121,7 @@ export default function Edital({ data, action, working, navigate }) {
         </div>
       </div>
       <section className="edital-summary" aria-label="Indicadores do edital">
-        <div>
+        <Paper component="div" variant="outlined">
           <span className="summary-icon mint">
             <BookMarked size={20} />
           </span>
@@ -137,8 +137,8 @@ export default function Edital({ data, action, working, navigate }) {
             color={designColors.primary}
             height={7}
           />
-        </div>
-        <div>
+        </Paper>
+        <Paper component="div" variant="outlined">
           <span className="summary-icon blue">
             <Target size={20} />
           </span>
@@ -149,23 +149,23 @@ export default function Edital({ data, action, working, navigate }) {
               ? `${fmtAccuracy((allCorrect * 100) / allQuestions)} de acerto`
               : "Ainda sem questões"}
           </small>
-        </div>
-        <div>
+        </Paper>
+        <Paper component="div" variant="outlined">
           <span className="summary-icon sand">
             <Clock3 size={20} />
           </span>
           <span>Tempo de estudo</span>
           <strong>{fmtHours(trackedSeconds)}</strong>
           <small>Com assunto definido</small>
-        </div>
-        <div>
+        </Paper>
+        <Paper component="div" variant="outlined">
           <span className="summary-icon rose">
             <RotateCcw size={20} />
           </span>
           <span>Revisões pendentes</span>
           <strong>{fmtNumber(pendingReviews)}</strong>
           <small>Por assimilação</small>
-        </div>
+        </Paper>
       </section>
       <Panel
         className="edital-sheet-panel"

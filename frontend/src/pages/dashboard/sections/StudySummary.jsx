@@ -73,7 +73,7 @@ export default function StudySummary({
             display: "grid",
             gridTemplateColumns: {
               xs: "minmax(0, 1fr)",
-              lg: "minmax(0, 1.3fr) minmax(0, 1fr)",
+              lg: "repeat(2, minmax(0, 1fr))",
             },
             gap: 3,
           }}

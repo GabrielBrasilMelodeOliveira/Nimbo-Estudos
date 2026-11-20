@@ -1,3 +1,4 @@
+import { ScreenshotInput } from "../../../shared/components/ScreenshotInput.jsx";
 import { useState } from "react";
 import {
   Alert,
@@ -15,12 +16,18 @@ import { api } from "../../../shared/services/api.js";
 
 export default function FlashcardEditor({ card, data, onClose, onSaved }) {
   const [form, setForm] = useState({
+    questionImageId: card?.questionImageId || null,
+    answerImageId: card?.answerImageId || null,
     title: card?.source || "",
     question: card?.question || "",
     answer: card?.answer || "",
     disciplineId: String(card?.disciplineId || ""),
     topicId: String(card?.topicId || ""),
   });
+  const [uploads, setUploads] = useState({ question: false, answer: false });
+  const uploading = Object.values(uploads).some(Boolean);
+  const uploadStatus = (side) => (pending) =>
+    setUploads((current) => ({ ...current, [side]: pending }));
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const change = (field) => (event) =>
@@ -30,7 +37,7 @@ export default function FlashcardEditor({ card, data, onClose, onSaved }) {
   );
   const submit = async (event) => {
     event.preventDefault();
-    if (saving) return;
+    if (saving || uploading) return;
     setSaving(true);
     setError("");
     try {
@@ -55,7 +62,7 @@ export default function FlashcardEditor({ card, data, onClose, onSaved }) {
   return (
     <Dialog
       open
-      onClose={saving ? undefined : onClose}
+      onClose={saving || uploading ? undefined : onClose}
       fullWidth
       maxWidth="md"
       aria-labelledby="flashcard-editor-title"
@@ -112,41 +119,55 @@ export default function FlashcardEditor({ card, data, onClose, onSaved }) {
                 ))}
               </SearchableSelect>
             </Stack>
-            <Stack direction={{ xs: "column", md: "row" }} spacing={2}>
-              <TextField
-                autoFocus
-                label="Pergunta"
-                required
-                multiline
-                minRows={5}
-                maxRows={12}
-                value={form.question}
-                onChange={change("question")}
-                disabled={saving}
-                slotProps={{ htmlInput: { maxLength: 20000 } }}
-              />
-              <TextField
-                label="Resposta"
-                required
-                multiline
-                minRows={5}
-                maxRows={12}
-                value={form.answer}
-                onChange={change("answer")}
-                disabled={saving}
-                slotProps={{ htmlInput: { maxLength: 20000 } }}
-              />
+            <Stack direction={{ xs: "column", md: "row" }} spacing={3}>
+              {[
+                { key: "question", label: "Pergunta" },
+                { key: "answer", label: "Resposta" },
+              ].map(({ key, label }) => (
+                <Stack key={key} spacing={2} sx={{ flex: 1, minWidth: 0 }}>
+                  <TextField
+                    autoFocus={key === "question"}
+                    label={label}
+                    required={!form[`${key}ImageId`]}
+                    multiline
+                    minRows={5}
+                    maxRows={12}
+                    value={form[key]}
+                    onChange={change(key)}
+                    disabled={saving}
+                    slotProps={{ htmlInput: { maxLength: 20000 } }}
+                    helperText="Use texto, imagem ou os dois."
+                  />
+                  <ScreenshotInput
+                    label={label}
+                    id={form[`${key}ImageId`]}
+                    disabled={saving}
+                    onUploadingChange={uploadStatus(key)}
+                    onChange={(id) =>
+                      setForm((current) => ({
+                        ...current,
+                        [`${key}ImageId`]: id,
+                      }))
+                    }
+                  />
+                </Stack>
+              ))}
             </Stack>
           </Stack>
         </DialogContent>
         <DialogActions sx={{ p: 3, pt: 1 }}>
-          <Button onClick={onClose} disabled={saving}>
+          <Button onClick={onClose} disabled={saving || uploading}>
             Cancelar
           </Button>
           <Button
             type="submit"
             variant="contained"
-            disabled={saving || !form.question.trim() || !form.answer.trim()}
+            disabled={
+              saving ||
+              uploading ||
+              (!form.question.trim() && !form.questionImageId) ||
+              (!form.answer.trim() && !form.answerImageId)
+            }
           >
             {saving
               ? "Salvando…"

@@ -247,7 +247,7 @@ export default function Sidebar({
           </Typography>
         )}
         <List disablePadding>{mainMenu.map(navigationItem)}</List>
-        <Divider sx={{ my: 1.5, borderColor: "primary.main" }} />
+        <Divider sx={{ my: 1.5, borderColor: "divider" }} />
         {!compact && (
           <Button
             onClick={onToggleMore}

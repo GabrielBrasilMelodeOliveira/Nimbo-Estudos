@@ -7,7 +7,7 @@ import {
   Input,
   SearchableSelect,
 } from "../../shared/components/FormControls.jsx";
-import { Button, TextareaAutosize } from "@mui/material";
+import { Paper, Button, TextareaAutosize } from "@mui/material";
 import { Plus, Target, Search, RotateCcw, Clock3 } from "lucide-react";
 import {
   Modal,
@@ -198,27 +198,27 @@ export default function Questions({
           </div>
         </Panel>
         <div className="question-stat-grid">
-          <div>
+          <Paper component="div" variant="outlined">
             <span>Questões</span>
             <strong>{total.toLocaleString("pt-BR")}</strong>
-          </div>
-          <div>
+          </Paper>
+          <Paper component="div" variant="outlined">
             <span>Acertos / erros</span>
             <strong>
               {correct.toLocaleString("pt-BR")}{" "}
               <em>/ {(total - correct).toLocaleString("pt-BR")}</em>
             </strong>
-          </div>
-          <div>
+          </Paper>
+          <Paper component="div" variant="outlined">
             <span>Aproveitamento</span>
             <strong>
               {total ? fmtPercent(percentage(correct, total)) : "—"}
             </strong>
-          </div>
-          <div>
+          </Paper>
+          <Paper component="div" variant="outlined">
             <span>Tempo em questões</span>
             <strong>{fmtHours(focusedSeconds)}</strong>
-          </div>
+          </Paper>
         </div>
         <Panel
           title="Por assunto"

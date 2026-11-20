@@ -1,5 +1,5 @@
 import { Input } from "./FormControls.jsx";
-import { Button, TextareaAutosize } from "@mui/material";
+import { Paper, Button, TextareaAutosize } from "@mui/material";
 import React, { useState } from "react";
 import {
   UploadCloud,
@@ -96,7 +96,11 @@ export default function EditalImporter({ action, working, history = [] }) {
   );
   return (
     <>
-      <div className="edital-upload-banner">
+      <Paper
+        component="div"
+        variant="outlined"
+        className="edital-upload-banner"
+      >
         <div className="edital-upload-icon">
           <FileText size={27} />
         </div>
@@ -119,7 +123,7 @@ export default function EditalImporter({ action, working, history = [] }) {
         >
           <UploadCloud size={17} /> Importar edital
         </Button>
-      </div>
+      </Paper>
       {history.length > 0 && (
         <div className="edital-import-history">
           <span>Último edital importado:</span>
