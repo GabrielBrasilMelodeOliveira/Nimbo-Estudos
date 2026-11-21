@@ -1,6 +1,6 @@
-# Nimbo 5.11.0 — Aventureiro em pixel art e evolução de classes
+# Nimbo 5.12.0 — Coruja personalizável e companheiro sempre acessível
 
-A versão **5.11.0** aparece no menu lateral. Para atualizar uma instalação Docker existente:
+A versão **5.12.0** aparece no menu lateral. Para atualizar uma instalação Docker existente:
 
 ```bash
 git pull --ff-only origin main
@@ -11,23 +11,23 @@ Recarregue a página após a reconstrução. Apenas `git pull` não substitui o 
 
 Nesta versão:
 
-- O companheiro agora é um homem em pixel art original, com visual de RPG de 16 bits. Cada classe muda a roupa e o equipamento: bolsa de viajante, livro, espada, escudo, capa, armadura e insígnias.
-- Mesmo parado, respira, pisca, olha para os lados e movimenta o braço. Fome, cansaço, tristeza, irritação e alegria têm expressões e movimentos próprios; as sequências de metas trazem celebrações. Na morte, fica imóvel e sem cor. A preferência do dispositivo por movimento reduzido é respeitada.
-- A aba Meu Nimbo mostra a jornada completa, as classes conquistadas e o XP que falta. O painel flutuante também mostra a classe e avisa quando ela muda.
-- A aparência escolhida, o XP, o vínculo, a coleção e o histórico de vidas são preservados. Nenhuma tabela é apagada ou recriada. Os identificadores existentes passam a representar visuais humanos. O recrutamento continua liberado quando todos os companheiros vivos chegam ao nível 13, agora Mestre de Batalha; há classes adicionais para continuar evoluindo.
-- Metas diárias continuam determinando o humor, a energia e a sobrevivência. Interações fortalecem o vínculo; apenas os estudos, questões e revisões concedem XP.
+- **Coruja em pixel art de 16 bits**, inspirada na referência enviada: olhos grandes, penas com sombras, cachecol, asas e bolsa. A arte em camadas permite mudar cores e equipamentos sem perder as expressões e animações. Ela respira, pisca, olha para os lados e movimenta as asas mesmo em repouso. Os humores e as sequências de metas continuam visíveis; na morte, fica imóvel e sem cor. Movimento reduzido do dispositivo é respeitado.
+- **Meu Nimbo → Personalizar coruja:** escolha Guerreiro, Mago ou Patrulheiro; cores das penas, olhos e cachecol/equipamentos; acessório da classe, nenhum, óculos, chapéu, capuz ou coroa; bolsa, capa ou nenhum acessório no corpo. Os seletores permitem digitar para procurar. Veja a prévia das sete evoluções e dos humores antes de salvar. A prévia não altera o XP ou o humor real. Há um botão para restaurar o visual azul original.
+- **Personalização persistida por companheiro:** trocar o caminho ou os acessórios mantém XP, vínculo, vida, humor e dados de estudo. As colunas de aparência são opcionais e adicionadas à tabela existente. Companheiros antigos recebem valores visuais padrão sem recriação de registros. Reiniciar uma vida preserva os acessórios, mas continua zerando o XP daquela vida conforme as regras anteriores.
+- **Bolinha recuperável:** renderizada acima da barra lateral, em uma camada própria, com a posição limitada à área visível do conteúdo. Posições antigas atrás do menu são corrigidas ao abrir a página; abrir/recolher o menu e redimensionar a janela reajusta os limites. “Recuperar companheiro”, no menu e em Meu Nimbo, recolhe o painel e traz a bolinha para o canto inferior direito. Ela continua visível durante o cronômetro de estudo; em telas pequenas, a bolinha fica acima dele para não cobrir seus botões.
+- XP, coleção, regras de metas e desbloqueio de outro companheiro no nível 13 são preservados. Só estudos, questões e revisões concedem XP; personalização é cosmética.
 
-| Classe | XP total | Nível |
-| --- | ---: | ---: |
-| Pessoa Comum | 0 | 1 |
-| Aprendiz | 200 | 3 |
-| Soldado | 400 | 5 |
-| Guardião da Vigília | 800 | 9 |
-| Mestre de Batalha | 1.200 | 13 |
-| Comandante da Aurora | 2.400 | 25 |
-| Lenda da Constância | 4.000 | 41 |
+| Etapa | XP total | Guerreiro | Mago | Patrulheiro |
+| --- | ---: | --- | --- | --- |
+| 1 | 0 | Coruja Viajante | Coruja Viajante | Coruja Viajante |
+| 2 | 200 | Aprendiz | Aprendiz | Aprendiz |
+| 3 | 400 | Soldado | Mago | Batedor |
+| 4 | 800 | Guardião da Vigília | Guardião das Runas | Sentinela do Bosque |
+| 5 | 1.200 | Mestre de Batalha | Mestre Arcano | Mestre Rastreador |
+| 6 | 2.400 | Comandante da Aurora | Arquimago da Aurora | Guardião do Horizonte |
+| 7 | 4.000 | Lenda da Constância | Lenda da Constância | Lenda da Constância |
 
-A progressão é definida em `backend/src/main/java/br/com/concursoti/companions/types/CompanionClass.java`. O sprite, as aparências e as animações ficam em `frontend/src/shared/components/pet/`. São vetores locais desenhados sobre uma grade de pixels, sem imagens remotas ou serviços externos.
+A progressão é definida em `backend/src/main/java/br/com/concursoti/companions/types/CompanionClass.java`; a personalização usa `PUT /api/pet/{id}/appearance`. O sprite e as opções de aparência ficam em `frontend/src/shared/components/pet/`. A avaliação dos conjuntos gratuitos e a decisão de usar uma arte própria em camadas estão em [ASSETS.md](frontend/src/shared/components/pet/ASSETS.md).
 
 Recursos da versão 5.10.2 preservados:
 

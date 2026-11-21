@@ -1,3 +1,4 @@
+import { recoverCompanion } from "../../utils/companionRecovery.js";
 import {
   Badge,
   Box,
@@ -14,6 +15,7 @@ import {
 } from "@mui/material";
 import {
   ChevronDown,
+  LocateFixed,
   Leaf,
   PanelLeftClose,
   PanelLeftOpen,
@@ -288,10 +290,29 @@ export default function Sidebar({
           {extraMenu.map(navigationItem)}
         </List>
       </Box>
+      <Tooltip title="Recuperar companheiro" placement="right">
+        <Button
+          aria-label="Recuperar companheiro"
+          onClick={() => {
+            recoverCompanion();
+            navigate("collection");
+          }}
+          sx={{
+            mt: "auto",
+            mx: 1,
+            color: "inherit",
+            minWidth: 0,
+            gap: 1,
+            py: 1.5,
+          }}
+        >
+          <LocateFixed size={20} />
+          {!compact && "Recuperar companheiro"}
+        </Button>
+      </Tooltip>
       <Typography
         variant="caption"
         sx={{
-          mt: "auto",
           p: compact ? 1 : 3,
           color: "inherit",
           textAlign: compact ? "center" : "left",

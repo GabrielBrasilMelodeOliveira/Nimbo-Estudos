@@ -1,5 +1,6 @@
 package br.com.concursoti.companions.controllers;
 
+import br.com.concursoti.companions.dto.CompanionAppearance;
 import br.com.concursoti.companions.services.CompanionsService;
 import br.com.concursoti.companions.services.CompanionsService.*;
 import java.util.*;
@@ -23,6 +24,14 @@ public class CompanionsController {
   @PostMapping("/pet/interact")
   public Map<String, Object> interactPet(@RequestBody PetInteraction request) {
     return service.interactPet(request);
+  }
+
+  @PutMapping("/pet/{id}/appearance")
+  public Map<String, Object> customizePet(
+    @PathVariable Long id,
+    @RequestBody CompanionAppearance appearance
+  ) {
+    return service.customizePet(id, appearance);
   }
 
   @GetMapping("/pet")

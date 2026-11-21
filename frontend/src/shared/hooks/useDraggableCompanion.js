@@ -1,3 +1,4 @@
+import { companionRecoveryEvent } from "../utils/companionRecovery.js";
 import { useEffect, useRef, useState } from "react";
 import {
   clampFloatingPosition,
@@ -5,10 +6,31 @@ import {
 } from "../utils/floatingPosition.js";
 
 const storageKey = "nimbo:position";
-const viewportSize = () => ({
-  width: window.innerWidth,
-  height: window.innerHeight,
-});
+const floatingClock = () =>
+  document.querySelector('[aria-label="Cronômetro em andamento"]');
+function viewportSize() {
+  const sidebar = document.querySelector(
+    '[aria-label="Barra lateral principal"]',
+  );
+  const bounds = sidebar?.getBoundingClientRect();
+  const leftInset =
+    window.innerWidth > 760 &&
+    bounds?.right > 0 &&
+    bounds.width < window.innerWidth - 76
+      ? bounds.right
+      : 0;
+  const clockBounds = floatingClock()?.getBoundingClientRect();
+  const bottomInset =
+    window.innerWidth <= 760 && clockBounds?.height > 0
+      ? Math.max(0, window.innerHeight - clockBounds.top + 8)
+      : 0;
+  return {
+    width: window.innerWidth,
+    height: window.innerHeight,
+    leftInset,
+    bottomInset,
+  };
+}
 function readPosition(viewport) {
   try {
     return restoreFloatingPosition(
@@ -44,10 +66,50 @@ export function useDraggableCompanion(onExpand) {
     const resize = () => {
       const nextViewport = viewportSize();
       setViewport(nextViewport);
-      setPosition((current) => clampFloatingPosition(current, nextViewport));
+      setPosition((current) => {
+        const nextPosition = clampFloatingPosition(current, nextViewport);
+        savePosition(nextPosition);
+        return nextPosition;
+      });
     };
+    const reset = () => {
+      const nextViewport = viewportSize();
+      const nextPosition = restoreFloatingPosition(null, nextViewport);
+      gesture.current = null;
+      ignoreClick.current = false;
+      setDragging(false);
+      setViewport(nextViewport);
+      setPosition(nextPosition);
+      savePosition(nextPosition);
+    };
+    const sidebar = document.querySelector(
+      '[aria-label="Barra lateral principal"]',
+    );
+    const observer = new ResizeObserver(resize);
+    if (sidebar) observer.observe(sidebar);
+    let clockElement = floatingClock();
+    if (clockElement) observer.observe(clockElement);
+    const clockMountObserver = new MutationObserver(() => {
+      const nextClock = floatingClock();
+      if (nextClock === clockElement) return;
+      if (clockElement) observer.unobserve?.(clockElement);
+      clockElement = nextClock;
+      if (clockElement) observer.observe(clockElement);
+      resize();
+    });
+    clockMountObserver.observe(document.body, {
+      childList: true,
+      subtree: true,
+    });
+    resize();
     window.addEventListener("resize", resize);
-    return () => window.removeEventListener("resize", resize);
+    window.addEventListener(companionRecoveryEvent, reset);
+    return () => {
+      window.removeEventListener("resize", resize);
+      window.removeEventListener(companionRecoveryEvent, reset);
+      observer.disconnect();
+      clockMountObserver.disconnect();
+    };
   }, []);
   const finish = (event) => {
     const current = gesture.current;

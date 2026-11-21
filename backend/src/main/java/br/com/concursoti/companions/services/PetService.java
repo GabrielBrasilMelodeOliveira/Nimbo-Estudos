@@ -1,5 +1,6 @@
 package br.com.concursoti.companions.services;
 
+import br.com.concursoti.companions.dto.CompanionAppearance;
 import br.com.concursoti.companions.entities.PetCompanion;
 import br.com.concursoti.companions.repositories.PetCompanionRepository;
 import br.com.concursoti.companions.repositories.PetRepository;
@@ -142,7 +143,10 @@ public class PetService {
         .toList()
     );
     view.put("totalCompanions", all.size());
-    view.put("classJourney", CompanionClass.journey());
+    view.put(
+      "classJourney",
+      CompanionClass.journey(CompanionAppearance.from(p).path())
+    );
     view.put("collectionComplete", all.size() == SPECIES.size());
     return view;
   }
@@ -173,7 +177,7 @@ public class PetService {
         )
         .count() < all.size()
     ) throw new IllegalArgumentException(
-      "Alcance Mestre de Batalha (nível 13) com todos os companheiros para recrutar outro aventureiro."
+      "Alcance a quinta classe (nível 13) com todos os companheiros para recrutar outro aventureiro."
     );
     for (PetCompanion member : all) {
       member.active = false;
@@ -204,6 +208,24 @@ public class PetService {
       companions.save(other);
     }
     return decorated(chosen, days);
+  }
+
+  @Transactional
+  public Map<String, Object> customize(Long id, CompanionAppearance request) {
+    if (request == null) throw new IllegalArgumentException(
+      "Informe a aparência da coruja."
+    );
+    CompanionAppearance appearance = request.validated();
+    List<DailyGoalDay> days = dailyProgress.synchronize();
+    migrate();
+    PetCompanion companion = companions
+      .findById(id)
+      .orElseThrow(() ->
+        new IllegalArgumentException("Companheiro não encontrado na coleção.")
+      );
+    appearance.applyTo(companion);
+    companions.save(companion);
+    return decorated(companion, days);
   }
 
   @Transactional
@@ -299,7 +321,11 @@ public class PetService {
 
   private Map<String, Object> view(PetCompanion p, List<DailyGoalDay> days) {
     PetCarePolicy.CareView care = carePolicy.evaluate(p, days);
-    CompanionClass.CareerView career = CompanionClass.describe(p.xp);
+    CompanionAppearance appearance = CompanionAppearance.from(p);
+    CompanionClass.CareerView career = CompanionClass.describe(
+      p.xp,
+      appearance.path()
+    );
     Map<String, Object> out = new LinkedHashMap<>();
     out.put("care", care);
     out.put("mood", care.mood());
@@ -310,6 +336,7 @@ public class PetService {
     out.put("energy", p.energy);
     out.put("stage", career.current().rank());
     out.put("career", career);
+    out.put("appearance", appearance);
     out.put("level", 1 + p.xp / 100);
     out.put("xpWithinStage", career.experienceWithinClass());
     out.put("xpToNextStage", career.experienceToNextClass());

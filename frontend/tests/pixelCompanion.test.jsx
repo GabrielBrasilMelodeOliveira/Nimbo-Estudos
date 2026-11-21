@@ -7,7 +7,8 @@ import PetProgression, {
   PetClassProgress,
 } from "../src/shared/components/pet/PetProgression.jsx";
 import { petMotion } from "../src/shared/components/pet/petMotion.js";
-import { heroClassNames } from "../src/shared/components/pet/heroAppearances.js";
+import { classNamesByPath } from "../src/shared/components/pet/owlAppearance.js";
+const heroClassNames = classNamesByPath.WARRIOR;
 
 const show = (children) =>
   render(<ThemeProvider theme={theme}>{children}</ThemeProvider>);
@@ -35,9 +36,11 @@ describe("pixel hero evolution", () => {
   it("changes equipment at each class and preserves the chosen appearance", () => {
     const { container, rerender } = show(<PetArt species="luma" stage={1} />);
     expect(screen.getByRole("img").getAttribute("aria-label")).toContain(
-      "Nimbo Lavanda · Pessoa Comum",
+      "Nimbo Lavanda · Coruja Viajante",
     );
-    expect(container.querySelector('[data-equipment="satchel"]')).toBeTruthy();
+    expect(
+      container.querySelector('[data-body-accessory="SATCHEL"]'),
+    ).toBeTruthy();
     for (let rank = 2; rank <= 7; rank++) {
       rerender(
         <ThemeProvider theme={theme}>
@@ -55,20 +58,20 @@ describe("pixel hero evolution", () => {
           `[data-equipment="${rank === 2 ? "book" : "sword"}"]`,
         ),
       ).toBeTruthy();
-      expect(!!container.querySelector(".hero-cape")).toBe(rank >= 4);
-      expect(!!container.querySelector('[data-equipment="pauldrons"]')).toBe(
-        rank >= 5,
+      expect(!!container.querySelector('[data-equipment="shield"]')).toBe(
+        rank >= 4,
       );
+      expect(
+        !!container.querySelector('[data-equipment="master-insignia"]'),
+      ).toBe(rank >= 5);
       expect(!!container.querySelector(".hero-aura")).toBe(rank === 7);
     }
   });
 
-  it("offers the same identifiers when recruiting a human companion", () => {
+  it("offers the same identifiers when recruiting an owl companion", () => {
     const select = vi.fn();
     show(<PetPicker availableSpecies={["nori", "luma"]} onSelect={select} />);
-    fireEvent.click(
-      screen.getByRole("button", { name: /Lavanda Aventureiro/ }),
-    );
+    fireEvent.click(screen.getByRole("button", { name: /Lavanda Coruja/ }));
     fireEvent.click(
       screen.getByRole("button", { name: /Começar com Lavanda/ }),
     );
@@ -120,7 +123,7 @@ describe("pixel hero evolution", () => {
     for (const part of [
       "hero-breath",
       "hero-head",
-      "hero-arm-left",
+      "owl-wing-front",
       "hero-eyes-open",
       "hero-eyes-closed",
     ]) {
@@ -128,7 +131,9 @@ describe("pixel hero evolution", () => {
       expect(idle[`& .${part}`].animation).toContain("steps(");
     }
     show(<PetArt stage={7} mood="dead" />);
-    expect(screen.getByRole("img").getAttribute("viewBox")).toBe("-8 0 80 76");
+    expect(screen.getByRole("img").getAttribute("viewBox")).toBe(
+      "-10 -6 88 88",
+    );
     const dead = petMotion("dead");
     expect(dead["&& *"].animation).toBe("none !important");
     expect(dead["&&"].filter).toBe("grayscale(1)");

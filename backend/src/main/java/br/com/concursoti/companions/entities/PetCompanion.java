@@ -52,6 +52,25 @@ public class PetCompanion {
   @Column(nullable = false, columnDefinition = "integer default 0")
   public int previousLifeXp;
 
+  // Optional columns keep existing companions compatible with the owl wardrobe.
+  @Column(length = 16)
+  public String heroPath;
+
+  @Column(length = 7)
+  public String featherColor;
+
+  @Column(length = 7)
+  public String scarfColor;
+
+  @Column(length = 7)
+  public String eyeColor;
+
+  @Column(length = 16)
+  public String headAccessory;
+
+  @Column(length = 16)
+  public String bodyAccessory;
+
   public LocalDateTime lastInteraction;
   public LocalDateTime lastRest;
 }

@@ -8,14 +8,14 @@ import {
 } from "@mui/material";
 import { Check, LockKeyhole } from "lucide-react";
 import { PetArt } from "../Pet.jsx";
-import { heroClassName } from "./heroAppearances.js";
+import { companionClassName } from "./owlAppearance.js";
 
 export function PetClassProgress({ pet, compact = false }) {
   const career = pet.career;
   if (!career)
     return (
       <Typography variant="body2" fontWeight={700}>
-        {heroClassName(pet.stage)}
+        {companionClassName(pet.stage, pet.appearance?.path)}
       </Typography>
     );
   const progress = career.next
@@ -54,7 +54,7 @@ export function PetClassProgress({ pet, compact = false }) {
       </Typography>
       {pet.care?.dead && (
         <Typography variant="caption" color="text.secondary">
-          Esta vida terminou. Ao recomeçar, você volta a Pessoa Comum.
+          Esta vida terminou. Ao recomeçar, você volta a Coruja Viajante.
         </Typography>
       )}
     </Stack>
@@ -116,6 +116,7 @@ export default function PetProgression({ pet }) {
                   <PetArt
                     species={pet.species}
                     stage={heroClass.rank}
+                    appearance={pet.appearance}
                     mood="neutral"
                   />
                 </Box>

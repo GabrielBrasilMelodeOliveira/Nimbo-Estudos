@@ -2,10 +2,7 @@ import Sidebar, {
   sidebarWidths,
 } from "./shared/components/navigation/Sidebar.jsx";
 import { useSidebarPreference } from "./shared/hooks/useSidebarPreference.js";
-import {
-  FocusTimerProvider,
-  HideDuringFocus,
-} from "./shared/hooks/FocusTimerContext.jsx";
+import { FocusTimerProvider } from "./shared/hooks/FocusTimerContext.jsx";
 import FocusTimerOverlay from "./shared/components/focus/FocusTimerOverlay.jsx";
 import Flashcards from "./pages/flashcards/Flashcards.jsx";
 import { version as appVersion } from "../package.json";
@@ -400,14 +397,12 @@ export default function App() {
           </Box>
         </Box>
         {!loading && (
-          <HideDuringFocus>
-            <PetCompanion
-              pet={data.pet}
-              navigate={navigate}
-              action={action}
-              working={working}
-            />
-          </HideDuringFocus>
+          <PetCompanion
+            pet={data.pet}
+            navigate={navigate}
+            action={action}
+            working={working}
+          />
         )}
         {quickOpen && (
           <div

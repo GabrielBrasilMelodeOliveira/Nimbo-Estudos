@@ -2,20 +2,23 @@ export const companionSize = 60;
 const margin = 8;
 
 export function clampFloatingPosition(position, viewport) {
+  const maximumX = Math.max(margin, viewport.width - companionSize - margin);
+  const minimumX = Math.min(
+    maximumX,
+    Math.max(margin, (viewport.leftInset || 0) + margin),
+  );
+  const maximumY = Math.max(
+    margin,
+    viewport.height - (viewport.bottomInset || 0) - companionSize - margin,
+  );
   return {
     x: Math.max(
-      margin,
-      Math.min(
-        position.x,
-        Math.max(margin, viewport.width - companionSize - margin),
-      ),
+      minimumX,
+      Math.min(Number.isFinite(position.x) ? position.x : maximumX, maximumX),
     ),
     y: Math.max(
       margin,
-      Math.min(
-        position.y,
-        Math.max(margin, viewport.height - companionSize - margin),
-      ),
+      Math.min(Number.isFinite(position.y) ? position.y : maximumY, maximumY),
     ),
   };
 }

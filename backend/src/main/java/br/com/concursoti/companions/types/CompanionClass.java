@@ -7,7 +7,7 @@ import java.util.List;
 public enum CompanionClass {
   COMMON(
     0,
-    "Pessoa Comum",
+    "Coruja Viajante",
     "Toda grande jornada começa com um primeiro passo."
   ),
   APPRENTICE(200, "Aprendiz", "O conhecimento é seu primeiro equipamento."),
@@ -68,9 +68,32 @@ public enum CompanionClass {
   }
 
   public ClassView view() {
+    return view("WARRIOR");
+  }
+
+  public ClassView view(String path) {
+    String name = displayName;
+    if ("MAGE".equals(path)) name = List.of(
+      "Coruja Viajante",
+      "Aprendiz",
+      "Mago",
+      "Guardião das Runas",
+      "Mestre Arcano",
+      "Arquimago da Aurora",
+      "Lenda da Constância"
+    ).get(ordinal());
+    if ("RANGER".equals(path)) name = List.of(
+      "Coruja Viajante",
+      "Aprendiz",
+      "Batedor",
+      "Sentinela do Bosque",
+      "Mestre Rastreador",
+      "Guardião do Horizonte",
+      "Lenda da Constância"
+    ).get(ordinal());
     return new ClassView(
       ordinal() + 1,
-      displayName,
+      name,
       description,
       minimumExperience,
       1 + minimumExperience / 100
@@ -78,10 +101,20 @@ public enum CompanionClass {
   }
 
   public static List<ClassView> journey() {
-    return Arrays.stream(values()).map(CompanionClass::view).toList();
+    return journey("WARRIOR");
+  }
+
+  public static List<ClassView> journey(String path) {
+    return Arrays.stream(values())
+      .map(heroClass -> heroClass.view(path))
+      .toList();
   }
 
   public static CareerView describe(int experience) {
+    return describe(experience, "WARRIOR");
+  }
+
+  public static CareerView describe(int experience, String path) {
     int totalExperience = Math.max(0, experience);
     CompanionClass current = COMMON;
     for (CompanionClass candidate : values()) {
@@ -92,8 +125,8 @@ public enum CompanionClass {
         ? values()[current.ordinal() + 1]
         : null;
     return new CareerView(
-      current.view(),
-      next == null ? null : next.view(),
+      current.view(path),
+      next == null ? null : next.view(path),
       totalExperience - current.minimumExperience,
       next == null ? 0 : next.minimumExperience - current.minimumExperience,
       next == null ? 0 : next.minimumExperience - totalExperience

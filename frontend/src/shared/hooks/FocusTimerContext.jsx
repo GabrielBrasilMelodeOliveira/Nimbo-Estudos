@@ -170,7 +170,3 @@ export function FocusTimerProvider({ data, action, working, children }) {
     </FocusContext.Provider>
   );
 }
-
-export function HideDuringFocus({ children }) {
-  return useFocusTimer().active ? null : children;
-}

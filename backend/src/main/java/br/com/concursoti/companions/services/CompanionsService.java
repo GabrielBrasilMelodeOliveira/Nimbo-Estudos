@@ -1,6 +1,6 @@
 package br.com.concursoti.companions.services;
 
-import br.com.concursoti.companions.services.PetService;
+import br.com.concursoti.companions.dto.CompanionAppearance;
 import java.util.*;
 
 @org.springframework.stereotype.Service
@@ -30,6 +30,13 @@ public class CompanionsService {
 
   public Map<String, Object> restartPet(Long id) {
     return pet.restart(id);
+  }
+
+  public Map<String, Object> customizePet(
+    Long id,
+    CompanionAppearance appearance
+  ) {
+    return pet.customize(id, appearance);
   }
 
   public Map<String, Object> activatePet(Long id) {

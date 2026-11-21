@@ -43,3 +43,25 @@ test("floating companion stays on screen after dragging and restoring on smaller
     { x: 244, y: 524 },
   );
 });
+
+test("floating positions exclude the sidebar and recover nonfinite coordinates", () => {
+  assert.deepEqual(
+    clampFloatingPosition(
+      { x: 15, y: 200 },
+      { width: 1440, height: 900, leftInset: 244 },
+    ),
+    { x: 252, y: 200 },
+  );
+  assert.deepEqual(
+    restoreFloatingPosition(
+      { x: -4, y: 10 },
+      { width: 1440, height: 900, leftInset: 244 },
+    ),
+    { x: 252, y: 832 },
+  );
+  const recovered = clampFloatingPosition(
+    { x: NaN, y: Infinity },
+    { width: 320, height: 600 },
+  );
+  assert.deepEqual(recovered, { x: 252, y: 532 });
+});

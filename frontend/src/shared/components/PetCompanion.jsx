@@ -1,3 +1,4 @@
+import { companionRecoveryEvent } from "../utils/companionRecovery.js";
 import { useDraggableCompanion } from "../hooks/useDraggableCompanion.js";
 import { useEffect, useRef, useState } from "react";
 import {
@@ -6,6 +7,7 @@ import {
   IconButton,
   LinearProgress,
   Paper,
+  Portal,
   Stack,
   TextField,
   Typography,
@@ -48,9 +50,13 @@ function reply(text, pet) {
     : starters[Math.floor(s.length % starters.length)];
 }
 export default function PetCompanion({ pet, navigate, action, working }) {
-  const [open, setOpen] = useState(
-    () => localStorage.getItem("nimbo:open") === "true",
-  );
+  const [open, setOpen] = useState(() => {
+    try {
+      return localStorage.getItem("nimbo:open") === "true";
+    } catch {
+      return false;
+    }
+  });
   const [chat, setChat] = useState(false);
   const [message, setMessage] = useState("");
   const [feedback, setFeedback] = useState("");
@@ -71,13 +77,32 @@ export default function PetCompanion({ pet, navigate, action, working }) {
     }
     previousCompanion.current = { id: pet?.id, stage: pet?.stage };
   }, [pet?.id, pet?.stage, pet?.career?.current?.name, pet?.care?.dead]);
+  useEffect(() => {
+    const recover = () => setOpen(false);
+    window.addEventListener(companionRecoveryEvent, recover);
+    return () => window.removeEventListener(companionRecoveryEvent, recover);
+  }, []);
   const dead = !!pet?.care?.dead;
   const mood = pet?.mood || "neutral";
   const toggle = () => {
-    localStorage.setItem("nimbo:open", String(!open));
+    try {
+      localStorage.setItem("nimbo:open", String(!open));
+    } catch {
+      /* The panel remains usable without browser storage. */
+    }
     setOpen(!open);
   };
   const floating = useDraggableCompanion(toggle);
+  const panelWidth = Math.min(340, floating.viewport.width - 16);
+  const maximumLeft = Math.max(8, floating.viewport.width - panelWidth - 8);
+  const minimumLeft = Math.min(
+    maximumLeft,
+    (floating.viewport.leftInset || 0) + 8,
+  );
+  const expandedLeft = Math.min(
+    maximumLeft,
+    Math.max(minimumLeft, floating.position.x),
+  );
   const expandedTop = Math.max(
     8,
     Math.min(floating.position.y, floating.viewport.height - 650),
@@ -132,202 +157,202 @@ export default function PetCompanion({ pet, navigate, action, working }) {
     }
   };
   return (
-    <Box
-      sx={{
-        position: "fixed",
-        ...(pet
-          ? {
-              left: open
-                ? Math.max(
-                    8,
-                    Math.min(
-                      floating.position.x,
-                      floating.viewport.width - 348,
-                    ),
-                  )
-                : floating.position.x,
-              top: open ? expandedTop : floating.position.y,
-            }
-          : { bottom: 16, right: 16 }),
-        zIndex: 1100,
-        maxWidth: "calc(100vw - 16px)",
-      }}
-    >
-      {!pet ? (
-        <Button
-          variant="outlined"
-          startIcon={<Sparkles size={18} />}
-          onClick={() => navigate("collection")}
-          sx={{ bgcolor: "background.paper" }}
-        >
-          Conhecer Nimbo
-        </Button>
-      ) : !open ? (
-        <IconButton
-          {...floating.bindings}
-          aria-label="Abrir companheiro Nimbo"
-          aria-expanded={false}
-          title="Arraste para mover; clique para expandir. Use as setas para mover pelo teclado."
-          sx={{
-            width: 60,
-            height: 60,
-            minWidth: 60,
-            borderRadius: "50%",
-            bgcolor: "background.paper",
-            color: "primary.main",
-            border: "2px solid",
-            borderColor: "divider",
-            boxShadow: 4,
-            p: 0.5,
-            touchAction: "none",
-            userSelect: "none",
-            cursor: floating.dragging ? "grabbing" : "grab",
-            "&:hover": { bgcolor: "background.paper", boxShadow: 6 },
-            "& svg.nimbo-art": {
-              width: "100%",
-              height: "100%",
-              pointerEvents: "none",
-            },
-          }}
-        >
-          <PetArt species={pet.species} stage={pet.stage} mood={mood} />
-        </IconButton>
-      ) : (
-        <Paper
-          component="section"
-          aria-label="Seu companheiro Nimbo"
-          elevation={5}
-          sx={{
-            width: 340,
-            maxWidth: "calc(100vw - 16px)",
-            maxHeight: `calc(100dvh - ${expandedTop + 8}px)`,
-            overflowY: "auto",
-            borderRadius: 3,
-          }}
-        >
-          <Stack
-            direction="row"
+    <Portal>
+      <Box
+        sx={{
+          position: "fixed",
+          ...(pet
+            ? {
+                left: open ? expandedLeft : floating.position.x,
+                top: open ? expandedTop : floating.position.y,
+              }
+            : { bottom: 16, right: 16 }),
+          zIndex: (theme) => theme.zIndex.drawer + 1,
+          maxWidth: "calc(100vw - 16px)",
+        }}
+      >
+        {!pet ? (
+          <Button
+            variant="outlined"
+            startIcon={<Sparkles size={18} />}
+            onClick={() => navigate("collection")}
+            sx={{ bgcolor: "background.paper" }}
+          >
+            Conhecer Nimbo
+          </Button>
+        ) : !open ? (
+          <IconButton
+            {...floating.bindings}
+            aria-label="Abrir companheiro Nimbo"
+            aria-expanded={false}
+            title="Arraste para mover; clique para expandir. Use as setas para mover pelo teclado."
             sx={{
-              alignItems: "center",
-              px: 2,
-              py: 1,
-              borderBottom: "1px solid",
+              width: 60,
+              height: 60,
+              minWidth: 60,
+              borderRadius: "50%",
+              bgcolor: "background.paper",
+              color: "primary.main",
+              border: "2px solid",
               borderColor: "divider",
+              boxShadow: 4,
+              p: 0.5,
+              touchAction: "none",
+              userSelect: "none",
+              cursor: floating.dragging ? "grabbing" : "grab",
+              "&:hover": { bgcolor: "background.paper", boxShadow: 6 },
+              "& svg.nimbo-art": {
+                width: "100%",
+                height: "100%",
+                pointerEvents: "none",
+              },
             }}
           >
-            <Typography fontWeight={700} variant="body2" sx={{ flex: 1 }}>
-              {speciesInfo(pet.species).name}
-            </Typography>
-            <IconButton
-              aria-label={speaking ? "Desativar voz" : "Ativar voz"}
-              onClick={() => setSpeaking(!speaking)}
-            >
-              {speaking ? <Volume2 size={18} /> : <VolumeX size={18} />}
-            </IconButton>
-            <IconButton aria-label="Recolher companheiro" onClick={toggle}>
-              <ChevronDown size={19} />
-            </IconButton>
-          </Stack>
-          <Stack spacing={1.5} sx={{ p: 2 }}>
-            <Button
-              aria-label="Incentivar aventureiro"
-              onClick={() => interact("PET")}
-              disabled={working || dead}
+            <PetArt
+              species={pet.species}
+              stage={pet.stage}
+              appearance={pet.appearance}
+              mood={mood}
+            />
+          </IconButton>
+        ) : (
+          <Paper
+            component="section"
+            aria-label="Seu companheiro Nimbo"
+            elevation={5}
+            sx={{
+              width: 340,
+              maxWidth: "calc(100vw - 16px)",
+              maxHeight: `calc(100dvh - ${expandedTop + 8}px)`,
+              overflowY: "auto",
+              borderRadius: 3,
+            }}
+          >
+            <Stack
+              direction="row"
               sx={{
-                alignSelf: "center",
-                p: 0,
-                "& svg.nimbo-art": { width: 176, height: 209 },
+                alignItems: "center",
+                px: 2,
+                py: 1,
+                borderBottom: "1px solid",
+                borderColor: "divider",
               }}
             >
-              <PetArt
-                species={pet.species}
-                stage={pet.stage}
-                mood={mood}
-                large
-              />
-            </Button>
-            <PetClassProgress pet={pet} compact />
-            <PetCareStatus
-              pet={pet}
-              action={action}
-              working={working}
-              compact
-            />
-            <Stack direction="row" justifyContent="space-between">
-              <Typography variant="caption">Energia {pet.energy}%</Typography>
-              <Typography variant="caption">
-                Nível {pet.level} · {pet.xp} XP · Vínculo {pet.bond ?? 20}
+              <Typography fontWeight={700} variant="body2" sx={{ flex: 1 }}>
+                {speciesInfo(pet.species).name}
               </Typography>
+              <IconButton
+                aria-label={speaking ? "Desativar voz" : "Ativar voz"}
+                onClick={() => setSpeaking(!speaking)}
+              >
+                {speaking ? <Volume2 size={18} /> : <VolumeX size={18} />}
+              </IconButton>
+              <IconButton aria-label="Recolher companheiro" onClick={toggle}>
+                <ChevronDown size={19} />
+              </IconButton>
             </Stack>
-            <LinearProgress
-              variant="determinate"
-              value={pet.energy}
-              color={dead ? "inherit" : "primary"}
-              sx={{ height: 6, borderRadius: 3 }}
-            />
-            {feedback && (
-              <Typography variant="body2" role="status" color="primary">
-                “{feedback}”
-              </Typography>
-            )}
-            {!dead && (
-              <>
-                <Stack direction="row" spacing={0.5}>
-                  <Button
-                    size="small"
-                    onClick={() => interact("PLAY")}
-                    disabled={working}
-                    startIcon={<SmilePlus size={16} />}
-                  >
-                    Treinar
-                  </Button>
-                  <Button
-                    size="small"
-                    onClick={() => interact("REST")}
-                    disabled={working}
-                    startIcon={<Moon size={16} />}
-                  >
-                    Descansar
-                  </Button>
-                  <IconButton
-                    aria-label="Conversar"
-                    onClick={() => setChat(!chat)}
-                  >
-                    <MessageCircle size={18} />
-                  </IconButton>
-                </Stack>
-                {chat && (
-                  <Stack
-                    component="form"
-                    direction="row"
-                    spacing={1}
-                    onSubmit={send}
-                  >
-                    <TextField
-                      value={message}
-                      onChange={(event) => setMessage(event.target.value)}
-                      label="Mensagem para Nimbo"
+            <Stack spacing={1.5} sx={{ p: 2 }}>
+              <Button
+                aria-label="Incentivar aventureiro"
+                onClick={() => interact("PET")}
+                disabled={working || dead}
+                sx={{
+                  alignSelf: "center",
+                  p: 0,
+                  "& svg.nimbo-art": { width: 176, height: 209 },
+                }}
+              >
+                <PetArt
+                  species={pet.species}
+                  stage={pet.stage}
+                  appearance={pet.appearance}
+                  mood={mood}
+                  large
+                />
+              </Button>
+              <PetClassProgress pet={pet} compact />
+              <PetCareStatus
+                pet={pet}
+                action={action}
+                working={working}
+                compact
+              />
+              <Stack direction="row" justifyContent="space-between">
+                <Typography variant="caption">Energia {pet.energy}%</Typography>
+                <Typography variant="caption">
+                  Nível {pet.level} · {pet.xp} XP · Vínculo {pet.bond ?? 20}
+                </Typography>
+              </Stack>
+              <LinearProgress
+                variant="determinate"
+                value={pet.energy}
+                color={dead ? "inherit" : "primary"}
+                sx={{ height: 6, borderRadius: 3 }}
+              />
+              {feedback && (
+                <Typography variant="body2" role="status" color="primary">
+                  “{feedback}”
+                </Typography>
+              )}
+              {!dead && (
+                <>
+                  <Stack direction="row" spacing={0.5}>
+                    <Button
                       size="small"
-                      fullWidth
-                      slotProps={{ htmlInput: { maxLength: 180 } }}
-                    />
-                    <IconButton
-                      type="submit"
-                      disabled={working || !message.trim()}
-                      aria-label="Enviar mensagem"
+                      onClick={() => interact("PLAY")}
+                      disabled={working}
+                      startIcon={<SmilePlus size={16} />}
                     >
-                      <Send size={18} />
+                      Treinar
+                    </Button>
+                    <Button
+                      size="small"
+                      onClick={() => interact("REST")}
+                      disabled={working}
+                      startIcon={<Moon size={16} />}
+                    >
+                      Descansar
+                    </Button>
+                    <IconButton
+                      aria-label="Conversar"
+                      onClick={() => setChat(!chat)}
+                    >
+                      <MessageCircle size={18} />
                     </IconButton>
                   </Stack>
-                )}
-              </>
-            )}
-            <Button onClick={() => navigate("collection")}>
-              Evolução e regras do Nimbo →
-            </Button>
-          </Stack>
-        </Paper>
-      )}
-    </Box>
+                  {chat && (
+                    <Stack
+                      component="form"
+                      direction="row"
+                      spacing={1}
+                      onSubmit={send}
+                    >
+                      <TextField
+                        value={message}
+                        onChange={(event) => setMessage(event.target.value)}
+                        label="Mensagem para Nimbo"
+                        size="small"
+                        fullWidth
+                        slotProps={{ htmlInput: { maxLength: 180 } }}
+                      />
+                      <IconButton
+                        type="submit"
+                        disabled={working || !message.trim()}
+                        aria-label="Enviar mensagem"
+                      >
+                        <Send size={18} />
+                      </IconButton>
+                    </Stack>
+                  )}
+                </>
+              )}
+              <Button onClick={() => navigate("collection")}>
+                Evolução e regras do Nimbo →
+              </Button>
+            </Stack>
+          </Paper>
+        )}
+      </Box>
+    </Portal>
   );
 }

@@ -22,6 +22,12 @@ const stretch = keyframes({
   "80%, 88%": { transform: "translate(-1px, -2px)" },
   "92%": { transform: "translate(-1px, -1px)" },
 });
+const flutter = keyframes({
+  "0%, 68%, 100%": { transform: "translate(0, 0)" },
+  "72%, 80%": { transform: "translate(-2px, -2px)" },
+  "76%, 84%": { transform: "translate(-4px, -3px)" },
+  "88%": { transform: "translate(-1px, -1px)" },
+});
 const cape = keyframes({
   "0%, 100%": { transform: "translateX(0)" },
   "50%": { transform: "translateX(1px)" },
@@ -110,7 +116,7 @@ export function petMotion(mood) {
       ...(mood === "dead"
         ? {
             transform: "translate(6px, 3px) rotate(-90deg)",
-            transformOrigin: "32px 43px",
+            transformOrigin: "32px 45px",
             opacity: 0.65,
           }
         : {}),
@@ -121,11 +127,13 @@ export function petMotion(mood) {
         ? "none"
         : `${lookAround} 11s steps(1, end) infinite`,
     },
-    "& .hero-arm-left": {
-      animation: distressed ? "none" : `${stretch} 9s steps(1, end) infinite`,
+    "& .owl-wing-front": {
+      animation: distressed
+        ? `${stretch} 9s steps(1, end) infinite`
+        : `${flutter} ${joyful ? 3 : 7}s steps(1, end) infinite`,
     },
     "& .hero-cape": { animation: `${cape} 4s steps(1, end) infinite` },
-    "& .hero-weapon, & .hero-arm-right": {
+    "& .hero-weapon, & .owl-wing-back": {
       animation: joyful
         ? `${salute} ${mood === "happy" ? 5 : 3}s steps(1, end) infinite`
         : "none",

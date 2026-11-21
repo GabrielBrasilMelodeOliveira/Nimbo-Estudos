@@ -1,9 +1,12 @@
+import { useState } from "react";
+import OwlCustomizer from "./components/OwlCustomizer.jsx";
+import { recoverCompanion } from "../../shared/utils/companionRecovery.js";
 import PetProgression, {
   PetClassProgress,
 } from "../../shared/components/pet/PetProgression.jsx";
 import PetCareStatus from "../../shared/components/pet/PetCareStatus.jsx";
 import PetCareRules from "../../shared/components/pet/PetCareRules.jsx";
-import { Paper, Button } from "@mui/material";
+import { Paper, Button, Stack } from "@mui/material";
 import { ArrowRight, Check, LockKeyhole, Sparkles } from "lucide-react";
 import {
   PetArt,
@@ -19,6 +22,7 @@ export default function Collection({ data, action, working, navigate }) {
     working,
     navigate,
   });
+  const [editing, setEditing] = useState(null);
   return (
     <div className="view-stack">
       <Paper
@@ -27,7 +31,10 @@ export default function Collection({ data, action, working, navigate }) {
         className="nimbo-collection-banner"
       >
         <div>
-          <h2>Seus companheiros</h2>
+          <h2>Suas corujas</h2>
+          <Button variant="outlined" onClick={recoverCompanion}>
+            Recuperar companheiro
+          </Button>
           <div className="collection-hero-tags">
             <span>{team.length} companheiros</span>
             <span>
@@ -39,6 +46,7 @@ export default function Collection({ data, action, working, navigate }) {
           species={pet?.species || "nori"}
           stage={pet?.stage || 1}
           mood={pet?.mood}
+          appearance={pet?.appearance}
           large
         />
       </Paper>
@@ -76,12 +84,19 @@ export default function Collection({ data, action, working, navigate }) {
                 species={member.species}
                 stage={member.stage}
                 mood={member.mood}
+                appearance={member.appearance}
                 large
               />
             </div>
             <div className="nimbo-collection-info">
               <div className="nimbo-collection-name">
-                <strong>{displayName(member.species, member.stage)}</strong>
+                <strong>
+                  {displayName(
+                    member.species,
+                    member.stage,
+                    member.appearance?.path,
+                  )}
+                </strong>
                 {member.active && (
                   <span>
                     <Check size={13} /> Ativo
@@ -98,7 +113,16 @@ export default function Collection({ data, action, working, navigate }) {
                   }}
                 />
               </div>
-              <PetClassProgress pet={member} />
+              <Stack spacing={1.5} sx={{ my: 2 }}>
+                <PetClassProgress pet={member} />
+                <Button
+                  variant="outlined"
+                  onClick={() => setEditing(member)}
+                  disabled={working}
+                >
+                  Personalizar coruja
+                </Button>
+              </Stack>
               <PetCareStatus pet={member} action={action} working={working} />
               <Button
                 className="btn btn-subtle"
@@ -150,9 +174,18 @@ export default function Collection({ data, action, working, navigate }) {
       {team.length > 0 && !pet?.canAdopt && (
         <div className="nimbo-lock-note">
           <LockKeyhole size={18} /> Para recrutar outro aventureiro, eleve todos
-          os companheiros a Mestre de Batalha, no nível 13. As classes seguintes
-          continuam disponíveis para cada um.
+          os companheiros à quinta classe do seu caminho, no nível 13. As
+          classes seguintes continuam disponíveis para cada um.
         </div>
+      )}
+      {editing && (
+        <OwlCustomizer
+          key={editing.id}
+          pet={editing}
+          action={action}
+          working={working}
+          onClose={() => setEditing(null)}
+        />
       )}
     </div>
   );
