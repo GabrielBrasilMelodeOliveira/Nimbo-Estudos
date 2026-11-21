@@ -120,19 +120,13 @@ describe("pixel hero evolution", () => {
 
   it("keeps idle movement and blinking, freezes death and respects reduced motion", () => {
     const idle = petMotion("neutral");
-    for (const part of [
-      "hero-breath",
-      "hero-head",
-      "owl-wing-front",
-      "hero-eyes-open",
-      "hero-eyes-closed",
-    ]) {
+    for (const part of ["hero-breath", "hero-eyes-open", "hero-eyes-closed"]) {
       expect(idle[`& .${part}`].animation).toContain("infinite");
       expect(idle[`& .${part}`].animation).toContain("steps(");
     }
     show(<PetArt stage={7} mood="dead" />);
     expect(screen.getByRole("img").getAttribute("viewBox")).toBe(
-      "-10 -6 88 88",
+      "-14 -9 86 86",
     );
     const dead = petMotion("dead");
     expect(dead["&& *"].animation).toBe("none !important");

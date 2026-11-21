@@ -1,6 +1,6 @@
-# Nimbo 5.12.0 — Coruja personalizável e companheiro sempre acessível
+# Nimbo 5.13.0 — Coruja fiel à referência, poses e armaduras evolutivas
 
-A versão **5.12.0** aparece no menu lateral. Para atualizar uma instalação Docker existente:
+A versão **5.13.0** aparece no menu lateral. Para atualizar uma instalação Docker existente:
 
 ```bash
 git pull --ff-only origin main
@@ -10,6 +10,14 @@ docker compose up -d --build
 Recarregue a página após a reconstrução. Apenas `git pull` não substitui o frontend que já está no container. Os volumes existentes são preservados.
 
 Nesta versão:
+
+- **Base refeita a partir da imagem enviada:** contorno em três quartos, olhos, bico, penas, cachecol e bolsa reproduzidos em uma grade de pixels com cores editáveis. A silhueta original permanece reconhecível nos três caminhos.
+- **Sete poses diferentes por caminho:** viajante em repouso, aprendiz lendo e posturas próprias de guarda, combate, comando e ascensão. As asas, cabeça e pés são articulados separadamente. Guerreiro, Mago e Patrulheiro possuem equipamentos e poses próprios a partir da terceira etapa.
+- **Armaduras com evolução visível:** peitoral na terceira classe, ombreiras e manto na quarta, detalhes dourados na quinta, proteção de comandante na sexta e ornamentos/aura na última. Espada e escudo, cajado e runas, arco e aljava distinguem os caminhos sem esconder os olhos.
+- **Gestos variados com intervalos diferentes:** olhar, limpar penas, espreguiçar, dar um passo, ajustar o cachecol e acenar; leitura para o aprendiz e gestos de espada/escudo, conjuração/cajado e arco/vigilância nas classes avançadas. A sequência percorre as ações disponíveis antes de repetir e evita repetir o último gesto ao iniciar outra sequência. Fome, tristeza, cansaço e raiva têm repertórios próprios. Animações são pausadas fora da área visível, com a aba oculta ou com movimento reduzido; a coruja morta permanece imóvel.
+- Personalizações, XP, classes conquistadas, regras de metas e recuperação da bolinha continuam preservados. Esta atualização é visual e não exige migração de dados.
+
+Recursos da versão 5.12 preservados:
 
 - **Coruja em pixel art de 16 bits**, inspirada na referência enviada: olhos grandes, penas com sombras, cachecol, asas e bolsa. A arte em camadas permite mudar cores e equipamentos sem perder as expressões e animações. Ela respira, pisca, olha para os lados e movimenta as asas mesmo em repouso. Os humores e as sequências de metas continuam visíveis; na morte, fica imóvel e sem cor. Movimento reduzido do dispositivo é respeitado.
 - **Meu Nimbo → Personalizar coruja:** escolha Guerreiro, Mago ou Patrulheiro; cores das penas, olhos e cachecol/equipamentos; acessório da classe, nenhum, óculos, chapéu, capuz ou coroa; bolsa, capa ou nenhum acessório no corpo. Os seletores permitem digitar para procurar. Veja a prévia das sete evoluções e dos humores antes de salvar. A prévia não altera o XP ou o humor real. Há um botão para restaurar o visual azul original.
@@ -27,7 +35,7 @@ Nesta versão:
 | 6 | 2.400 | Comandante da Aurora | Arquimago da Aurora | Guardião do Horizonte |
 | 7 | 4.000 | Lenda da Constância | Lenda da Constância | Lenda da Constância |
 
-A progressão é definida em `backend/src/main/java/br/com/concursoti/companions/types/CompanionClass.java`; a personalização usa `PUT /api/pet/{id}/appearance`. O sprite e as opções de aparência ficam em `frontend/src/shared/components/pet/`. A avaliação dos conjuntos gratuitos e a decisão de usar uma arte própria em camadas estão em [ASSETS.md](frontend/src/shared/components/pet/ASSETS.md).
+A progressão é definida em `backend/src/main/java/br/com/concursoti/companions/types/CompanionClass.java`; a personalização usa `PUT /api/pet/{id}/appearance`. O sprite e as opções de aparência ficam em `frontend/src/shared/components/pet/`. A avaliação dos conjuntos gratuitos e a documentação da arte em camadas baseada na referência enviada estão em [ASSETS.md](frontend/src/shared/components/pet/ASSETS.md).
 
 Recursos da versão 5.10.2 preservados:
 

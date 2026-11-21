@@ -1,5 +1,5 @@
 import { Paper, Box, Button } from "@mui/material";
-import { useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { petMotion, moodLabels } from "./pet/petMotion.js";
 import {
@@ -8,6 +8,7 @@ import {
   companionRank,
 } from "./pet/owlAppearance.js";
 import PixelOwl from "./pet/PixelOwl.jsx";
+import useOwlGesture from "./pet/useOwlGesture.js";
 import { resolveOwlAppearance } from "./pet/owlAppearance.js";
 
 export const speciesInfo = (species) =>
@@ -24,13 +25,25 @@ export function PetArt({
   appearance,
 }) {
   const rank = companionRank(stage);
-  const owlAppearance = resolveOwlAppearance(appearance, species);
+  const owlAppearance = useMemo(
+    () => resolveOwlAppearance(appearance, species),
+    [appearance, species],
+  );
+  const elementRef = useRef(null);
+  const gesture = useOwlGesture({
+    path: owlAppearance.path,
+    rank,
+    mood,
+    elementRef,
+  });
   return (
     <Box
       component="svg"
-      sx={petMotion(mood)}
+      ref={elementRef}
+      data-gesture={gesture}
+      sx={petMotion(mood, gesture, rank)}
       className={`nimbo-art ${large ? "nimbo-big" : ""} nimbo-${mood}`}
-      viewBox={mood === "dead" ? "-10 -6 88 88" : "-4 -6 72 88"}
+      viewBox={mood === "dead" ? "-14 -9 86 86" : "-9 -10 74 83"}
       shapeRendering="crispEdges"
       role="img"
       aria-label={`Coruja em pixel art de 16 bits: ${displayName(species, rank, owlAppearance.path)} · ${moodLabels[mood] || "neutro"}`}
