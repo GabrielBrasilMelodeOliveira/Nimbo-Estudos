@@ -203,7 +203,7 @@ export default function Sidebar({
                 letterSpacing: -1,
               }}
             >
-              nimbo.
+              Nimbo
             </Typography>
           )}
         </Button>

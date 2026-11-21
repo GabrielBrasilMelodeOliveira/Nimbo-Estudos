@@ -169,12 +169,6 @@ export default function Edital({ data, action, working, navigate }) {
       </section>
       <Panel
         className="edital-sheet-panel"
-        title="Acompanhamento por assunto"
-        action={
-          <span className="small-chip">
-            {filtered.length} de {rows.length} assuntos
-          </span>
-        }
       >
         <div className="edital-filter-grid">
           <label className="sheet-filter sheet-search">
