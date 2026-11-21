@@ -1,3 +1,4 @@
+import { accountLocalStorage as localStorage } from "../utils/accountStorage.js";
 import { useState } from "react";
 
 const preferenceKey = "nimbo:sidebar-collapsed";

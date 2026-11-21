@@ -216,8 +216,8 @@ export default function Settings({ data, action, working }) {
       <details className="ux-inline-help ux-security">
         <summary>Sobre segurança e uso local</summary>
         <p>
-          Este projeto não possui autenticação. Antes de disponibilizá-lo na
-          internet, configure login, HTTPS e proteção dos dados.
+          Seus dados são separados por conta. A limpeza desta página afeta
+          somente a conta conectada. O menu do seu perfil permite sair do Nimbo.
         </p>
       </details>
     </div>

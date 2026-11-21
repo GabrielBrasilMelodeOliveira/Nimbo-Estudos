@@ -11,6 +11,20 @@ import org.springframework.web.bind.annotation.*;
 @RestControllerAdvice
 public class ApiExceptionHandler {
 
+  @ExceptionHandler(
+    org.springframework.web.bind.MethodArgumentNotValidException.class
+  )
+  public ResponseEntity<Map<String, String>> invalidFields(
+    org.springframework.web.bind.MethodArgumentNotValidException exception
+  ) {
+    return ResponseEntity.badRequest().body(
+      Map.of(
+        "error",
+        "Confira os campos: nome de 2 a 80 caracteres, e-mail válido e senha com pelo menos 10 caracteres."
+      )
+    );
+  }
+
   @ExceptionHandler(IllegalArgumentException.class)
   public ResponseEntity<Map<String, String>> invalid(
     IllegalArgumentException ex

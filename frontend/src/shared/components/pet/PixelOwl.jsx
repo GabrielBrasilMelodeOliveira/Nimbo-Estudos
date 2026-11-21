@@ -1,4 +1,5 @@
 import { memo } from "react";
+import OwlBodyFoundation, { OwlLegJoint } from "./OwlBodyFoundation.jsx";
 import PixelOwlFace from "./PixelOwlFace.jsx";
 import {
   OwlEquipment,
@@ -46,23 +47,16 @@ function PixelOwl({ rank, mood, appearance }) {
         <g className="owl-gesture-body">
           <g transform={pose.body}>
             <OwlMantle rank={rank} appearance={appearance} palette={palette} />
-            <g transform={pose.frontFoot}>{layer("footFront")}</g>
-            <g transform={pose.backFoot}>{layer("footBack")}</g>
+            <g transform={pose.frontFoot}>
+              <OwlLegJoint side="front" colors={colors} />
+              {layer("footFront")}
+            </g>
+            <g transform={pose.backFoot}>
+              <OwlLegJoint side="back" colors={colors} />
+              {layer("footBack")}
+            </g>
             <g className="hero-breath">
-              {/* Underpainting prevents gaps when the original wing or bag moves. */}
-              {(rank > 1 || appearance.bodyAccessory !== "SATCHEL") && (
-                <>
-                  <path
-                    d="M18 36h17v4h7v14h-4v5H23v-3h-7V43h2z"
-                    fill={colors[2]}
-                  />
-                  <path
-                    d="M22 39h11v5h6v10h-4v3H24v-3h-5v-9h3z"
-                    fill={colors[5]}
-                  />
-                  <path d="M25 43h5v3h4v7h-7v2h-4v-8h2z" fill={colors[6]} />
-                </>
-              )}
+              <OwlBodyFoundation colors={colors} />
               {layer("body")}
               <g transform={pose.backWing}>
                 <g className="owl-wing-back">{layer("wingBack")}</g>

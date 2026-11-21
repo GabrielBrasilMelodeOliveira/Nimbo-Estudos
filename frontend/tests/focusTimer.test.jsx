@@ -1,3 +1,9 @@
+import AccountMenu from "../src/shared/components/account/AccountMenu.jsx";
+import {
+  activateAccount,
+  accountSessionStorage,
+} from "../src/shared/utils/accountStorage.js";
+import { focusStorageKey } from "../src/shared/utils/focusClock.js";
 import React, { useState } from "react";
 import { it, expect, vi, afterEach } from "vitest";
 import { act, fireEvent, render, screen, within } from "@testing-library/react";
@@ -14,6 +20,7 @@ const data = {
 afterEach(() => {
   vi.useRealTimers();
   sessionStorage.clear();
+  activateAccount(null);
 });
 function Harness({ action, kind }) {
   const [page, setPage] = useState(kind === "THEORY" ? "cycle" : "questions");
@@ -89,3 +96,38 @@ it.each(["THEORY", "QUESTIONS"])(
     ).toBeNull();
   },
 );
+
+it("persists a paused draft before logout changes the active account", async () => {
+  vi.useFakeTimers();
+  vi.setSystemTime(new Date("2026-11-21T12:00:00Z"));
+  activateAccount({ id: "one" });
+  let savedClock;
+  const logout = vi.fn(async () => {
+    savedClock = JSON.parse(accountSessionStorage.getItem(focusStorageKey));
+    activateAccount({ id: "two" });
+  });
+  render(
+    <ThemeProvider theme={theme}>
+      <FocusTimerProvider data={data} action={vi.fn()}>
+        <FocusTimer data={data} kind="THEORY" focusDisciplineId="1" />
+        <AccountMenu
+          account={{ id: "one", name: "Ana", email: "ana@example.test" }}
+          onLogout={logout}
+        />
+      </FocusTimerProvider>
+    </ThemeProvider>,
+  );
+  fireEvent.click(screen.getByRole("button", { name: "Iniciar estudo" }));
+  act(() => vi.advanceTimersByTime(3000));
+  fireEvent.click(screen.getByRole("button", { name: "Sua conta: Ana" }));
+  fireEvent.click(screen.getByRole("menuitem", { name: "Sair da conta" }));
+  await act(async () =>
+    fireEvent.click(screen.getByRole("button", { name: "Sair" })),
+  );
+  expect(savedClock).toMatchObject({
+    elapsedMs: 3000,
+    runningSince: null,
+    disciplineId: "1",
+  });
+  expect(accountSessionStorage.getItem(focusStorageKey)).toBeNull();
+});

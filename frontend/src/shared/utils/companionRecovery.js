@@ -1,3 +1,4 @@
+import { accountLocalStorage as localStorage } from "./accountStorage.js";
 export const companionRecoveryEvent = "nimbo:recover-companion";
 export function recoverCompanion() {
   try {

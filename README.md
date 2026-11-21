@@ -1,20 +1,46 @@
-# Nimbo 5.13.1 — Piscadas corrigidas e equipamentos finais inspirados nas referências
+# Nimbo 5.14.0 — Contas individuais e movimentos contínuos da coruja
 
-A versão **5.13.1** aparece no menu lateral. Para atualizar uma instalação Docker existente:
+A versão **5.14.0** aparece no menu lateral. Para atualizar uma instalação Docker existente:
 
 ```bash
 git pull --ff-only origin main
 docker compose up -d --build
+docker compose logs api
 ```
 
 Recarregue a página após a reconstrução. Apenas `git pull` não substitui o frontend que já está no container. Os volumes existentes são preservados.
 
 Nesta versão:
 
-- **Piscadas sem quadrados:** a região completa dos olhos permanece preenchida, e pálpebras na cor das penas fecham sobre ela. Também funciona nos estados de cansaço e morte e com cores personalizadas.
-- **Guerreiro nas etapas 6 e 7:** armadura azul e prata, elmo aberto com chifres, capa vermelha, espada de aço e escudo com brasão, adaptados à referência enviada. A etapa final recebe proteção adicional no elmo e acabamento nas placas.
-- **Arqueiro nas etapas 6 e 7:** traje verde, couro marrom, faixa com penas, aljava com flechas, grevas e arco recurvo de madeira. A última etapa usa a postura de arco tensionado.
-- As etapas 1 a 5 e todos os equipamentos de Mago foram preservados. A personalização de cores/acessórios, animações, regras de metas e XP continuam funcionando. Não há alteração de dados nem migração nesta atualização.
+- **Cadastro e login:** nome, e-mail e senha, com telas MUI, confirmação de senha, mostrar/ocultar senha e opção de sair no perfil.
+- **Dados por conta no PostgreSQL:** disciplinas, assuntos, agenda, metas, sessões, questões, revisões, flashcards, erros, materiais, anexos e companheiros ficam separados. A limpeza de dados também se limita à conta conectada.
+- **Primeira conta preserva o histórico existente:** copie o valor `NIMBO_SETUP_KEY` dos logs da API e informe a chave no primeiro cadastro. Ela é necessária para assumir os dados antigos e deixa de valer depois desse cadastro. As próximas contas começam vazias e não pedem a chave.
+- **Sessões persistidas no banco:** senha com BCrypt, cookie HTTP-only e SameSite, proteção CSRF, limite de tentativas e renovação do identificador ao entrar. O login expira após 12 horas de inatividade. A saída invalida a sessão.
+- **Troca de conta:** conteúdo privado só é carregado após autenticação; abas antigas são atualizadas e requisições da conta anterior são rejeitadas. Posição do Nimbo, menu lateral e rascunho do cronômetro ficam separados por conta neste navegador. Ao sair, o cronômetro pausa e seu tempo pode ser retomado na mesma aba ao entrar novamente.
+- **Coruja sem recortes vazios:** anatomia contínua atrás das asas, pescoço, barriga e junções das pernas. As partes móveis se sobrepõem ao respirar, olhar, acenar e executar os gestos de cada classe; desenho, acessórios e cores aprovados foram mantidos.
+
+### Primeiro acesso e armazenamento
+
+O cadastro inicial exige a chave dos logs mesmo em uma instalação vazia. Se a API reiniciar antes desse cadastro, uma nova chave é gerada. Opcionalmente, configure `NIMBO_SETUP_KEY` no ambiente da API para fixar a chave até a criação da primeira conta. Não há envio ou recuperação de senha por e-mail nesta versão.
+
+As tabelas `nimbo_accounts`, `nimbo_installation`, `nimbo_sessions` e `nimbo_sessions_attributes` ficam em `public`. A primeira conta utiliza as tabelas de estudos existentes em `public`; cada conta adicional recebe um schema PostgreSQL `nimbo_<id>`, com tabelas, sequências e chaves estrangeiras próprias. A API escolhe o schema pela sessão autenticada, nunca pelo conteúdo enviado pelo navegador. Os arquivos também são consultados no schema da conta antes de serem entregues.
+
+No início da API, o modelo JPA atualiza a base existente e `AccountSchemaService` adiciona tabelas/colunas/chaves estrangeiras ausentes nos schemas das outras contas. Alterações destrutivas, mudanças de tipos e de índices existentes exigem migração explícita em uma versão futura. O usuário do banco precisa poder criar schemas. Um backup completo do banco deve incluir **todos os schemas**, além do volume de anexos antigos.
+
+O frontend usa `/api` na mesma origem. O proxy do Vite e o Nginx do Docker já encaminham essas chamadas. Em uma hospedagem pública, configure HTTPS e um proxy confiável; o cookie recebe `Secure` nas requisições HTTPS. A instalação Docker continua vinculada ao endereço local por padrão.
+
+### API de acesso
+
+- `GET /api/auth/session`: usuário atual (ou `null`), token CSRF e indicação de configuração inicial.
+- `POST /api/auth/register`: `{ "name":"Nome", "email":"nome@exemplo.com", "password":"senha-com-10-ou-mais-caracteres", "setupKey":"somente-no-primeiro-cadastro" }`.
+- `POST /api/auth/login`: `{ "email":"nome@exemplo.com", "password":"sua-senha" }`.
+- `POST /api/auth/logout`: invalida a sessão. Chamadas de escrita exigem o cabeçalho `X-CSRF-TOKEN` recebido em `/session`; após login/cadastro, consulte `/session` novamente para receber o novo token. Cookies devem acompanhar as chamadas.
+- As demais rotas, inclusive uploads, prévias e `/api/health`, exigem login. O cliente envia `X-Nimbo-Account` para impedir gravações de abas que ainda pertencem à conta anterior; URLs de arquivos usam o parâmetro `account` com a mesma finalidade.
+
+Recursos da versão 5.13.1 preservados:
+
+- Pálpebras na cor das penas, inclusive nos estados de cansaço e morte.
+- Equipamentos finais de Guerreiro e Patrulheiro baseados nas referências: armadura azul/prata, capa vermelha e escudo com brasão; traje verde, aljava e arco recurvo/tensionado.
 
 Recursos da versão 5.13.0 preservados:
 
@@ -177,7 +203,7 @@ docker compose ps
 docker compose logs --tail=80 api
 ```
 
-Abra **http://localhost:3000**. A API também responde em `http://localhost:8080/api/health`.
+Abra **http://localhost:3000**. A API também responde em `http://localhost:8080/api/health` após autenticação.
 
 **NÃO execute `docker compose down -v`, `docker volume prune` nem apague os volumes** `postgres_data` e `uploads_data`. O banco preserva assuntos, questões, estudos, anexos, simulados e o Nimbo.
 
@@ -193,7 +219,7 @@ Hibernate (configurado com `ddl-auto: update` para uso pessoal local) adiciona:
 - campos de cuidado, sequências, morte e vidas anteriores em `pet_companions`;
 - `error_notes.flashcard_undo_state` para desfazer a última avaliação do cartão.
 
-Os registros antigos permanecem. Para um ambiente de produção ou hospedagem pública, serão necessárias migrações versionadas e autenticação; esta instalação foi projetada para uso local individual.
+Os registros antigos permanecem e são atribuídos à primeira conta mediante a chave de configuração. A autenticação e a separação entre contas estão incluídas; migrações destrutivas futuras devem ser versionadas.
 
 ## Instalação do zero
 

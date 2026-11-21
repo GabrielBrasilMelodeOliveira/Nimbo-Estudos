@@ -1,3 +1,4 @@
+import { createAccountSessionStorage } from "../utils/accountStorage.js";
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { TODAY } from "../utils/utils.js";
 import {
@@ -14,7 +15,8 @@ export function useFocusTimer() {
   return context;
 }
 export function FocusTimerProvider({ data, action, working, children }) {
-  const [clock, setClock] = useState(() => restoreFocus(window.sessionStorage));
+  const [sessionStorage] = useState(createAccountSessionStorage);
+  const [clock, setClock] = useState(() => restoreFocus(sessionStorage));
   const [now, setNow] = useState(Date.now());
   const [recordOpen, setRecordOpen] = useState(false);
   const [result, setResult] = useState({ total: "20", correct: "", notes: "" });
@@ -35,7 +37,7 @@ export function FocusTimerProvider({ data, action, working, children }) {
     } catch {
       /* Clock still works when storage is unavailable. */
     }
-  }, [clock]);
+  }, [clock, sessionStorage]);
   useEffect(() => {
     if (!running) return;
     const interval = setInterval(() => setNow(Date.now()), 250);
@@ -68,11 +70,18 @@ export function FocusTimerProvider({ data, action, working, children }) {
   };
   const pause = () => {
     const timestamp = Date.now();
-    setClock((current) => ({
-      ...current,
-      elapsedMs: elapsedMilliseconds(current, timestamp),
+    const pausedClock = {
+      ...clock,
+      elapsedMs: elapsedMilliseconds(clock, timestamp),
       runningSince: null,
-    }));
+    };
+    // Persist before logout can unmount this provider and change the active account.
+    try {
+      sessionStorage.setItem(focusStorageKey, JSON.stringify(pausedClock));
+    } catch {
+      /* Pausing still works when browser storage is unavailable. */
+    }
+    setClock(pausedClock);
     setNow(timestamp);
   };
   const reset = () => {

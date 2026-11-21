@@ -1,6 +1,19 @@
 server:
   port: 8080
+  forward-headers-strategy: framework
+  servlet:
+    session:
+      timeout: 12h
+      cookie:
+        name: NIMBOSESSION
+        http-only: true
+        same-site: lax
 spring:
+  session:
+    timeout: 12h
+    jdbc:
+      initialize-schema: never
+      table-name: public.nimbo_sessions
   datasource:
     url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/concurso_ti}
     username: ${SPRING_DATASOURCE_USERNAME:concurso}
@@ -11,6 +24,9 @@ spring:
       ddl-auto: update # MVP local; migrar para Flyway antes de colocar em produção
     properties:
       hibernate:
+        cache:
+          use_second_level_cache: false
+          use_query_cache: false
         jdbc:
           time_zone: America/Fortaleza
   jackson:
@@ -22,3 +38,7 @@ spring:
       max-request-size: 22MB
 trilhamon:
   storage-dir: ${STORAGE_DIR:./uploads}
+
+nimbo:
+  accounts:
+    setup-key: ${NIMBO_SETUP_KEY:}

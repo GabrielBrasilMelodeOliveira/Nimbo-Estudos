@@ -23,3 +23,7 @@ Armaduras, mantos, acessórios e armas são geometria adicional em camadas. O ro
 - [Owlpack — SeethingSwarm](https://seethingswarm.itch.io/owlpack): coruja com animações, porém pago e com restrição à distribuição dos arquivos individuais. Não foi incorporado.
 
 A versão usa a arte em código para manter o visual da referência, permitir recoloração e combinar acessórios sem depender de um pacote externo. Nenhum arquivo dos conjuntos pesquisados está incluído no repositório.
+
+## Continuidade nas animações (5.14.0)
+
+`OwlBodyFoundation.jsx` preenche a anatomia por trás das peças recortadas: pescoço, tronco e articulações superiores das pernas. Essa base permanece presente em todas as classes e acessórios. As junções das pernas acompanham as poses dos pés, sobrepondo-se ao tronco durante a respiração. As cores vêm da mesma paleta personalizável do sprite. A base do pescoço também cobre o espaço revelado ao inclinar a cabeça e ajustar o cachecol, sem alterar o rosto de referência.

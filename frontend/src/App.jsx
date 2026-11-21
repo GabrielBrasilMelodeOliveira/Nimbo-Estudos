@@ -1,3 +1,4 @@
+import AccountMenu from "./shared/components/account/AccountMenu.jsx";
 import Sidebar, {
   sidebarWidths,
 } from "./shared/components/navigation/Sidebar.jsx";
@@ -154,7 +155,7 @@ const initial = {
     recommendations: [],
   },
 };
-export default function App() {
+export default function App({ account, onLogout }) {
   const { collapsed, toggleCollapsed } = useSidebarPreference();
   const [data, setData] = useState(initial),
     [page, setPage] = useState("dashboard"),
@@ -344,6 +345,7 @@ export default function App() {
                 <Search size={18} /> <span>Ir para...</span>
                 <kbd>Ctrl K</kbd>
               </Button>
+              {account && <AccountMenu account={account} onLogout={onLogout} />}
               <span className="edition-chip" title="Concurso atual">
                 {data.plan?.name || "Concurso de TI"}
               </span>

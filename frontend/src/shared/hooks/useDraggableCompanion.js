@@ -1,3 +1,4 @@
+import { accountLocalStorage as localStorage } from "../utils/accountStorage.js";
 import { companionRecoveryEvent } from "../utils/companionRecovery.js";
 import { useEffect, useRef, useState } from "react";
 import {

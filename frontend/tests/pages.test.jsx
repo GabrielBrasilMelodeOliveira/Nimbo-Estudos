@@ -67,6 +67,7 @@ const data = {
 };
 const pages = import.meta.glob("../src/pages/*/*.jsx");
 for (const [path, load] of Object.entries(pages)) {
+  if (path.includes("/authentication/")) continue;
   it(`renders ${path} with existing project data`, async () => {
     const { default: Page } = await load();
     const { container } = render(

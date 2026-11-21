@@ -65,7 +65,7 @@ public class UploadController {
       : MediaType.IMAGE_PNG;
     return ResponseEntity.ok()
       .contentType(mime)
-      .header("Cache-Control", "no-cache")
+      .header("Cache-Control", "no-store")
       .header("X-Content-Type-Options", "nosniff")
       .body(png);
   }

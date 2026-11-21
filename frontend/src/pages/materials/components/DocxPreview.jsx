@@ -1,3 +1,4 @@
+import { privateFetch } from "../../../shared/services/sessionTransport.js";
 import { designColors } from "../../../shared/theme/designColors.js";
 import { useEffect, useState } from "react";
 import { Alert, Box, CircularProgress, Stack, Typography } from "@mui/material";
@@ -9,7 +10,9 @@ export default function DocxPreview({ source, title, height }) {
     const controller = new AbortController();
     const load = async () => {
       try {
-        const response = await fetch(source, { signal: controller.signal });
+        const response = await privateFetch(source, {
+          signal: controller.signal,
+        });
         if (!response.ok)
           throw new Error("Não foi possível carregar o documento.");
         const html = await renderDocumentPreview(await response.arrayBuffer());

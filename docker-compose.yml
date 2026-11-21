@@ -25,6 +25,7 @@ services:
       SPRING_DATASOURCE_PASSWORD: concurso_local
       TZ: America/Fortaleza
       STORAGE_DIR: /data/uploads
+      NIMBO_SETUP_KEY: ${NIMBO_SETUP_KEY:-}
     volumes:
       - uploads_data:/data/uploads
     ports:

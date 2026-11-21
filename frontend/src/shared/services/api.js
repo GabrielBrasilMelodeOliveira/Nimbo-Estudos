@@ -1,7 +1,9 @@
+import { privateFetch } from "./sessionTransport.js";
+import { currentAccountId } from "../utils/accountStorage.js";
 export async function api(path, method = "GET", body = undefined) {
   let response;
   try {
-    response = await fetch(`/api/${path}`, {
+    response = await privateFetch(`/api/${path}`, {
       method,
       headers: body === undefined ? {} : { "Content-Type": "application/json" },
       body: body === undefined ? undefined : JSON.stringify(body),
@@ -59,7 +61,7 @@ export async function uploadFile(file) {
   body.append("file", file);
   let response;
   try {
-    response = await fetch("/api/uploads", { method: "POST", body });
+    response = await privateFetch("/api/uploads", { method: "POST", body });
   } catch {
     throw new Error("Sem conexão com o servidor para enviar arquivo.");
   }
@@ -72,7 +74,12 @@ export async function uploadFile(file) {
   }
   return response.json();
 }
-export const fileUrl = (id, download = false) =>
-  `/api/uploads/${encodeURIComponent(id)}/content${download ? "?download=true" : ""}`;
+export const fileUrl = (id, download = false) => {
+  const parameters = new URLSearchParams({
+    ...(download ? { download: "true" } : {}),
+    ...(currentAccountId() ? { account: currentAccountId() } : {}),
+  }).toString();
+  return `/api/uploads/${encodeURIComponent(id)}/content${parameters ? `?${parameters}` : ""}`;
+};
 export const previewUrl = (id) =>
-  `/api/uploads/${encodeURIComponent(id)}/preview`;
+  `/api/uploads/${encodeURIComponent(id)}/preview${currentAccountId() ? `?account=${currentAccountId()}` : ""}`;
