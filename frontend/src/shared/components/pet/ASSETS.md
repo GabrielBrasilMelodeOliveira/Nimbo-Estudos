@@ -8,8 +8,9 @@ Arquivos principais:
 - `art/referencePalette.js`: recoloração das famílias de penas e cachecol sem alterar os outros materiais.
 - `PixelOwl.jsx`: composição, articulações, bolsa, cachecol e efeitos de humor.
 - `owlPoses.js`: sete poses por caminho, separadas das animações para preservar a postura da classe.
-- `PixelOwlFace.jsx`: olhos, piscadas, bico e expressões.
+- `PixelOwlFace.jsx`: olhos com base permanente, pálpebras coloridas sobrepostas e expressões. A piscada nunca remove a região que preenche os olhos.
 - `OwlEquipment.jsx`: equipamentos dos três caminhos e acessórios opcionais.
+- `equipment/AdvancedWarrior.jsx` e `equipment/AdvancedRanger.jsx`: etapas 6 e 7 adaptadas às duas referências adicionais enviadas pelo usuário. Guerreiro azul/prata com capa vermelha e escudo heráldico; arqueiro verde/couro com arco de madeira e aljava. As outras etapas e o Mago mantêm a arte anterior. Cores de cachecol personalizadas continuam influenciando os tecidos.
 - `owlAppearance.js`: cores, opções do editor e nomes das classes para prévias.
 - `petMotion.js`: keyframes de respiração, piscadas e gestos por articulação, mantendo os pivôs das poses.
 - `useOwlGesture.js`: sequências embaralhadas sem repetição consecutiva, intervalos variáveis e pausa com aba oculta, personagem fora da tela ou movimento reduzido.

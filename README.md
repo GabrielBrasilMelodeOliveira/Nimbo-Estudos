@@ -1,6 +1,6 @@
-# Nimbo 5.13.0 — Coruja fiel à referência, poses e armaduras evolutivas
+# Nimbo 5.13.1 — Piscadas corrigidas e equipamentos finais inspirados nas referências
 
-A versão **5.13.0** aparece no menu lateral. Para atualizar uma instalação Docker existente:
+A versão **5.13.1** aparece no menu lateral. Para atualizar uma instalação Docker existente:
 
 ```bash
 git pull --ff-only origin main
@@ -10,6 +10,13 @@ docker compose up -d --build
 Recarregue a página após a reconstrução. Apenas `git pull` não substitui o frontend que já está no container. Os volumes existentes são preservados.
 
 Nesta versão:
+
+- **Piscadas sem quadrados:** a região completa dos olhos permanece preenchida, e pálpebras na cor das penas fecham sobre ela. Também funciona nos estados de cansaço e morte e com cores personalizadas.
+- **Guerreiro nas etapas 6 e 7:** armadura azul e prata, elmo aberto com chifres, capa vermelha, espada de aço e escudo com brasão, adaptados à referência enviada. A etapa final recebe proteção adicional no elmo e acabamento nas placas.
+- **Arqueiro nas etapas 6 e 7:** traje verde, couro marrom, faixa com penas, aljava com flechas, grevas e arco recurvo de madeira. A última etapa usa a postura de arco tensionado.
+- As etapas 1 a 5 e todos os equipamentos de Mago foram preservados. A personalização de cores/acessórios, animações, regras de metas e XP continuam funcionando. Não há alteração de dados nem migração nesta atualização.
+
+Recursos da versão 5.13.0 preservados:
 
 - **Base refeita a partir da imagem enviada:** contorno em três quartos, olhos, bico, penas, cachecol e bolsa reproduzidos em uma grade de pixels com cores editáveis. A silhueta original permanece reconhecível nos três caminhos.
 - **Sete poses diferentes por caminho:** viajante em repouso, aprendiz lendo e posturas próprias de guarda, combate, comando e ascensão. As asas, cabeça e pés são articulados separadamente. Guerreiro, Mago e Patrulheiro possuem equipamentos e poses próprios a partir da terceira etapa.

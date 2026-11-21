@@ -17,6 +17,8 @@ function PixelOwl({ rank, mood, appearance }) {
   const palette = owlPalette(appearance);
   const colors = referencePalette(appearance);
   const pose = owlPose(rank, appearance.path);
+  const advancedOutfit =
+    rank >= 6 && ["WARRIOR", "RANGER"].includes(appearance.path);
   const layer = (name) => <ReferenceOwlLayer name={name} colors={colors} />;
   return (
     <>
@@ -27,8 +29,17 @@ function PixelOwl({ rank, mood, appearance }) {
       />
       {rank === 7 && mood !== "dead" && (
         <g className="hero-aura" fill={palette.goldLight}>
-          <path d="M0 20h1v32H0zM3 12h1v5H3zM53 12h1v5h-1zM57 21h1v29h-1zM5 56h2v2H5zM51 57h2v2h-2z" />
-          <path d="M15 -4h24v1H15zM11 -3h4v1h-4zM39 -3h4v1h-4zM15 0h24v1H15z" />
+          {appearance.path === "MAGE" ? (
+            <>
+              <path d="M0 20h1v32H0zM3 12h1v5H3zM53 12h1v5h-1zM57 21h1v29h-1zM5 56h2v2H5zM51 57h2v2h-2z" />
+              <path d="M15 -4h24v1H15zM11 -3h4v1h-4zM39 -3h4v1h-4zM15 0h24v1H15z" />
+            </>
+          ) : (
+            <path
+              d="M1 27h1v2h2v1H2v2H1v-2h-2v-1h2zM56 57h1v2h2v1h-2v2h-1v-2h-2v-1h2zM8 65h1v2H8zM45 68h1v2h-1z"
+              opacity=".65"
+            />
+          )}
         </g>
       )}
       <g className="hero-body" data-rank={rank} data-pose={pose.name}>
@@ -59,10 +70,29 @@ function PixelOwl({ rank, mood, appearance }) {
               {appearance.bodyAccessory === "SATCHEL" && (
                 <g
                   data-body-accessory="SATCHEL"
-                  transform={rank >= 3 ? "translate(3 1)" : undefined}
+                  transform={
+                    rank >= 3 && !advancedOutfit ? "translate(3 1)" : undefined
+                  }
                 >
-                  {layer("strap")}
-                  {layer("satchel")}
+                  {advancedOutfit ? (
+                    <>
+                      <path
+                        d="M39 49h7v3h1v5h-2v2h-6v-2h-1v-6h1z"
+                        fill={palette.ink}
+                      />
+                      <path
+                        d="M40 50h5v3h1v3h-2v1h-4v-2h-1v-3h1z"
+                        fill={palette.leather}
+                      />
+                      <path d="M40 51h5v3h-5z" fill={palette.leatherLight} />
+                      <path d="M42 53h1v2h-1z" fill={palette.goldLight} />
+                    </>
+                  ) : (
+                    <>
+                      {layer("strap")}
+                      {layer("satchel")}
+                    </>
+                  )}
                 </g>
               )}
               <OwlArmor rank={rank} appearance={appearance} palette={palette} />
@@ -75,6 +105,7 @@ function PixelOwl({ rank, mood, appearance }) {
                   {layer("head")}
                   <PixelOwlFace mood={mood} palette={palette} colors={colors} />
                   <OwlHeadwear
+                    appearance={appearance}
                     accessory={appearance.headAccessory}
                     path={appearance.path}
                     rank={rank}

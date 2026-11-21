@@ -1,3 +1,16 @@
+import {
+  WarriorArmor,
+  WarriorHelmet,
+  WarriorMantle,
+  WarriorWeapons,
+} from "./equipment/AdvancedWarrior.jsx";
+import {
+  RangerArmor,
+  RangerHeadband,
+  RangerMantle,
+  RangerWeapons,
+} from "./equipment/AdvancedRanger.jsx";
+
 const armorColors = (rank, palette) => ({
   edge: "#162B3B",
   shade: rank >= 5 ? "#66502C" : "#395365",
@@ -7,6 +20,10 @@ const armorColors = (rank, palette) => ({
 });
 
 export function OwlMantle({ rank, appearance, palette }) {
+  if (rank >= 6 && appearance.path === "WARRIOR")
+    return <WarriorMantle rank={rank} appearance={appearance} />;
+  if (rank >= 6 && appearance.path === "RANGER")
+    return <RangerMantle rank={rank} appearance={appearance} />;
   const hasCape = appearance.bodyAccessory === "CAPE";
   return (
     <>
@@ -56,6 +73,10 @@ export function OwlMantle({ rank, appearance, palette }) {
 
 export function OwlArmor({ rank, appearance, palette }) {
   if (rank < 3) return null;
+  if (rank >= 6 && appearance.path === "WARRIOR")
+    return <WarriorArmor rank={rank} />;
+  if (rank >= 6 && appearance.path === "RANGER")
+    return <RangerArmor rank={rank} appearance={appearance} />;
   const metal = armorColors(rank, palette);
   const mage = appearance.path === "MAGE";
   const ranger = appearance.path === "RANGER";
@@ -147,7 +168,11 @@ export function OwlArmor({ rank, appearance, palette }) {
   );
 }
 
-export function OwlHeadwear({ accessory, path, rank, palette }) {
+export function OwlHeadwear({ accessory, path, rank, palette, appearance }) {
+  if (rank >= 6 && accessory === "AUTO" && path === "WARRIOR")
+    return <WarriorHelmet rank={rank} />;
+  if (rank >= 6 && accessory === "AUTO" && path === "RANGER")
+    return <RangerHeadband rank={rank} appearance={appearance} />;
   const selected =
     accessory === "AUTO"
       ? rank < 3
@@ -259,6 +284,10 @@ export function OwlHeadwear({ accessory, path, rank, palette }) {
 }
 
 export function OwlEquipment({ rank, appearance, palette }) {
+  if (rank >= 6 && appearance.path === "WARRIOR")
+    return <WarriorWeapons rank={rank} />;
+  if (rank >= 6 && appearance.path === "RANGER")
+    return <RangerWeapons rank={rank} />;
   const metal = armorColors(rank, palette);
   const weaponPose =
     rank === 3

@@ -5,10 +5,6 @@ const breathe = motion({
   "0%, 100%": { transform: "translateY(0)" },
   "50%": { transform: "translateY(-1px)" },
 });
-const blinkOpen = motion({
-  "0%, 31%, 35%, 71%, 75%, 79%, 100%": { opacity: 1 },
-  "32%, 34%, 72%, 74%, 77%, 78%": { opacity: 0 },
-});
 const blinkClosed = motion({
   "0%, 31%, 35%, 71%, 75%, 79%, 100%": { opacity: 0 },
   "32%, 34%, 72%, 74%, 77%, 78%": { opacity: 1 },
@@ -200,9 +196,6 @@ export function petMotion(mood, gesture = "rest", rank = 1) {
     "& .hero-weapon": { transformOrigin: "45px 49px" },
     "& .owl-spell": { transformOrigin: "6px 32px" },
     "& .hero-cape": { animation: `${cape} 5.7s steps(1, end) infinite` },
-    "& .hero-eyes-open": {
-      animation: `${blinkOpen} 9.7s steps(1, end) infinite`,
-    },
     "& .hero-eyes-closed": {
       opacity: 0,
       animation: `${blinkClosed} 9.7s steps(1, end) infinite`,

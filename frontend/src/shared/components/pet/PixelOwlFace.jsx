@@ -11,12 +11,24 @@ export default function PixelOwlFace({ mood, palette, colors }) {
   }
   return (
     <g className="owl-face">
-      <g className={closed ? undefined : "hero-eyes-open"}>
+      <g className="hero-eye-foundation">
         <ReferenceOwlLayer name="eyeFront" colors={eyeColors} />
         <ReferenceOwlLayer name="eyeBack" colors={eyeColors} />
       </g>
-      <g className={closed ? undefined : "hero-eyes-closed"}>
-        <path d="M21 18h11v10H21zM36 17h6v10h-6z" fill={colors[5]} />
+      {/* Keep the complete eye region underneath the lids: blinking must never cut a rectangular hole in the face. */}
+      <g
+        className={closed ? undefined : "hero-eyes-closed"}
+        data-eye-state={closed ? "closed" : "blinking"}
+      >
+        <path
+          d="M23 17h4v1h2v1h2v2h1v4h-2v2h-5v-1h-3v-1h-2v-5h1v-2h2zM39 16h3v2h1v6h-2v2h-3v-2h-1v-5h1v-2h1z"
+          fill={colors[5]}
+        />
+        <path
+          d="M23 18h4v1h2v1h-5v1h-2v3h-1v-4h1v-1h1zM39 18h2v2h-2v3h-1v-4h1z"
+          fill={colors[6]}
+        />
+        <path d="M24 26h6v1h-5v-1zM40 24h2v1h-2z" fill={colors[4]} />
         <path
           d="M22 23h2v1h6v-1h2v2h-2v1h-6v-1h-2zM37 23h4v2h-4z"
           fill={colors[1]}

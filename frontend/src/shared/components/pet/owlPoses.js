@@ -26,8 +26,8 @@ const posesByPath = {
     ["ready", -3, -14, 12, -1, 1, 0],
     ["shield-guard", 5, 28, -15, -3, 2, 2],
     ["blade-raised", -7, 60, -32, -4, 3, 0],
-    ["commander-salute", -4, 126, -10, -2, 2, -1],
-    ["legend-flight", -6, 76, -65, -3, 4, -4],
+    ["commander-guard", -4, 18, -5, -2, 2, 0],
+    ["legend-knight", -6, 36, -22, -3, 4, 0],
   ],
   MAGE: [
     ["staff-rest", 4, 28, -10, 0, 2, 0],
@@ -40,8 +40,8 @@ const posesByPath = {
     ["trail-scout", 6, -12, -5, -2, 1, 1],
     ["bow-ready", -4, -48, 18, -3, 3, 2],
     ["arrow-aim", -8, -76, 32, -4, 4, 0],
-    ["horizon-watch", -9, 120, -20, -2, 3, -1],
-    ["sky-sentinel", -5, 80, -66, -4, 4, -4],
+    ["horizon-watch", -6, -38, -58, -2, 3, 0],
+    ["sky-sentinel", -3, -77, -76, -4, 4, 1],
   ],
 };
 export function owlPose(stage, path) {
@@ -56,7 +56,7 @@ export function owlPose(stage, path) {
     body: `translate(0 ${lift})`,
     frontWing: `rotate(${front} 18 38)`,
     backWing: `rotate(${back} 40 39)`,
-    frontFoot: `translate(${frontFoot} ${rank === 7 ? -2 : 0})`,
-    backFoot: `translate(${backFoot} ${rank === 7 ? -1 : 0})`,
+    frontFoot: `translate(${frontFoot} ${rank === 7 && path === "MAGE" ? -2 : 0})`,
+    backFoot: `translate(${backFoot} ${rank === 7 && path === "MAGE" ? -1 : 0})`,
   };
 }

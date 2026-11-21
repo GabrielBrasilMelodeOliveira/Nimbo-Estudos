@@ -120,7 +120,7 @@ describe("pixel hero evolution", () => {
 
   it("keeps idle movement and blinking, freezes death and respects reduced motion", () => {
     const idle = petMotion("neutral");
-    for (const part of ["hero-breath", "hero-eyes-open", "hero-eyes-closed"]) {
+    for (const part of ["hero-breath", "hero-eyes-closed"]) {
       expect(idle[`& .${part}`].animation).toContain("infinite");
       expect(idle[`& .${part}`].animation).toContain("steps(");
     }
