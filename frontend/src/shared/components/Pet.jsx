@@ -1,3 +1,4 @@
+import owlCareMotion from "./pet/owlCareMotion.js";
 import { Paper, Box, Button } from "@mui/material";
 import { useMemo, useRef, useState } from "react";
 import { ArrowRight, Sparkles } from "lucide-react";
@@ -23,6 +24,7 @@ export function PetArt({
   mood = "neutral",
   onClick,
   appearance,
+  activity = "IDLE",
 }) {
   const rank = companionRank(stage);
   const owlAppearance = useMemo(
@@ -35,21 +37,28 @@ export function PetArt({
     rank,
     mood,
     elementRef,
+    busy: activity !== "IDLE",
   });
   return (
     <Box
       component="svg"
       ref={elementRef}
       data-gesture={gesture}
-      sx={petMotion(mood, gesture, rank)}
+      data-activity={activity}
+      sx={[petMotion(mood, gesture, rank), owlCareMotion(activity)]}
       className={`nimbo-art ${large ? "nimbo-big" : ""} nimbo-${mood}`}
       viewBox={mood === "dead" ? "-14 -9 86 86" : "-9 -10 74 83"}
       shapeRendering="crispEdges"
       role="img"
-      aria-label={`Coruja em pixel art de 16 bits: ${displayName(species, rank, owlAppearance.path)} · ${moodLabels[mood] || "neutro"}`}
+      aria-label={`Coruja em pixel art de 16 bits: ${displayName(species, rank, owlAppearance.path)} · ${{ TRAINING: "treinando com óculos e livro", EATING: "comendo pizza", SLEEPING: "dormindo", CELEBRATING: "comemorando" }[activity] || moodLabels[mood] || "neutro"}`}
       onClick={onClick}
     >
-      <PixelOwl rank={rank} mood={mood} appearance={owlAppearance} />
+      <PixelOwl
+        rank={rank}
+        mood={activity === "SLEEPING" ? "tired" : mood}
+        appearance={owlAppearance}
+        activity={activity}
+      />
     </Box>
   );
 }
@@ -113,6 +122,7 @@ export default function Pet({ pet, navigate }) {
         stage={pet.stage}
         mood={pet.mood}
         appearance={pet.appearance}
+        activity={pet.vitals?.activity}
         large
       />
       <div>

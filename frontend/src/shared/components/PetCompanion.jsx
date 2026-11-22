@@ -1,95 +1,93 @@
-import { accountLocalStorage as localStorage } from "../utils/accountStorage.js";
-import { companionRecoveryEvent } from "../utils/companionRecovery.js";
-import { useDraggableCompanion } from "../hooks/useDraggableCompanion.js";
 import { useEffect, useRef, useState } from "react";
 import {
+  Alert,
   Box,
   Button,
+  Chip,
   IconButton,
   LinearProgress,
+  Link,
   Paper,
   Portal,
+  Snackbar,
   Stack,
-  TextField,
   Typography,
 } from "@mui/material";
-import {
-  ChevronDown,
-  Moon,
-  SmilePlus,
-  MessageCircle,
-  Volume2,
-  VolumeX,
-  Send,
-  Sparkles,
-} from "lucide-react";
+import { ChevronDown, Flame, Sparkles } from "lucide-react";
+import { accountLocalStorage } from "../utils/accountStorage.js";
+import { companionRecoveryEvent } from "../utils/companionRecovery.js";
+import { companionPrompt } from "../utils/companionPrompt.js";
+import { useDraggableCompanion } from "../hooks/useDraggableCompanion.js";
+import usePetCareSession from "../hooks/usePetCareSession.js";
 import { PetArt, speciesInfo } from "./Pet.jsx";
-import { PetClassProgress } from "./pet/PetProgression.jsx";
+import { companionClassName } from "./pet/owlAppearance.js";
 import PetCareStatus from "./pet/PetCareStatus.jsx";
+import PetVitalBars from "./pet/PetVitalBars.jsx";
 
-const starters = [
-  "Vamos avançar um pouquinho hoje?",
-  "Consistência vale mais do que pressa.",
-  "Cada estudo fortalece nossa jornada.",
-  "Um assunto de cada vez. Eu fico aqui com você.",
-];
-function reply(text, pet) {
-  if (pet.care?.dead || pet.care?.missedDays > 0) return pet.message;
-  const s = text.toLowerCase();
-  if (/cans|sono|descans|dorm/.test(s))
-    return "Descansar também faz parte do plano. Que tal uma pausa de verdade?";
-  if (/prova|concurso|edital/.test(s))
-    return "A prova se aproxima por etapas. Vamos resolver o próximo assunto juntos.";
-  if (/trist|desanim|dif[ií]cil/.test(s))
-    return "Um dia difícil não apaga tudo que você já estudou. Podemos fazer só 15 minutos.";
-  if (/quest|err/.test(s))
-    return "Cada erro revela um tema para reforçar. Anote o motivo e tente de novo.";
-  if (/obrig|oi|ol[aá]/.test(s))
-    return "Oi! Estou por aqui. Vamos conquistar uma pequena meta hoje?";
-  return pet.energy < 30
-    ? "Estou um pouco cansado. Podemos ir com calma."
-    : starters[Math.floor(s.length % starters.length)];
-}
-export default function PetCompanion({ pet, navigate, action, working }) {
+const duration = (seconds) => {
+  const remaining = Math.max(0, Math.ceil(seconds));
+  return `${Math.floor(remaining / 3600)
+    .toString()
+    .padStart(2, "0")}:${Math.floor((remaining / 60) % 60)
+    .toString()
+    .padStart(2, "0")}:${(remaining % 60).toString().padStart(2, "0")}`;
+};
+
+export default function PetCompanion({
+  pet,
+  data = {},
+  navigate,
+  action,
+  working,
+  onPetUpdate,
+}) {
   const [open, setOpen] = useState(() => {
     try {
-      return localStorage.getItem("nimbo:open") === "true";
+      return accountLocalStorage.getItem("nimbo:open") === "true";
     } catch {
       return false;
     }
   });
-  const [chat, setChat] = useState(false);
-  const [message, setMessage] = useState("");
-  const [feedback, setFeedback] = useState("");
-  const [speaking, setSpeaking] = useState(false);
+  const [evolution, setEvolution] = useState("");
   const previousCompanion = useRef({ id: pet?.id, stage: pet?.stage });
+  const { now, notice, clearNotice, celebrating } = usePetCareSession(
+    pet,
+    onPetUpdate,
+  );
   useEffect(() => {
     const previous = previousCompanion.current;
-    if (pet?.id !== previous.id) setFeedback("");
     if (
       pet?.id === previous.id &&
       pet?.stage > previous.stage &&
-      pet?.career?.current &&
       !pet?.care?.dead
     ) {
-      setFeedback(
-        `Evoluí para ${pet.career.current.name}! Cada estudo nos trouxe até aqui.`,
+      setEvolution(
+        `ABRAM ALAS! Virei ${pet.career?.current?.name || companionClassName(pet.stage, pet.appearance?.path)}. Foi seu estudo que pagou essa armadura!`,
       );
-    }
+    } else if (pet?.id !== previous.id) setEvolution("");
     previousCompanion.current = { id: pet?.id, stage: pet?.stage };
-  }, [pet?.id, pet?.stage, pet?.career?.current?.name, pet?.care?.dead]);
+  }, [
+    pet?.id,
+    pet?.stage,
+    pet?.care?.dead,
+    pet?.career?.current?.name,
+    pet?.appearance?.path,
+  ]);
+  useEffect(() => {
+    if (!evolution) return;
+    const timer = setTimeout(() => setEvolution(""), 8000);
+    return () => clearTimeout(timer);
+  }, [evolution]);
   useEffect(() => {
     const recover = () => setOpen(false);
     window.addEventListener(companionRecoveryEvent, recover);
     return () => window.removeEventListener(companionRecoveryEvent, recover);
   }, []);
-  const dead = !!pet?.care?.dead;
-  const mood = pet?.mood || "neutral";
   const toggle = () => {
     try {
-      localStorage.setItem("nimbo:open", String(!open));
+      accountLocalStorage.setItem("nimbo:open", String(!open));
     } catch {
-      /* The panel remains usable without browser storage. */
+      /* Storage is optional. */
     }
     setOpen(!open);
   };
@@ -106,57 +104,33 @@ export default function PetCompanion({ pet, navigate, action, working }) {
   );
   const expandedTop = Math.max(
     8,
-    Math.min(floating.position.y, floating.viewport.height - 650),
+    Math.min(floating.position.y, floating.viewport.height - 640),
   );
-  useEffect(() => {
-    if (!feedback) return;
-    const timeout = setTimeout(() => setFeedback(""), 6000);
-    return () => clearTimeout(timeout);
-  }, [feedback]);
-  useEffect(() => {
-    if (!speaking || !pet?.message || !("speechSynthesis" in window)) return;
-    const utterance = new SpeechSynthesisUtterance(pet.message);
-    utterance.lang = "pt-BR";
-    window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(utterance);
-    return () => window.speechSynthesis.cancel();
-  }, [speaking, pet?.message]);
-  const interact = async (type) => {
-    if (working || dead) return;
-    if (
-      await action(
-        "pet/interact",
-        "POST",
-        { action: type },
-        "Vínculo fortalecido.",
+  const dead = !!pet?.care?.dead;
+  const activity = dead
+    ? "DEAD"
+    : celebrating || evolution
+      ? "CELEBRATING"
+      : pet?.vitals?.activity || "IDLE";
+  const mood = activity === "CELEBRATING" ? "happy" : pet?.mood || "neutral";
+  const prompt = companionPrompt(pet, data);
+  const career = pet?.career;
+  const progress = career?.next
+    ? Math.min(
+        100,
+        (100 * career.experienceWithinClass) / career.experienceToNextClass,
       )
-    ) {
-      setFeedback(
-        {
-          PET: "Obrigado pelo incentivo! Seguimos juntos nesta jornada.",
-          PLAY: "Treino concluído! O XP vem dos estudos; vamos cuidar das metas também?",
-          REST: "Descansei um pouco. Para recuperar minha energia, precisamos avançar nas metas.",
-          TALK: "Gosto de conversar com você!",
-        }[type],
-      );
-    }
-  };
-  const send = async (event) => {
-    event.preventDefault();
-    if (!message.trim() || working || dead) return;
-    const answer = reply(message, pet);
-    if (
-      await action(
-        "pet/interact",
-        "POST",
-        { action: "TALK" },
-        "Nimbo ouviu você.",
-      )
-    ) {
-      setMessage("");
-      setFeedback(answer);
-    }
-  };
+    : career
+      ? 100
+      : 0;
+  const trainingElapsed =
+    (pet?.vitals?.trainingSeconds || 0) +
+    (pet?.vitals?.trainingPresent && !document.hidden && pet?.serverTime
+      ? Math.max(0, Math.min(15, (now - Date.parse(pet.serverTime)) / 1000))
+      : 0);
+  const sleepRemaining = pet?.vitals?.sleepUntil
+    ? (Date.parse(pet.vitals.sleepUntil) - now) / 1000
+    : 0;
   return (
     <Portal>
       <Box
@@ -214,6 +188,7 @@ export default function PetCompanion({ pet, navigate, action, working }) {
               stage={pet.stage}
               appearance={pet.appearance}
               mood={mood}
+              activity={activity}
             />
           </IconButton>
         ) : (
@@ -231,8 +206,8 @@ export default function PetCompanion({ pet, navigate, action, working }) {
           >
             <Stack
               direction="row"
+              alignItems="center"
               sx={{
-                alignItems: "center",
                 px: 2,
                 py: 1,
                 borderBottom: "1px solid",
@@ -242,25 +217,22 @@ export default function PetCompanion({ pet, navigate, action, working }) {
               <Typography fontWeight={700} variant="body2" sx={{ flex: 1 }}>
                 {speciesInfo(pet.species).name}
               </Typography>
-              <IconButton
-                aria-label={speaking ? "Desativar voz" : "Ativar voz"}
-                onClick={() => setSpeaking(!speaking)}
-              >
-                {speaking ? <Volume2 size={18} /> : <VolumeX size={18} />}
-              </IconButton>
+              {pet.care?.streak > 0 && (
+                <Chip
+                  size="small"
+                  icon={<Flame size={13} />}
+                  label={`${pet.care.streak} dias`}
+                />
+              )}
               <IconButton aria-label="Recolher companheiro" onClick={toggle}>
                 <ChevronDown size={19} />
               </IconButton>
             </Stack>
             <Stack spacing={1.5} sx={{ p: 2 }}>
-              <Button
-                aria-label="Incentivar aventureiro"
-                onClick={() => interact("PET")}
-                disabled={working || dead}
+              <Box
                 sx={{
                   alignSelf: "center",
-                  p: 0,
-                  "& svg.nimbo-art": { width: 176, height: 209 },
+                  "& svg.nimbo-art": { width: 145, height: 163 },
                 }}
               >
                 <PetArt
@@ -268,92 +240,112 @@ export default function PetCompanion({ pet, navigate, action, working }) {
                   stage={pet.stage}
                   appearance={pet.appearance}
                   mood={mood}
+                  activity={activity}
                   large
                 />
-              </Button>
-              <PetClassProgress pet={pet} compact />
-              <PetCareStatus
-                pet={pet}
-                action={action}
-                working={working}
-                compact
-              />
-              <Stack direction="row" justifyContent="space-between">
-                <Typography variant="caption">Energia {pet.energy}%</Typography>
-                <Typography variant="caption">
-                  Nível {pet.level} · {pet.xp} XP · Vínculo {pet.bond ?? 20}
+              </Box>
+              <Stack spacing={0.5}>
+                <Typography variant="body2" fontWeight={700}>
+                  {career?.current?.name ||
+                    companionClassName(pet.stage, pet.appearance?.path)}{" "}
+                  <Box
+                    component="span"
+                    sx={{ color: "text.secondary", fontWeight: 400 }}
+                  >
+                    · Nível {pet.level || 1}
+                  </Box>
+                </Typography>
+                <LinearProgress
+                  aria-label="XP de estudo"
+                  variant="determinate"
+                  value={progress}
+                  sx={{ height: 4, borderRadius: 2 }}
+                />
+                <Typography variant="caption" color="text.secondary">
+                  {pet.xp || 0} XP de estudo
+                  {career?.next
+                    ? ` · faltam ${career.remainingExperience} para evoluir`
+                    : ""}
                 </Typography>
               </Stack>
-              <LinearProgress
-                variant="determinate"
-                value={pet.energy}
-                color={dead ? "inherit" : "primary"}
-                sx={{ height: 6, borderRadius: 3 }}
-              />
-              {feedback && (
-                <Typography variant="body2" role="status" color="primary">
-                  “{feedback}”
-                </Typography>
-              )}
-              {!dead && (
+              {dead ? (
+                <PetCareStatus
+                  pet={pet}
+                  action={action}
+                  working={working}
+                  compact
+                />
+              ) : (
                 <>
-                  <Stack direction="row" spacing={0.5}>
-                    <Button
-                      size="small"
-                      onClick={() => interact("PLAY")}
-                      disabled={working}
-                      startIcon={<SmilePlus size={16} />}
-                    >
-                      Treinar
-                    </Button>
-                    <Button
-                      size="small"
-                      onClick={() => interact("REST")}
-                      disabled={working}
-                      startIcon={<Moon size={16} />}
-                    >
-                      Descansar
-                    </Button>
-                    <IconButton
-                      aria-label="Conversar"
-                      onClick={() => setChat(!chat)}
-                    >
-                      <MessageCircle size={18} />
-                    </IconButton>
-                  </Stack>
-                  {chat && (
-                    <Stack
-                      component="form"
-                      direction="row"
-                      spacing={1}
-                      onSubmit={send}
-                    >
-                      <TextField
-                        value={message}
-                        onChange={(event) => setMessage(event.target.value)}
-                        label="Mensagem para Nimbo"
-                        size="small"
-                        fullWidth
-                        slotProps={{ htmlInput: { maxLength: 180 } }}
-                      />
-                      <IconButton
-                        type="submit"
-                        disabled={working || !message.trim()}
-                        aria-label="Enviar mensagem"
+                  <Box
+                    sx={{ bgcolor: "action.hover", borderRadius: 2, p: 1.5 }}
+                  >
+                    <Typography variant="body2" role="status">
+                      {evolution || (celebrating && notice) || prompt.text}
+                    </Typography>
+                    {prompt.page && !evolution && (
+                      <Link
+                        component="button"
+                        type="button"
+                        onClick={() => navigate(prompt.page, prompt.options)}
+                        sx={{ mt: 0.75, fontSize: 12, textAlign: "left" }}
                       >
-                        <Send size={18} />
-                      </IconButton>
-                    </Stack>
+                        {prompt.link} →
+                      </Link>
+                    )}
+                  </Box>
+                  <PetVitalBars pet={pet} action={action} working={working} />
+                  {pet.vitals?.activity === "TRAINING" && (
+                    <Typography variant="caption" color="primary" role="timer">
+                      Treino: {duration(1800 - trainingElapsed)} restantes ·{" "}
+                      {pet.vitals.trainingPresent
+                        ? "contando nesta aba"
+                        : "aguardando presença"}
+                    </Typography>
+                  )}
+                  {pet.vitals?.activity === "SLEEPING" && (
+                    <Typography variant="caption" color="primary" role="timer">
+                      Acorda em {duration(sleepRemaining)} · pode fechar o site
+                    </Typography>
+                  )}
+                  {pet.vitals?.activity === "IDLE" && !pet.vitals?.canRest && (
+                    <Typography variant="caption" color="text.secondary">
+                      {pet.vitals?.restHint}
+                    </Typography>
+                  )}
+                  {pet.vitals?.criticalUntil && (
+                    <Alert severity="error" sx={{ py: 0 }}>
+                      Barra zerada: cuide antes de{" "}
+                      {new Date(pet.vitals.criticalUntil).toLocaleString(
+                        "pt-BR",
+                      )}
+                      .
+                    </Alert>
                   )}
                 </>
               )}
-              <Button onClick={() => navigate("collection")}>
-                Evolução e regras do Nimbo →
-              </Button>
+              <Link
+                component="button"
+                type="button"
+                onClick={() => navigate("collection")}
+                sx={{ fontSize: 12, alignSelf: "center" }}
+              >
+                Evolução, recompensas e regras →
+              </Link>
             </Stack>
           </Paper>
         )}
       </Box>
+      <Snackbar
+        open={!!notice}
+        autoHideDuration={8000}
+        onClose={clearNotice}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert severity="success" variant="filled" onClose={clearNotice}>
+          {notice}
+        </Alert>
+      </Snackbar>
     </Portal>
   );
 }

@@ -1,13 +1,4 @@
-import {
-  Box,
-  Chip,
-  LinearProgress,
-  Paper,
-  Stack,
-  Typography,
-} from "@mui/material";
-import { Check, LockKeyhole } from "lucide-react";
-import { PetArt } from "../Pet.jsx";
+import { LinearProgress, Stack, Typography } from "@mui/material";
 import { companionClassName } from "./owlAppearance.js";
 
 export function PetClassProgress({ pet, compact = false }) {
@@ -61,10 +52,6 @@ export function PetClassProgress({ pet, compact = false }) {
   );
 }
 
-export default function PetProgression({ pet }) {
-  const journey = pet?.classJourney;
-  if (!journey?.length) return null;
-  return (
-    <></>
-  );
+export default function PetProgression() {
+  return null;
 }

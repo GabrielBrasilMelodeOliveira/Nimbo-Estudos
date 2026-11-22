@@ -39,7 +39,13 @@ export function shuffleGestures(gestures, previous, random = Math.random) {
   return shuffled;
 }
 
-export default function useOwlGesture({ path, rank, mood, elementRef }) {
+export default function useOwlGesture({
+  path,
+  rank,
+  mood,
+  elementRef,
+  busy = false,
+}) {
   const [gesture, setGesture] = useState("rest");
   useEffect(() => {
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -53,10 +59,11 @@ export default function useOwlGesture({ path, rank, mood, elementRef }) {
       visible &&
       !document.hidden &&
       !media.matches &&
-      mood !== "dead";
+      mood !== "dead" &&
+      !busy;
     const schedule = () => {
       clearTimeout(timeout);
-      setGesture(allowed() ? "rest" : "paused");
+      setGesture(busy ? "rest" : allowed() ? "rest" : "paused");
       if (!allowed()) return;
       timeout = setTimeout(
         () => {
@@ -91,6 +98,6 @@ export default function useOwlGesture({ path, rank, mood, elementRef }) {
       document.removeEventListener("visibilitychange", schedule);
       media.removeEventListener("change", schedule);
     };
-  }, [path, rank, mood, elementRef]);
+  }, [path, rank, mood, elementRef, busy]);
   return gesture;
 }

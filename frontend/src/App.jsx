@@ -172,13 +172,28 @@ export default function App({ account, onLogout }) {
   const refresh = useCallback(async (first = false) => {
     try {
       const results = await Promise.all(endpoints.map((p) => api(p)));
-      setData(Object.fromEntries(endpoints.map((p, i) => [p, results[i]])));
+      const next = Object.fromEntries(endpoints.map((p, i) => [p, results[i]]));
+      setData((current) => ({
+        ...next,
+        pet:
+          Date.parse(current.pet?.serverTime) > Date.parse(next.pet?.serverTime)
+            ? current.pet
+            : next.pet,
+      }));
       setError("");
     } catch (e) {
       setError(e.message);
     } finally {
       if (first) setLoading(false);
     }
+  }, []);
+  const updatePet = useCallback((pet) => {
+    setData((current) =>
+      current.pet?.id === pet.id &&
+      !(Date.parse(current.pet?.serverTime) > Date.parse(pet.serverTime))
+        ? { ...current, pet }
+        : current,
+    );
   }, []);
   useEffect(() => {
     refresh(true);
@@ -401,6 +416,8 @@ export default function App({ account, onLogout }) {
         {!loading && (
           <PetCompanion
             pet={data.pet}
+            data={data}
+            onPetUpdate={updatePet}
             navigate={navigate}
             action={action}
             working={working}

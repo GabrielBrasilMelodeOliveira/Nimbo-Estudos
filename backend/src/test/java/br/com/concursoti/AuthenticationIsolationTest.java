@@ -65,6 +65,9 @@ class AuthenticationIsolationTest {
   EntityManagerFactory entities;
 
   @Autowired
+  AccountSchemaService accountSchemas;
+
+  @Autowired
   @Qualifier("accountJdbc")
   JdbcTemplate jdbc;
 
@@ -265,6 +268,55 @@ class AuthenticationIsolationTest {
     owner.call(get("/api/flashcards"), 200);
     assertEquals(1, owner.last.size());
     owner.call(get("/api/uploads/" + assetId + "/content"), 200);
+    // Care sessions and additive upgrades must stay in the authenticated account too.
+    owner.call(post("/api/pet").content(json(Map.of("species", "nori"))), 200);
+    long ownerPet = owner.last.path("id").asLong();
+    owner.call(
+      post("/api/pet/interact").content(json(Map.of("action", "TRAIN"))),
+      200
+    );
+    owner.call(
+      post("/api/pet/" + ownerPet + "/presence").content(
+        json(Map.of("present", true))
+      ),
+      200
+    );
+    assertEquals(
+      "TRAINING",
+      owner.last.path("vitals").path("activity").asText()
+    );
+    assertEquals(0, owner.last.path("xp").asInt());
+    second.call(get("/api/pet"), 200);
+    assertTrue(second.last.isNull());
+    second.call(post("/api/pet").content(json(Map.of("species", "nori"))), 200);
+    second.call(
+      post("/api/pet/interact").content(json(Map.of("action", "FEED"))),
+      200
+    );
+    assertEquals(
+      "EATING",
+      second.last.path("vitals").path("activity").asText()
+    );
+    owner.call(get("/api/pet"), 200);
+    assertEquals(
+      "TRAINING",
+      owner.last.path("vitals").path("activity").asText()
+    );
+    String secondSchema = jdbc.queryForObject(
+      "select schema_name from public.nimbo_accounts where email='second@example.test'",
+      String.class
+    );
+    jdbc.execute(
+      "alter table " + secondSchema + ".pet_companions drop column care_points"
+    );
+    accountSchemas.synchronize(secondSchema);
+    accountSchemas.synchronize(secondSchema);
+    second.call(get("/api/pet"), 200);
+    assertEquals(0, second.last.path("vitals").path("carePoints").asInt());
+    assertEquals(
+      "EATING",
+      second.last.path("vitals").path("activity").asText()
+    );
     // Old browser tabs cannot accidentally write to the newly selected account.
     second.call(
       post("/api/disciplines")

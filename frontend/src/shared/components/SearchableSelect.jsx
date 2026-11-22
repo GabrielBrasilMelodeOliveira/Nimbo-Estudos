@@ -28,6 +28,7 @@ export function SearchableSelect({
   placeholder,
   required = false,
   disabled = false,
+  allowClear = false,
   name,
   inputProps,
   "aria-label": ariaLabel,
@@ -55,7 +56,8 @@ export function SearchableSelect({
       disabled={disabled}
       options={options}
       value={selected}
-      disableClearable
+      disableClearable={!allowClear}
+      clearText="Limpar seleção"
       getOptionLabel={(option) => option.label}
       getOptionKey={(option) => option.value}
       getOptionDisabled={(option) => option.disabled}

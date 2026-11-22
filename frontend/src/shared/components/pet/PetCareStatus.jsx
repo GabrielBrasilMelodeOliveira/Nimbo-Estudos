@@ -39,7 +39,9 @@ export default function PetCareStatus({
         <Chip
           size="small"
           color={care.dead ? "error" : care.streak ? "success" : "default"}
-          label={care.moodLabel}
+          label={
+            care.dead ? care.moodLabel : "Humor pelas metas: " + care.moodLabel
+          }
         />
         <Chip
           size="small"
@@ -107,9 +109,10 @@ export default function PetCareStatus({
         <DialogTitle>Recomeçar com este Nimbo?</DialogTitle>
         <DialogContent>
           <Typography>
-            O XP, o vínculo e a sequência desta vida voltam ao início. O recorde
-            e o número de vidas ficam registrados. Seus estudos, questões e
-            metas continuam salvos.
+            O XP de estudo e a sequência desta vida voltam ao início. As barras
+            de cuidado recomeçam em 80%. Seus pontos de cuidado, o recorde e o
+            número de vidas ficam registrados. Seus estudos, questões e metas
+            continuam salvos.
           </Typography>
         </DialogContent>
         <DialogActions>

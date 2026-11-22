@@ -16,6 +16,12 @@ public class CompanionsService {
 
   public record PetInteraction(String action) {}
 
+  public record PresenceInput(boolean present) {}
+
+  public Map<String, Object> presence(Long id, PresenceInput input) {
+    return pet.presence(id, input.present());
+  }
+
   public Map<String, Object> interactPet(PetInteraction request) {
     return pet.interact(request.action());
   }

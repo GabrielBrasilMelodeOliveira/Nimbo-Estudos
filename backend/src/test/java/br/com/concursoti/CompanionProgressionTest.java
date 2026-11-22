@@ -8,6 +8,7 @@ import br.com.concursoti.companions.repositories.PetCompanionRepository;
 import br.com.concursoti.companions.repositories.PetRepository;
 import br.com.concursoti.companions.services.PetCarePolicy;
 import br.com.concursoti.companions.services.PetService;
+import br.com.concursoti.companions.services.PetVitalCare;
 import br.com.concursoti.companions.types.CompanionClass;
 import br.com.concursoti.dailygoals.services.DailyProgressService;
 import java.time.Clock;
@@ -75,6 +76,7 @@ class CompanionProgressionTest {
       mock(PetRepository.class),
       dailyProgress,
       new PetCarePolicy(clock),
+      new PetVitalCare(clock),
       clock
     );
     var view = service.current();

@@ -98,7 +98,7 @@ class PetCarePolicyTest {
     var liveDays = missed(2);
     liveDays.getLast().outcome = "PARTIAL";
     assertEquals("neutral", policy.evaluate(hungry, liveDays).mood());
-    assertEquals(65, hungry.energy);
+    assertEquals(75, hungry.energy); // Study mood does not refill vital energy.
   }
 
   @Test
@@ -131,7 +131,7 @@ class PetCarePolicyTest {
       var status = policy.evaluate(pet, days);
       assertEquals(count, status.streak());
       assertEquals(milestone.getValue(), status.mood());
-      assertEquals(100, pet.energy);
+      assertEquals(75, pet.energy);
       assertEquals(count, policy.evaluate(pet, days).streak());
     }
   }

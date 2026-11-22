@@ -167,9 +167,7 @@ export default function Edital({ data, action, working, navigate }) {
           <small>Por assimilação</small>
         </Paper>
       </section>
-      <Panel
-        className="edital-sheet-panel"
-      >
+      <Panel className="edital-sheet-panel">
         <div className="edital-filter-grid">
           <label className="sheet-filter sheet-search">
             <span>Buscar assunto</span>

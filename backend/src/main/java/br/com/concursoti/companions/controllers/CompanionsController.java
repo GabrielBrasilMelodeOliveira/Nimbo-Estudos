@@ -26,6 +26,14 @@ public class CompanionsController {
     return service.interactPet(request);
   }
 
+  @PostMapping("/pet/{id}/presence")
+  public Map<String, Object> presence(
+    @PathVariable Long id,
+    @RequestBody PresenceInput input
+  ) {
+    return service.presence(id, input);
+  }
+
   @PutMapping("/pet/{id}/appearance")
   public Map<String, Object> customizePet(
     @PathVariable Long id,

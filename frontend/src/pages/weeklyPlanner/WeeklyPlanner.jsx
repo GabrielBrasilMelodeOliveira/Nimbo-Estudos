@@ -364,6 +364,13 @@ export default function WeeklyPlanner({ data, action, working, navigate }) {
                       {count > 0 && <small>{count} itens</small>}
                     </span>
                     <span className="n55-month-text">
+                      {(data["study-plan"] || [])
+                        .find((plan) => plan.studyDate === day)
+                        ?.disciplines?.map((discipline) => (
+                          <span key={`plan-${discipline.id}`}>
+                            {discipline.name}
+                          </span>
+                        ))}
                       {scheduled.slice(0, 1).map((i) => (
                         <span key={i.id}>{i.title}</span>
                       ))}
@@ -405,6 +412,12 @@ export default function WeeklyPlanner({ data, action, working, navigate }) {
       {selectedDay && (
         <Modal title={dateBR(selectedDay)} onClose={() => setSelectedDay(null)}>
           <div className="n55-day-dialog">
+            <DailyStudyPlan
+              day={selectedDay}
+              data={data}
+              action={action}
+              working={working}
+            />
             <Button
               className="btn btn-primary"
               onClick={() => openAdd(selectedDay, true)}

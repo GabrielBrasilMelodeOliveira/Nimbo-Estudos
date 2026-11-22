@@ -1,6 +1,6 @@
-# Nimbo 5.14.0 — Contas individuais e movimentos contínuos da coruja
+# Nimbo 5.15.0 — A toca do Nimbo e planejamento editável
 
-A versão **5.14.0** aparece no menu lateral. Para atualizar uma instalação Docker existente:
+A versão **5.15.0** aparece no menu lateral. Para atualizar uma instalação Docker existente:
 
 ```bash
 git pull --ff-only origin main
@@ -11,6 +11,22 @@ docker compose logs api
 Recarregue a página após a reconstrução. Apenas `git pull` não substitui o frontend que já está no container. Os volumes existentes são preservados.
 
 Nesta versão:
+
+- **Agenda editável:** botões explícitos para alterar as disciplinas, retirar uma delas ou limpar o planejamento de um dia, nas visões semanal e mensal. O seletor permite pesquisar e limpar a seleção. Remover do dia preserva disciplinas, assuntos e histórico.
+- **Painel do Nimbo simplificado:** coruja, XP de estudo, uma fala contextual e três barras com três ações. Voz do computador, chat, incentivo por clique e métricas duplicadas foram removidos. Falas da coruja apontam revisões vencidas, disciplinas planejadas e outros próximos passos reais, com atalhos para estudá-los.
+- **Dois tipos de progresso:** XP de estudo continua sendo a única forma de subir nível/classe. Treinar e completar o descanso rendem pontos de cuidado e títulos cosméticos próprios, sem gerar XP de estudo.
+- **Treino de 30 minutos:** óculos e livro animados, progresso confirmado no servidor a cada 15 segundos, recompensa única de 20 pontos e preparo cheio. A aba precisa permanecer visível; fechar, minimizar, trocar para outro site ou perder conexão pausa a contagem. Voltar retoma o tempo já confirmado. Recarregar e abrir várias abas não multiplicam a recompensa.
+- **Pizza:** animação de 12 segundos, saciedade cheia e +25 de energia. Intervalo de quatro horas entre refeições.
+- **Sono de oito horas:** liberado após treinar e comer desde o último sono. Continua offline, preserva as barras enquanto dorme e termina com energia cheia, saciedade mínima de 60%, preparo mínimo de 70% e +10 pontos. Treino/sono concluídos geram aviso de sucesso e comemoração.
+- **Desafio vital:** saciedade cai 4 pontos/h, energia 3 e preparo 2 enquanto o companheiro está ativo e acordado, inclusive offline. O recomendado é manter as três em pelo menos 35%. Uma barra zerada inicia uma crise de 12 horas; recuperar todas para acima de zero ou iniciar o sono encerra a crise. Sem recuperação, a vida termina. Companheiros em reserva preservam os sinais vitais.
+- **Regras diárias mantidas para toda a coleção:** 1 dia encerrado sem progresso dá fome; 2, cansaço; 3, tristeza pela manhã/irritação à tarde; o 4º causa morte. Cuidados não substituem estudo, e estudo não preenche barras de cuidado. Recomeçar preserva estudos, aparência, recordes e pontos de cuidado, mas reinicia o XP daquela vida.
+- **Recompensas de cuidado:** títulos em 30, 100, 300 e 600 pontos, exibidos em Meu Nimbo, além do histórico de ciclos completos. O próximo treino fica disponível oito horas após concluir o anterior.
+
+As novas colunas de sinais vitais e temporizadores são adicionadas a `pet_companions`, inclusive nos schemas de outras contas. As barras de companheiros existentes começam em 80% no primeiro acesso; não há desgaste vital retroativo. O histórico de metas e XP existente permanece. O horário dos fechamentos continua sendo America/Fortaleza.
+
+A implementação fica em `companions/services/PetVitalCare.java`; os acessórios animados usam a mesma arte vetorial editável de `shared/components/pet/`. Nenhuma imagem externa nova ou serviço de voz foi adicionado. As rotas autenticadas são `POST /api/pet/interact` com `TRAIN`, `FEED` ou `REST`, e `POST /api/pet/{id}/presence` com `{ "present": true|false }`; o cliente nunca envia a quantidade de tempo a conceder. Todas as operações usam o bloqueio transacional diário da conta para evitar recompensas duplicadas.
+
+Recursos da versão 5.14.0 preservados:
 
 - **Cadastro e login:** nome, e-mail e senha, com telas MUI, confirmação de senha, mostrar/ocultar senha e opção de sair no perfil.
 - **Dados por conta no PostgreSQL:** disciplinas, assuntos, agenda, metas, sessões, questões, revisões, flashcards, erros, materiais, anexos e companheiros ficam separados. A limpeza de dados também se limita à conta conectada.

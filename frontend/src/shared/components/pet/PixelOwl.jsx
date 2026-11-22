@@ -1,3 +1,4 @@
+import OwlCareProps from "./OwlCareProps.jsx";
 import { memo } from "react";
 import OwlBodyFoundation, { OwlLegJoint } from "./OwlBodyFoundation.jsx";
 import PixelOwlFace from "./PixelOwlFace.jsx";
@@ -14,10 +15,14 @@ import ReferenceOwlLayer from "./art/ReferenceOwlLayer.jsx";
 import { referencePalette } from "./art/referencePalette.js";
 
 /** Reference-faithful pixel layers, articulated at the neck, shoulders and feet. */
-function PixelOwl({ rank, mood, appearance }) {
+function PixelOwl({ rank, mood, appearance, activity = "IDLE" }) {
   const palette = owlPalette(appearance);
   const colors = referencePalette(appearance);
-  const pose = owlPose(rank, appearance.path);
+  const caring = ["TRAINING", "EATING", "SLEEPING"].includes(activity);
+  const pose = owlPose(
+    caring ? (activity === "TRAINING" ? 2 : 1) : rank,
+    appearance.path,
+  );
   const advancedOutfit =
     rank >= 6 && ["WARRIOR", "RANGER"].includes(appearance.path);
   const layer = (name) => <ReferenceOwlLayer name={name} colors={colors} />;
@@ -100,18 +105,27 @@ function PixelOwl({ rank, mood, appearance }) {
                   <PixelOwlFace mood={mood} palette={palette} colors={colors} />
                   <OwlHeadwear
                     appearance={appearance}
-                    accessory={appearance.headAccessory}
+                    accessory={
+                      activity === "TRAINING"
+                        ? "GOGGLES"
+                        : activity === "SLEEPING"
+                          ? "NONE"
+                          : appearance.headAccessory
+                    }
                     path={appearance.path}
                     rank={rank}
                     palette={palette}
                   />
                 </g>
               </g>
-              <OwlEquipment
-                rank={rank}
-                appearance={appearance}
-                palette={palette}
-              />
+              {!caring && (
+                <OwlEquipment
+                  rank={rank}
+                  appearance={appearance}
+                  palette={palette}
+                />
+              )}
+              <OwlCareProps activity={activity} palette={palette} />
               {mood === "hungry" && (
                 <path
                   className="hero-hunger"
@@ -119,7 +133,7 @@ function PixelOwl({ rank, mood, appearance }) {
                   fill={palette.gold}
                 />
               )}
-              {mood === "tired" && (
+              {mood === "tired" && activity !== "SLEEPING" && (
                 <path
                   className="hero-sleep"
                   d="M46 6h6v1h-2v2h-2v2h4v1h-6v-2h2V8h2V7h-4z"

@@ -8,7 +8,6 @@ import br.com.concursoti.companions.types.CompanionClass;
 import br.com.concursoti.dailygoals.entities.DailyGoalDay;
 import br.com.concursoti.dailygoals.services.DailyProgressService;
 import java.time.Clock;
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -23,6 +22,7 @@ public class PetService {
   private final DailyProgressService dailyProgress;
   private final PetCarePolicy carePolicy;
   private final Clock clock;
+  private final PetVitalCare vitalCare;
   private static final List<String> SPECIES = List.of(
     "nori",
     "luma",
@@ -55,6 +55,7 @@ public class PetService {
     PetRepository legacy,
     DailyProgressService dailyProgress,
     PetCarePolicy carePolicy,
+    PetVitalCare vitalCare,
     Clock clock
   ) {
     this.companions = companions;
@@ -62,6 +63,7 @@ public class PetService {
     this.dailyProgress = dailyProgress;
     this.carePolicy = carePolicy;
     this.clock = clock;
+    this.vitalCare = vitalCare;
   }
 
   /** Preserva XP, energia e coleção existente ao migrar do tema antigo para Nimbo. */
@@ -166,7 +168,10 @@ public class PetService {
       "Este companheiro já está na coleção."
     );
     List<PetCompanion> all = new ArrayList<>(companions.findAll());
-    all.forEach(member -> carePolicy.evaluate(member, days));
+    all.forEach(member -> {
+      vitalCare.evaluate(member);
+      carePolicy.evaluate(member, days);
+    });
     if (
       !all.isEmpty() &&
       all
@@ -204,6 +209,9 @@ public class PetService {
         new IllegalArgumentException("Companheiro não encontrado na coleção.")
       );
     for (PetCompanion other : companions.findAll()) {
+      vitalCare.evaluate(other);
+      carePolicy.evaluate(other, days);
+      other.trainingHeartbeatAt = null;
       other.active = other.id.equals(id);
       companions.save(other);
     }
@@ -234,6 +242,7 @@ public class PetService {
     List<DailyGoalDay> days = dailyProgress.synchronize();
     migrate();
     PetCompanion pet = companions.findById(id).orElseThrow();
+    vitalCare.evaluate(pet);
     carePolicy.evaluate(pet, days);
     if (pet.diedAt == null) throw new IllegalArgumentException(
       "Esta vida ainda está ativa."
@@ -248,6 +257,7 @@ public class PetService {
     pet.lastCareDate = pet.careStartedAt.minusDays(1);
     pet.lastInteraction = null;
     pet.lastRest = null;
+    vitalCare.restart(pet);
     companions.save(pet);
     return decorated(pet, days);
   }
@@ -264,44 +274,28 @@ public class PetService {
     if (type == null) throw new IllegalArgumentException(
       "Escolha uma interação."
     );
-    String action = type.toUpperCase(Locale.ROOT);
-    if (
-      !Set.of("PET", "TALK", "PLAY", "REST").contains(action)
-    ) throw new IllegalArgumentException("Interação inválida.");
+    vitalCare.evaluate(p);
     carePolicy.evaluate(p, days);
-    if (p.diedAt != null) throw new IllegalArgumentException(
-      "Esta jornada terminou. Recomece uma vida para interagir."
-    );
+    vitalCare.interact(p, type.toUpperCase(Locale.ROOT));
     LocalDateTime now = LocalDateTime.now(clock);
-    if (
-      p.lastInteraction != null &&
-      Duration.between(p.lastInteraction, now).toSeconds() < 15
-    ) throw new IllegalArgumentException(
-      "Nimbo precisa de alguns segundos antes da próxima interação."
-    );
-    switch (action) {
-      case "PET" -> p.bond = Math.min(100, (p.bond == null ? 20 : p.bond) + 1);
-      case "TALK" -> p.bond = Math.min(100, (p.bond == null ? 20 : p.bond) + 2);
-      case "PLAY" -> {
-        if (p.energy < 4) throw new IllegalArgumentException(
-          "Seu companheiro precisa recuperar energia antes de treinar."
-        );
-        p.bond = Math.min(100, (p.bond == null ? 20 : p.bond) + 3);
-      }
-      case "REST" -> {
-        if (
-          p.lastRest != null && Duration.between(p.lastRest, now).toHours() < 4
-        ) throw new IllegalArgumentException(
-          "Seu companheiro descansou recentemente. Volte depois."
-        );
-        p.bond = Math.min(100, (p.bond == null ? 20 : p.bond) + 1);
-        p.lastRest = now;
-      }
-    }
     p.lastInteraction = now;
     p.lastActivity = LocalDate.now(clock);
     companions.save(p);
     return decorated(p, days);
+  }
+
+  @Transactional
+  public Map<String, Object> presence(Long id, boolean present) {
+    List<DailyGoalDay> days = dailyProgress.synchronize();
+    PetCompanion companion = active();
+    if (companion == null || !companion.id.equals(id)) {
+      throw new IllegalArgumentException("Este companheiro não está ativo.");
+    }
+    vitalCare.evaluate(companion);
+    carePolicy.evaluate(companion, days);
+    vitalCare.presence(companion, present);
+    companions.save(companion);
+    return decorated(companion, days);
   }
 
   @Transactional
@@ -311,6 +305,7 @@ public class PetService {
     migrate();
     PetCompanion p = active();
     if (p == null) return;
+    vitalCare.evaluate(p);
     carePolicy.evaluate(p, days);
     if (p.diedAt != null) return;
     p.xp = Math.max(0, p.xp + experiencePoints);
@@ -320,15 +315,26 @@ public class PetService {
   }
 
   private Map<String, Object> view(PetCompanion p, List<DailyGoalDay> days) {
+    vitalCare.evaluate(p);
     PetCarePolicy.CareView care = carePolicy.evaluate(p, days);
+    PetVitalCare.VitalView vitals = vitalCare.view(p);
     CompanionAppearance appearance = CompanionAppearance.from(p);
     CompanionClass.CareerView career = CompanionClass.describe(
       p.xp,
       appearance.path()
     );
     Map<String, Object> out = new LinkedHashMap<>();
+    out.put("serverTime", clock.instant());
     out.put("care", care);
-    out.put("mood", care.mood());
+    out.put("vitals", vitals);
+    String mood = care.mood();
+    if (!care.dead()) {
+      if (vitals.activity().equals("SLEEPING")) mood = "tired";
+      else if (vitals.satiety() < 35) mood = "hungry";
+      else if (vitals.energy() < 35) mood = "tired";
+      else if (vitals.readiness() < 35) mood = "angry";
+    }
+    out.put("mood", mood);
     out.put("message", care.message());
     out.put("id", p.id);
     out.put("species", p.species);

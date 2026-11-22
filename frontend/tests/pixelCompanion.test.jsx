@@ -78,16 +78,17 @@ describe("pixel hero evolution", () => {
     expect(select).toHaveBeenCalledWith("luma");
   });
 
-  it("distinguishes earned, current and future classes and exposes the XP remaining", () => {
+  it("shows current class progress without restoring the removed journey grid", () => {
     show(
       <>
         <PetProgression pet={pet} />
         <PetClassProgress pet={pet} />
       </>,
     );
-    expect(screen.getAllByText("Conquistada")).toHaveLength(4);
-    expect(screen.getAllByText("Classe atual")).toHaveLength(1);
-    expect(screen.getAllByText("A conquistar")).toHaveLength(2);
+    expect(screen.getByText(journey[4].name)).toBeTruthy();
+    expect(screen.queryByText("Conquistada")).toBeNull();
+    expect(screen.queryByText("Classe atual")).toBeNull();
+    expect(screen.queryByText("A conquistar")).toBeNull();
     expect(
       screen.getByText("Faltam 700 XP para Comandante da Aurora"),
     ).toBeTruthy();

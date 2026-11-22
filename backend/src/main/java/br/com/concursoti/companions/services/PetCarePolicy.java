@@ -61,6 +61,7 @@ public class PetCarePolicy {
       pet.lastCareDate = day.studyDate;
       if (pet.missedDays > 3) {
         pet.diedAt = day.studyDate;
+        pet.deathCause = "STUDY";
         pet.deathCount++;
       }
     }
@@ -79,13 +80,14 @@ public class PetCarePolicy {
       mood = "dead";
       label = "Jornada encerrada";
       streak = 0;
-      message =
-        "Fiquei quatro dias seguidos sem progresso e esta vida terminou. Você pode recomeçar comigo; seus estudos continuam salvos.";
+      message = "VITALS".equals(pet.deathCause)
+        ? "As barras zeraram, o resgate não veio e minhas penas pediram demissão. Esta vida acabou; seus estudos continuam salvos."
+        : "Quatro dias sem progresso. O conselho das corujas encerrou minha jornada. Recomeçamos? Seus estudos estão intactos.";
     } else if (outcome.equals("PARTIAL")) {
       mood = "neutral";
       label = "Neutro";
       message =
-        "Você já fez parte das metas! Estou bem, sem fome ou cansaço. Complete o restante para celebrarmos juntos.";
+        "Já saiu progresso! Minhas penas aprovaram com ressalvas. Complete as metas e eu libero o escândalo da vitória.";
     } else if (outcome.equals("COMPLETE")) {
       mood =
         streak >= 30
@@ -108,43 +110,36 @@ public class PetCarePolicy {
                 ? "Orgulhoso"
                 : "Feliz";
       message =
-        "Metas de hoje completas! " +
+        "ATENÇÃO, BIBLIOTECA: metas completas! " +
         (streak >= 3
           ? "Já são " +
             streak +
             " dias seguidos. Estou " +
             label.toLowerCase(java.util.Locale.ROOT) +
             " com nossa constância!"
-          : "Estou feliz com o que fizemos hoje!");
+          : "Eu sou oficialmente uma coruja insuportavelmente orgulhosa!");
     } else if (pet.missedDays >= 3) {
       mood = LocalTime.now(clock).getHour() < 12 ? "sad" : "angry";
       label = mood.equals("sad") ? "Triste" : "Irritado";
       message =
-        "Estou triste e irritado: três dias terminaram sem progresso. Precisamos estudar hoje; mais um dia vazio encerra esta vida.";
+        "Três dias sem estudo. Estou a UMA página de abrir um sindicato das penas! Estude hoje: outro dia vazio encerra minha vida.";
     } else if (pet.missedDays == 2) {
       mood = "tired";
       label = "Cansado";
       message =
-        "Estou cansado e com fome depois de dois dias sem progresso. Um começo hoje já me ajuda a ficar neutro.";
+        "Dois dias sem progresso. Meu cérebro virou purê de apostila. Vamos registrar um estudo antes que eu vire decoração.";
     } else if (pet.missedDays == 1) {
       mood = "hungry";
       label = "Com fome";
       message =
-        "Ontem terminou sem progresso e estou com fome. Vamos começar uma das metas de hoje?";
+        "Ontem o estudo evaporou! Meu estômago está tentando resolver questões sozinho. Faça um pouco hoje e me dê uma pizza.";
     } else {
       mood = "neutral";
       label = "Neutro";
       message =
-        "O dia está aberto! Estou esperando nosso primeiro passo. As metas completas me deixam feliz.";
+        "Penas penteadas, drama carregado. Cadê o primeiro estudo do dia? Minha armadura não evolui olhando para ela.";
     }
-    pet.energy = switch (mood) {
-      case "dead" -> 0;
-      case "sad", "angry" -> 10;
-      case "tired" -> 25;
-      case "hungry" -> 45;
-      case "neutral" -> 65;
-      default -> 100;
-    };
+    if (pet.diedAt != null) pet.energy = 0;
     int nextMilestone =
       streak < 3
         ? 3

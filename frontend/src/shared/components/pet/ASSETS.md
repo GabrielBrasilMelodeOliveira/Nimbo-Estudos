@@ -27,3 +27,7 @@ A versão usa a arte em código para manter o visual da referência, permitir re
 ## Continuidade nas animações (5.14.0)
 
 `OwlBodyFoundation.jsx` preenche a anatomia por trás das peças recortadas: pescoço, tronco e articulações superiores das pernas. Essa base permanece presente em todas as classes e acessórios. As junções das pernas acompanham as poses dos pés, sobrepondo-se ao tronco durante a respiração. As cores vêm da mesma paleta personalizável do sprite. A base do pescoço também cobre o espaço revelado ao inclinar a cabeça e ajustar o cachecol, sem alterar o rosto de referência.
+
+## Cenas de cuidado (5.15.0)
+
+`OwlCareProps.jsx` acrescenta livro, páginas, pizza, migalhas, cobertor, letras de sono e confetes na grade original. `owlCareMotion.js` anima leitura, mordidas, respiração e comemoração. O treino usa os óculos editáveis existentes; durante as cenas de cuidado, armas e acessórios que atrapalhariam as ações ficam temporariamente ocultos. Nenhuma classe ou personalização é alterada no banco. A preferência de movimento reduzido é respeitada.

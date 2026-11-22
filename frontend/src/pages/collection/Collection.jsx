@@ -5,6 +5,8 @@ import PetProgression, {
   PetClassProgress,
 } from "../../shared/components/pet/PetProgression.jsx";
 import PetCareStatus from "../../shared/components/pet/PetCareStatus.jsx";
+import PetVitalBars from "../../shared/components/pet/PetVitalBars.jsx";
+import PetCareRewards from "../../shared/components/pet/PetCareRewards.jsx";
 import PetCareRules from "../../shared/components/pet/PetCareRules.jsx";
 import { Paper, Button, Stack } from "@mui/material";
 import { ArrowRight, Check, LockKeyhole, Sparkles } from "lucide-react";
@@ -47,6 +49,7 @@ export default function Collection({ data, action, working, navigate }) {
           stage={pet?.stage || 1}
           mood={pet?.mood}
           appearance={pet?.appearance}
+          activity={pet?.vitals?.activity}
           large
         />
       </Paper>
@@ -85,6 +88,7 @@ export default function Collection({ data, action, working, navigate }) {
                 stage={member.stage}
                 mood={member.mood}
                 appearance={member.appearance}
+                activity={member.vitals?.activity}
                 large
               />
             </div>
@@ -103,16 +107,18 @@ export default function Collection({ data, action, working, navigate }) {
                   </span>
                 )}
               </div>
-              <p>
-                Nível {member.level} · {member.xp} XP · Energia {member.energy}%
-              </p>
-              <div className="nimbo-meter">
-                <i
-                  style={{
-                    width: `${member.energy}%`,
-                  }}
+              <Stack spacing={1.5} sx={{ my: 2 }}>
+                <PetVitalBars
+                  pet={member}
+                  action={action}
+                  working={working}
+                  readOnly={!member.active || member.care?.dead}
                 />
-              </div>
+                {!member.active && (
+                  <p>Em reserva: sinais vitais preservados.</p>
+                )}
+                <PetCareRewards pet={member} />
+              </Stack>
               <Stack spacing={1.5} sx={{ my: 2 }}>
                 <PetClassProgress pet={member} />
                 <Button

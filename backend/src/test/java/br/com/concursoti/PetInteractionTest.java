@@ -8,6 +8,7 @@ import br.com.concursoti.companions.repositories.PetCompanionRepository;
 import br.com.concursoti.companions.repositories.PetRepository;
 import br.com.concursoti.companions.services.PetCarePolicy;
 import br.com.concursoti.companions.services.PetService;
+import br.com.concursoti.companions.services.PetVitalCare;
 import br.com.concursoti.dailygoals.services.DailyProgressService;
 import java.time.Clock;
 import java.time.LocalDate;
@@ -28,56 +29,40 @@ class PetInteractionTest {
   PetRepository legacy;
 
   @Test
-  void conversarFortaleceAmizadeMasNaoConcedeXp() {
-    PetCompanion p = new PetCompanion();
-    p.id = 1L;
-    p.species = "nori";
-    p.active = true;
-    p.xp = 390;
-    p.energy = 70;
-    p.lastDecay = LocalDate.now();
+  void feedingRestoresVitalsWithoutStudyExperienceAndBlocksRepeatedMeals() {
+    PetCompanion pet = new PetCompanion();
+    pet.id = 1L;
+    pet.species = "nori";
+    pet.active = true;
+    pet.xp = 390;
     when(companions.count()).thenReturn(1L);
-    when(companions.findFirstByActiveTrue()).thenReturn(Optional.of(p));
-    when(companions.findAll()).thenReturn(List.of(p));
+    when(companions.findFirstByActiveTrue()).thenReturn(Optional.of(pet));
+    when(companions.findAll()).thenReturn(List.of(pet));
+    Clock clock = Clock.systemUTC();
     PetService service = new PetService(
       companions,
       legacy,
       mock(DailyProgressService.class),
-      new PetCarePolicy(Clock.systemUTC()),
-      Clock.systemUTC()
+      new PetCarePolicy(clock),
+      new PetVitalCare(clock),
+      clock
     );
-    var out = service.interact("TALK");
-    assertEquals(390, p.xp);
-    assertEquals(22, p.bond);
-    assertEquals(22, out.get("bond"));
+    var result = service.interact("FEED");
+    assertEquals(390, pet.xp);
+    assertEquals(
+      100,
+      ((PetVitalCare.VitalView) result.get("vitals")).satiety()
+    );
+    assertTrue(pet.fedSinceRest);
+    assertThrows(IllegalArgumentException.class, () ->
+      service.interact("FEED")
+    );
+    assertThrows(IllegalArgumentException.class, () ->
+      service.interact("REST")
+    );
     assertThrows(IllegalArgumentException.class, () ->
       service.interact("TALK")
     );
-    verify(companions).save(p);
-  }
-
-  @Test
-  void descansarFortaleceVinculoSemSubstituirMetas() {
-    PetCompanion p = new PetCompanion();
-    p.id = 1L;
-    p.species = "luma";
-    p.active = true;
-    p.xp = 100;
-    p.energy = 25;
-    when(companions.count()).thenReturn(1L);
-    when(companions.findFirstByActiveTrue()).thenReturn(Optional.of(p));
-    when(companions.findAll()).thenReturn(List.of(p));
-    var result = new PetService(
-      companions,
-      legacy,
-      mock(DailyProgressService.class),
-      new PetCarePolicy(Clock.systemUTC()),
-      Clock.systemUTC()
-    ).interact("REST");
-    assertEquals(100, p.xp);
-    assertEquals(65, p.energy);
-    assertEquals(65, result.get("energy"));
-    assertNotNull(p.lastRest);
   }
 
   @Test
@@ -103,6 +88,7 @@ class PetInteractionTest {
       legacy,
       mock(DailyProgressService.class),
       new PetCarePolicy(Clock.systemUTC()),
+      new PetVitalCare(Clock.systemUTC()),
       Clock.systemUTC()
     );
     service.awardExperience(100);

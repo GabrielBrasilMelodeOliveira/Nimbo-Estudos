@@ -1,5 +1,13 @@
 import { useState } from "react";
-import { Button, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  IconButton,
+  Stack,
+  Tooltip,
+  Typography,
+} from "@mui/material";
+import { Pencil, Trash2 } from "lucide-react";
 import { Modal } from "../../../shared/components/UI.jsx";
 import { SearchableSelect } from "../../../shared/components/FormControls.jsx";
 import { dateBR } from "../../../shared/utils/utils.js";
@@ -11,30 +19,69 @@ export default function DailyStudyPlan({ day, data, action, working }) {
   const [selectedIds, setSelectedIds] = useState(["", ""]);
   return (
     <>
-      <Button
-        fullWidth
-        size="small"
-        variant="outlined"
-        disabled={working}
-        sx={{
-          mb: 1.5,
-          textAlign: "left",
-          justifyContent: "flex-start",
-          whiteSpace: "normal",
-          fontSize: 12,
-        }}
-        onClick={() => {
-          setSelectedIds([
-            String(disciplines[0]?.id || ""),
-            String(disciplines[1]?.id || ""),
-          ]);
-          setOpen(true);
-        }}
-      >
-        {disciplines.length
-          ? disciplines.map((discipline) => discipline.name).join(" · ")
-          : "Planejar disciplinas"}
-      </Button>
+      <Box sx={{ mb: 1.5 }}>
+        {disciplines.map((discipline) => (
+          <Stack
+            key={discipline.id}
+            direction="row"
+            alignItems="center"
+            spacing={0.5}
+            sx={{ mb: 0.5 }}
+          >
+            <Typography
+              variant="caption"
+              sx={{ flex: 1, minWidth: 0, overflowWrap: "anywhere" }}
+            >
+              {discipline.name}
+            </Typography>
+            <Tooltip title="Retirar do planejamento deste dia">
+              <span>
+                <IconButton
+                  size="small"
+                  disabled={working}
+                  aria-label={`Retirar ${discipline.name} de ${dateBR(day)}`}
+                  onClick={() =>
+                    action(
+                      `study-plan/${day}`,
+                      "PUT",
+                      {
+                        disciplineIds: disciplines
+                          .filter((item) => item.id !== discipline.id)
+                          .map((item) => item.id),
+                      },
+                      "Disciplina retirada deste dia. Seu histórico foi mantido.",
+                    )
+                  }
+                >
+                  <Trash2 size={14} />
+                </IconButton>
+              </span>
+            </Tooltip>
+          </Stack>
+        ))}
+        <Button
+          fullWidth
+          size="small"
+          variant="outlined"
+          disabled={working}
+          startIcon={disciplines.length ? <Pencil size={14} /> : undefined}
+          sx={{
+            textAlign: "left",
+            justifyContent: "flex-start",
+            whiteSpace: "normal",
+            fontSize: 12,
+          }}
+          onClick={() => {
+            setSelectedIds([
+              String(disciplines[0]?.id || ""),
+              String(disciplines[1]?.id || ""),
+            ]);
+            setOpen(true);
+          }}
+        >
+          {disciplines.length ? "Alterar disciplinas" : "Planejar disciplinas"}
+        </Button>
+      </Box>
       {open && (
         <Modal
           title={`Disciplinas de ${dateBR(day)}`}
@@ -48,6 +95,7 @@ export default function DailyStudyPlan({ day, data, action, working }) {
             {[0, 1].map((index) => (
               <SearchableSelect
                 key={index}
+                allowClear
                 label={`Disciplina ${index + 1}`}
                 value={selectedIds[index]}
                 onChange={(event) =>
@@ -71,6 +119,26 @@ export default function DailyStudyPlan({ day, data, action, working }) {
                   ))}
               </SearchableSelect>
             ))}
+            {disciplines.length > 0 && (
+              <Button
+                color="error"
+                startIcon={<Trash2 size={16} />}
+                disabled={working}
+                onClick={async () => {
+                  if (
+                    await action(
+                      `study-plan/${day}`,
+                      "PUT",
+                      { disciplineIds: [] },
+                      "Planejamento deste dia removido.",
+                    )
+                  )
+                    setOpen(false);
+                }}
+              >
+                Limpar planejamento do dia
+              </Button>
+            )}
             <Button
               variant="contained"
               disabled={working}

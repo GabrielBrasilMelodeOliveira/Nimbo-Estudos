@@ -1,6 +1,7 @@
 package br.com.concursoti.companions.entities;
 
 import jakarta.persistence.*;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -70,6 +71,41 @@ public class PetCompanion {
 
   @Column(length = 16)
   public String bodyAccessory;
+
+  // Nullable values initialize existing companions without retroactive penalties.
+  public Double satiety;
+  public Double stamina;
+  public Double readiness;
+  public Instant vitalsUpdatedAt;
+  public Instant criticalSince;
+
+  @Column(length = 20)
+  public String deathCause;
+
+  public Instant trainingStartedAt;
+  public Instant trainingHeartbeatAt;
+
+  @Column(nullable = false, columnDefinition = "bigint default 0")
+  public long trainingElapsedMillis;
+
+  public Instant trainingCompletedAt;
+  public Instant lastFedAt;
+  public Instant eatingUntil;
+  public Instant sleepStartedAt;
+  public Instant sleepUntil;
+  public Instant wokeAt;
+
+  @Column(nullable = false, columnDefinition = "boolean default false")
+  public boolean trainedSinceRest;
+
+  @Column(nullable = false, columnDefinition = "boolean default false")
+  public boolean fedSinceRest;
+
+  @Column(nullable = false, columnDefinition = "integer default 0")
+  public int carePoints;
+
+  @Column(nullable = false, columnDefinition = "integer default 0")
+  public int completedCareCycles;
 
   public LocalDateTime lastInteraction;
   public LocalDateTime lastRest;
